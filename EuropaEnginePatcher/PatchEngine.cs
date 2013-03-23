@@ -6288,8 +6288,6 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.HeartsOfIron2:
-                case PatchType.HeartsOfIron212:
-                case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy107:
                     PatchByte(_data, offset, 0x8D); // lea eax, byte ptr [esp+50h]
                     offset++;
@@ -6301,6 +6299,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
 
+                case PatchType.HeartsOfIron212:
+                case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.DarkestHour102:
                     PatchByte(_data, offset, 0x8D); // lea eax, byte ptr [esp+48h]
@@ -6355,8 +6355,6 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.HeartsOfIron2:
-                case PatchType.HeartsOfIron212:
-                case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy107:
                     PatchByte(_data, offset, 0xC6); // mov [esp+eax+4Ch],0
                     offset++;
@@ -6370,6 +6368,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
 
+                case PatchType.HeartsOfIron212:
+                case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.DarkestHour102:
                     PatchByte(_data, offset, 0xC6); // mov [esp+eax+44h],0
