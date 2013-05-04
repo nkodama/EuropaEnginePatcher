@@ -101,6 +101,9 @@ namespace EuropaEnginePatcher
         private uint _sizeRdataSection; // .rdataセクションのサイズ
         private uint _sizeTextFree; // .textセクションの空きサイズ
         private uint _sizeTextSection; // .textセクションのサイズ
+        private uint _posChatBlockChar1; // チャットウィンドウの特殊文字ブロック処理の位置1
+        private uint _posChatBlockChar2; // チャットウィンドウの特殊文字ブロック処理の位置2
+        private uint _posChatBlockChar3; // チャットウィンドウの特殊文字ブロック処理の位置3
 
         /// <summary>
         ///     テキスト自動折り返しの有無
@@ -1132,6 +1135,10 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
+                    if (!ScanChatBlockChar())
+                    {
+                        return false;
+                    }
                     break;
             }
             // テキスト自動折り返し
@@ -1454,6 +1461,68 @@ namespace EuropaEnginePatcher
                 return false;
             }
             _posLatinToUpper = l[0];
+            AppendLog("ScanBinary passed\n\n");
+
+            return true;
+        }
+
+        /// <summary>
+        /// チャットウィンドウの特殊文字ブロック処理の位置を探索する
+        /// </summary>
+        /// <returns>探索に成功すればtrueを返す</returns>
+        private bool ScanChatBlockChar()
+        {
+            AppendLog("ScanBinary - 特定バイナリを探す\n");
+            AppendLog("  \"%XX チャットウィンドウの特殊文字ブロック処理の位置\"を探します。\n");
+
+            byte[] pattern;
+            List<uint> l;
+            switch (_patchType)
+            {
+                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy107:
+                pattern = new byte[]
+                    {
+                        0x3D, 0xA7, 0x00, 0x00, 0x00, 0x0F, 0x8F
+                    };
+                l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                if (l.Count == 0)
+                {
+                    return false;
+                }
+                _posChatBlockChar3 = l[0] + 11;
+
+                pattern = new byte[]
+                    {
+                        0x00, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08
+                    };
+                    break;
+
+                default:
+                    pattern = new byte[]
+                    {
+                        0x00, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x02, 0x03, 0x03, 0x03, 0x03
+                    };
+                    break;
+            }
+            l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+            if (l.Count == 0)
+            {
+                return false;
+            }
+            _posChatBlockChar1 = l[0];
+
+            pattern = new byte[]
+                {
+                    0x00, 0x01, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00
+                };
+            l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+            if (l.Count == 0)
+            {
+                return false;
+            }
+            _posChatBlockChar2 = l[0];
+
             AppendLog("ScanBinary passed\n\n");
 
             return true;
@@ -2625,6 +2694,7 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     PatchLatinToUpper();
+                    PatchChatBlockChar();
                     break;
             }
             PatchWinMmDll();
@@ -3429,6 +3499,53 @@ namespace EuropaEnginePatcher
 
                 default:
                     PatchByte(_data, offset, 0x14);
+                    break;
+            }
+            AppendLog("\n");
+        }
+
+        /// <summary>
+        /// チャットウィンドウの特殊文字ブロック処理を書き換える
+        /// </summary>
+        private void PatchChatBlockChar()
+        {
+            AppendLog("  proc ChatBlockChar書き換え\n");
+            switch (_patchType)
+            {
+                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy:
+                    // 0x5C
+                    PatchByte(_data, _posChatBlockChar1 + 0x5C + 0x59, 0x08);
+                    PatchByte(_data, _posChatBlockChar2 + 0x5C - 0x2C, 0x01);
+
+                    // 0x7C
+                    PatchByte(_data, _posChatBlockChar1 + 0x7C + 0x59, 0x08);
+
+                    // 0xA7
+                    uint offset = _posChatBlockChar3;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    break;
+
+                default:
+                    // 0x5C
+                    PatchByte(_data, _posChatBlockChar1 + 0x5C - 0x10, 0x03);
+                    PatchByte(_data, _posChatBlockChar2 + 0x5C - 0x2C, 0x01);
+
+                    // 0x7C
+                    PatchByte(_data, _posChatBlockChar1 + 0x7C - 0x10, 0x03);
+
+                    // 0xA7
+                    PatchByte(_data, _posChatBlockChar1 + 0xA7 - 0x10, 0x03);
                     break;
             }
             AppendLog("\n");
