@@ -7,19 +7,19 @@ namespace EuropaEnginePatcher
     /// <summary>
     ///     メインフォーム
     /// </summary>
-    internal partial class MainForm : Form
+    public partial class MainForm : Form
     {
         /// <summary>
-        ///     パッチエンジン
+        ///     静的呼び出しのためにフォームのインスタンスを保存
         /// </summary>
-        private readonly PatchEngine _engine;
+        private static MainForm _form;
 
         /// <summary>
         ///     コンストラクタ
         /// </summary>
-        internal MainForm()
+        public MainForm()
         {
-            _engine = new PatchEngine(this);
+            _form = this;
 
             InitializeComponent();
 
@@ -37,9 +37,9 @@ namespace EuropaEnginePatcher
         ///     ログを追加する
         /// </summary>
         /// <param name="s">出力する文字列</param>
-        internal void AppendLog(string s)
+        public static void AppendLog(string s)
         {
-            logRichTextBox.AppendText(s);
+            _form.logRichTextBox.AppendText(s);
         }
 
         /// <summary>
@@ -48,38 +48,6 @@ namespace EuropaEnginePatcher
         private void UpdateTitle()
         {
             Text = string.Format("Europe Engine Patcher Ver {0}", EuropaEnginePatcher.VersionName);
-        }
-
-        /// <summary>
-        ///     _inmm.dllをコピーする
-        /// </summary>
-        /// <param name="dirName">対象ディレクトリ名</param>
-        private void CopyDll(string dirName)
-        {
-            string destName = Path.Combine(dirName, "_inmm.dll");
-            string srcName = Path.Combine(Environment.CurrentDirectory, "_inmm.dll");
-            if (File.Exists(srcName))
-            {
-                if (File.Exists(destName))
-                {
-                    if (!File.GetLastWriteTimeUtc(destName).Equals(File.GetLastWriteTimeUtc(srcName)))
-                    {
-                        if (MessageBox.Show("_inmm.dllのバージョンが一致しません。\n上書きコピーしてもよろしいですか？",
-                                            "日本語化DLLのコピー", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                        {
-                            File.Copy(srcName, destName, true);
-                        }
-                    }
-                }
-                else
-                {
-                    if (MessageBox.Show("_inmm.dllがありません。\nコピーしてもよろしいですか？",
-                                        "日本語化DLLのコピー", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        File.Copy(srcName, destName);
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -96,8 +64,8 @@ namespace EuropaEnginePatcher
                 // 自動判別処理
                 if (typeComboBox.SelectedIndex == 0)
                 {
-                    PatchType patchType = _engine.DetectPatchType(dialog.FileName);
-                    typeComboBox.SelectedIndex = _engine.GetPatchIndex(patchType);
+                    PatchController.DetectGameType(pathTextBox.Text);
+                    typeComboBox.SelectedIndex = PatchController.GetGameIndex();
                 }
             }
         }
@@ -122,13 +90,11 @@ namespace EuropaEnginePatcher
         /// <param name="e"></param>
         private void OnStartButtonClick(object sender, EventArgs e)
         {
-            saveButton.Enabled = false;
-            _engine.IsAutoLineBreak = autoLineBreakCheckBox.Checked;
-            _engine.IsWordOrder = wordOrderCheckBox.Checked;
-            if (_engine.PatchGameFile(pathTextBox.Text, _engine.GetPatchType(typeComboBox.SelectedIndex)))
+            if (!File.Exists(PatchController.TargetFileName))
             {
-                saveButton.Enabled = true;
+                return;
             }
+            saveButton.Enabled = PatchController.Patch();
         }
 
         /// <summary>
@@ -138,23 +104,11 @@ namespace EuropaEnginePatcher
         /// <param name="e"></param>
         private void OnSaveButtonClick(object sender, EventArgs e)
         {
-            var dialog = new SaveFileDialog();
-            if (string.IsNullOrEmpty(pathTextBox.Text))
+            if (!File.Exists(PatchController.TargetFileName))
             {
-                dialog.FileName = "HoI2Jp";
+                return;
             }
-            else
-            {
-                dialog.FileName = Path.GetFileNameWithoutExtension(pathTextBox.Text) + "Jp";
-            }
-            dialog.DefaultExt = "exe";
-            dialog.Filter = "実行ファイル (*.exe)|*.exe";
-            dialog.InitialDirectory = Path.GetDirectoryName(pathTextBox.Text);
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                _engine.SavePatchedFile(dialog.FileName);
-                CopyDll(Path.GetDirectoryName(dialog.FileName));
-            }
+            PatchController.Save();
         }
 
         /// <summary>
@@ -189,7 +143,8 @@ namespace EuropaEnginePatcher
             // 自動判別処理
             if (typeComboBox.SelectedIndex == 0)
             {
-                typeComboBox.SelectedIndex = _engine.GetPatchIndex(_engine.DetectPatchType(fileNames[0]));
+                PatchController.DetectGameType(pathTextBox.Text);
+                typeComboBox.SelectedIndex = PatchController.GetGameIndex();
             }
         }
 
@@ -200,21 +155,62 @@ namespace EuropaEnginePatcher
         /// <param name="e"></param>
         private void OnTypeComboBoxSelectedIndexChanged(object sender, EventArgs e)
         {
-            PatchType patchType = _engine.GetPatchType(typeComboBox.SelectedIndex);
+            PatchController.SetGameType(typeComboBox.SelectedIndex);
 
-            if (patchType == PatchType.Unknown)
-            {
-                autoLineBreakCheckBox.Enabled = true;
-                wordOrderCheckBox.Enabled = true;
-            }
-            else
-            {
-                autoLineBreakCheckBox.Enabled = _engine.GetAutoLineBreakEffective(patchType);
-                autoLineBreakCheckBox.Checked = autoLineBreakCheckBox.Enabled &&
-                                                _engine.GetAutoLineBreakDefault(patchType);
-                wordOrderCheckBox.Enabled = _engine.GetWordOrderEffective(patchType);
-                wordOrderCheckBox.Checked = wordOrderCheckBox.Enabled && _engine.GetWordOrderDefault(patchType);
-            }
+            autoLineBreakCheckBox.Enabled = PatchController.GetAutoLineBreakEffective();
+            autoLineBreakCheckBox.Checked = autoLineBreakCheckBox.Enabled && PatchController.GetAutoLineBreakDefault();
+            wordOrderCheckBox.Enabled = PatchController.GetWordOrderEffective();
+            wordOrderCheckBox.Checked = wordOrderCheckBox.Enabled && PatchController.GetWordOrderDefault();
+        }
+
+        /// <summary>
+        ///     パス名変更時の処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnPathTextBoxTextChanged(object sender, EventArgs e)
+        {
+            PatchController.TargetFileName = pathTextBox.Text;
+        }
+
+        /// <summary>
+        ///     自動処理モードのチェック状態変更時の処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnAutoModeCheckedBoxCheckedChanged(object sender, EventArgs e)
+        {
+            PatchController.AutoMode = autoModeCheckBox.Checked;
+        }
+
+        /// <summary>
+        ///     元のファイルをリネームのチェック状態変更時の処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnRenameOriginalCheckBoxCheckedChanged(object sender, EventArgs e)
+        {
+            PatchController.RenameOriginal = renameOriginalCheckBox.Checked;
+        }
+
+        /// <summary>
+        ///     テキスト自動折り返しのチェック状態変更時の処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnAutoLineBreakCheckBoxCheckedChanged(object sender, EventArgs e)
+        {
+            PatchController.AutoLineBreak = autoLineBreakCheckBox.Checked;
+        }
+
+        /// <summary>
+        ///     自動命名時の語順変更のチェック状態変更時の処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnWordOrderCheckBoxCheckedChanged(object sender, EventArgs e)
+        {
+            PatchController.WordOrder = wordOrderCheckBox.Checked;
         }
     }
 }

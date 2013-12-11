@@ -9,138 +9,112 @@ namespace EuropaEnginePatcher
     /// <summary>
     ///     パッチエンジン
     /// </summary>
-    internal class PatchEngine
+    public static class PatchEngine
     {
         #region メンバ変数
 
-        /// <summary>
-        ///     メインフォーム
-        /// </summary>
-        private readonly MainForm _form;
-
-        private uint _addrBase; // ベースアドレス
-        private uint _addrCalcLineBreak; // CalcLineBreakの埋め込みアドレス
-        private uint _addrDataSection; // .dataセクションの開始アドレス
-        private uint _addrEeMaxAmphibModTitle; // EE_MAX_AMPHIB_MOD_TITLEの埋め込みアドレス
-        private uint _addrGetModuleHandleA; // GetModuleHandleAの呼び出しアドレス
-        private uint _addrGetProcAddress; // GetProcAddressの呼び出しアドレス
-        private uint _addrGetTextWidth; // GetTextWidthの埋め込みアドレス
-        private uint _addrIdataSection; // .idataセクションの開始アドレス
-        private uint _addrIsDebuggerPresent; // IsDebuggerPresentの呼び出しアドレス
-        private uint _addrRankingSuffix; // RANKING_SUFFIXの埋め込みアドレス
-        private uint _addrRdataSection; // .rdataセクションの開始アドレス
-        private uint _addrStrNLen; // strnlen0の埋め込みアドレス
-        private uint _addrTextOutDc; // TextOutDC0/1/2の埋め込みアドレス
-        private uint _addrTextSection; // .textセクションの開始アドレス
-        private uint _addrVarCalcLineBreakAddress; // varCalcLineBreakの割り当てアドレス
-        private uint _addrVarGetTextWidthAddress; // varGetTextWidthAddressの割り当てアドレス
-        private uint _addrVarStrNLenAddress; // varStrNLenAddressの割り当てアドレス
-        private uint _addrVarTextOutDcAddress; // varTextOutDC0/1/2Addressの割り当てアドレス
-        private uint _addrWinMmDll; // WINMM.DLLの定義アドレス
-        private uint _alignSection; // セクションアラインメント
-        private uint _countImportDir; // インポートディレクトリの数
-        private uint _countSections; // セクションの数
-        private byte[] _data;
-        private long _fileSize;
-        private int _gameVersion; // ゲームバージョン
-        private PatchType _patchType; // パッチの種類
-        private uint _posArmyNameFormat; // 軍団名の書式の定義位置
-        private uint _posCalcLineBreak; // CalcLineBreakのファイル上の埋め込み位置
-        private uint _posCalcLineBreakEnd1; // CalcLineBreakの処理後のジャンプ位置1
-        private uint _posCalcLineBreakEnd2; // CalcLineBreakの処理後のジャンプ位置2
-        private uint _posCalcLineBreakEnd3; // CalcLineBreakの処理後のジャンプ位置3
-        private uint _posCalcLineBreakEnd4; // CalcLineBreakの処理後のジャンプ位置4
-        private uint _posCalcLineBreakEnd5; // CalcLineBreakの処理後のジャンプ位置5
-        private uint _posCalcLineBreakEnd6; // CalcLineBreakの処理後のジャンプ位置6
-        private uint _posCalcLineBreakStart1; // CalcLineBreakの処理へジャンプする位置1
-        private uint _posCalcLineBreakStart2; // CalcLineBreakの処理へジャンプする位置2
-        private uint _posCalcLineBreakStart3; // CalcLineBreakの処理へジャンプする位置3
-        private uint _posCalcLineBreakStart4; // CalcLineBreakの処理へジャンプする位置4
-        private uint _posCalcLineBreakStart5; // CalcLineBreakの処理へジャンプする位置5
-        private uint _posCalcLineBreakStart6; // CalcLineBreakの処理へジャンプする位置6
-        private uint _posDataSection; // .dataセクションのファイル上の開始位置
-        private uint _posDivisionNameFormat; // 師団名の書式の定義位置
-        private uint _posEeMaxAmphibModTitle; // EE_MAX_AMPHIB_MOD_TITLEのファイル上の埋め込み位置
-        private uint _posGetArmyName1; // 軍団名取得処理の位置1
-        private uint _posGetArmyName2; // 軍団名取得処理の位置2
-        private uint _posGetDivisionName1; // 師団名取得処理の位置1
-        private uint _posGetDivisionName2; // 師団名取得処理の位置2
-        private uint _posGetRankingName1; // 国家序列取得処理の位置1
-        private uint _posGetRankingName2; // 国家序列取得処理の位置2
-        private uint _posGetTextWidth; // GetTextWidthのファイル上の埋め込み位置
-        private uint _posGetTextWidthEnd; // GetTextWidthの処理後のジャンプ位置
-        private uint _posGetTextWidthStart; // GetTextWidthの処理開始位置
-        private uint _posIdataSection; // .idataセクションのファイル上の開始位置
-        private uint _posImportSection; // インポートセクションのファイル上の位置
-        private uint _posImportTable; // インポートテーブルのファイル上の位置
-        private uint _posIsDebuggerPresent; // IsDebuggerPresentのファイル上の定義位置
-        private uint _posLatinToUpper; // Latin文字の大文字化処理の位置
-        private uint _posPeHeader; // PEヘッダのファイル上の位置
-        private uint _posPushEeMaxAmphibModTitle; // push EE_MAX_AMPHIB_MOD_TITLEの位置
-        private uint _posRankingSuffix; // RANKING_SUFFIXのファイル上の埋め込み位置
-        private uint _posRdataSection; // .rdataセクションのファイル上の開始位置
-        private uint _posStrNLen; // strnlen0のファイル上の埋め込み位置
-        private uint _posTermModelNameStart1; // モデル名の終端文字設定位置1
-        private uint _posTermModelNameStart2; // モデル名の終端文字設定位置2
-        private uint _posTermModelNameStart3; // モデル名の終端文字設定位置3
-        private uint _posTermModelNameStart4; // モデル名の終端文字設定位置4
-        private uint _posTermModelNameStart5; // モデル名の終端文字設定位置5
-        private uint _posTermModelNameStart6; // モデル名の終端文字設定位置6
-        private uint _posTermModelNameStart7; // モデル名の終端文字設定位置7
-        private uint _posTermModelNameStart8; // モデル名の終端文字設定位置8
-        private uint _posTextOutDc; // TextOutDC0/1/2のファイル上の埋め込み位置
-        private uint _posTextOutDcFree; // TextOutの埋め込み位置後の空き領域
-        private uint _posTextOutEnd; // TextOutの処理後のジャンプ位置
-        private uint _posTextOutStart; // TextOutの処理開始位置
-        private uint _posTextSection; // .textセクションのファイル上の開始位置
-        private uint _posWinMmDll; // WINMM.DLLのファイル上の定義位置
-        private uint _rvaImportSection; // インポートセクションのRVA
-        private uint _rvaImportTable; // インポートテーブルのアドレス
-        private uint _sizeDataSection; // .dataセクションのサイズ
-        private uint _sizeRdataFree; // .rdataセクションの空きサイズ
-        private uint _sizeRdataSection; // .rdataセクションのサイズ
-        private uint _sizeTextFree; // .textセクションの空きサイズ
-        private uint _sizeTextSection; // .textセクションのサイズ
-        private uint _posChatBlockChar1; // チャットウィンドウの特殊文字ブロック処理の位置1
-        private uint _posChatBlockChar2; // チャットウィンドウの特殊文字ブロック処理の位置2
-        private uint _posChatBlockChar3; // チャットウィンドウの特殊文字ブロック処理の位置3
-
-        /// <summary>
-        ///     テキスト自動折り返しの有無
-        /// </summary>
-        internal bool IsAutoLineBreak { get; set; }
-
-        /// <summary>
-        ///     語順変更の有無
-        /// </summary>
-        internal bool IsWordOrder { get; set; }
+        private static uint _addrBase; // ベースアドレス
+        private static uint _addrCalcLineBreak; // CalcLineBreakの埋め込みアドレス
+        private static uint _addrDataSection; // .dataセクションの開始アドレス
+        private static uint _addrEeMaxAmphibModTitle; // EE_MAX_AMPHIB_MOD_TITLEの埋め込みアドレス
+        private static uint _addrGetModuleHandleA; // GetModuleHandleAの呼び出しアドレス
+        private static uint _addrGetProcAddress; // GetProcAddressの呼び出しアドレス
+        private static uint _addrGetTextWidth; // GetTextWidthの埋め込みアドレス
+        private static uint _addrIdataSection; // .idataセクションの開始アドレス
+        private static uint _addrIsDebuggerPresent; // IsDebuggerPresentの呼び出しアドレス
+        private static uint _addrRankingSuffix; // RANKING_SUFFIXの埋め込みアドレス
+        private static uint _addrRdataSection; // .rdataセクションの開始アドレス
+        private static uint _addrStrNLen; // strnlen0の埋め込みアドレス
+        private static uint _addrTextOutDc; // TextOutDC0/1/2の埋め込みアドレス
+        private static uint _addrTextSection; // .textセクションの開始アドレス
+        private static uint _addrVarCalcLineBreakAddress; // varCalcLineBreakの割り当てアドレス
+        private static uint _addrVarGetTextWidthAddress; // varGetTextWidthAddressの割り当てアドレス
+        private static uint _addrVarStrNLenAddress; // varStrNLenAddressの割り当てアドレス
+        private static uint _addrVarTextOutDcAddress; // varTextOutDC0/1/2Addressの割り当てアドレス
+        private static uint _addrWinMmDll; // WINMM.DLLの定義アドレス
+        private static uint _alignSection; // セクションアラインメント
+        private static uint _countImportDir; // インポートディレクトリの数
+        private static uint _countSections; // セクションの数
+        private static byte[] _data;
+        private static long _fileSize;
+        private static int _gameVersion; // ゲームバージョン
+        private static PatchType _patchType; // パッチの種類
+        private static uint _posArmyNameFormat; // 軍団名の書式の定義位置
+        private static uint _posCalcLineBreak; // CalcLineBreakのファイル上の埋め込み位置
+        private static uint _posCalcLineBreakEnd1; // CalcLineBreakの処理後のジャンプ位置1
+        private static uint _posCalcLineBreakEnd2; // CalcLineBreakの処理後のジャンプ位置2
+        private static uint _posCalcLineBreakEnd3; // CalcLineBreakの処理後のジャンプ位置3
+        private static uint _posCalcLineBreakEnd4; // CalcLineBreakの処理後のジャンプ位置4
+        private static uint _posCalcLineBreakEnd5; // CalcLineBreakの処理後のジャンプ位置5
+        private static uint _posCalcLineBreakEnd6; // CalcLineBreakの処理後のジャンプ位置6
+        private static uint _posCalcLineBreakStart1; // CalcLineBreakの処理へジャンプする位置1
+        private static uint _posCalcLineBreakStart2; // CalcLineBreakの処理へジャンプする位置2
+        private static uint _posCalcLineBreakStart3; // CalcLineBreakの処理へジャンプする位置3
+        private static uint _posCalcLineBreakStart4; // CalcLineBreakの処理へジャンプする位置4
+        private static uint _posCalcLineBreakStart5; // CalcLineBreakの処理へジャンプする位置5
+        private static uint _posCalcLineBreakStart6; // CalcLineBreakの処理へジャンプする位置6
+        private static uint _posDataSection; // .dataセクションのファイル上の開始位置
+        private static uint _posDivisionNameFormat; // 師団名の書式の定義位置
+        private static uint _posEeMaxAmphibModTitle; // EE_MAX_AMPHIB_MOD_TITLEのファイル上の埋め込み位置
+        private static uint _posGetArmyName1; // 軍団名取得処理の位置1
+        private static uint _posGetArmyName2; // 軍団名取得処理の位置2
+        private static uint _posGetDivisionName1; // 師団名取得処理の位置1
+        private static uint _posGetDivisionName2; // 師団名取得処理の位置2
+        private static uint _posGetRankingName1; // 国家序列取得処理の位置1
+        private static uint _posGetRankingName2; // 国家序列取得処理の位置2
+        private static uint _posGetTextWidth; // GetTextWidthのファイル上の埋め込み位置
+        private static uint _posGetTextWidthEnd; // GetTextWidthの処理後のジャンプ位置
+        private static uint _posGetTextWidthStart; // GetTextWidthの処理開始位置
+        private static uint _posIdataSection; // .idataセクションのファイル上の開始位置
+        private static uint _posImportSection; // インポートセクションのファイル上の位置
+        private static uint _posImportTable; // インポートテーブルのファイル上の位置
+        private static uint _posIsDebuggerPresent; // IsDebuggerPresentのファイル上の定義位置
+        private static uint _posLatinToUpper; // Latin文字の大文字化処理の位置
+        private static uint _posPeHeader; // PEヘッダのファイル上の位置
+        private static uint _posPushEeMaxAmphibModTitle; // push EE_MAX_AMPHIB_MOD_TITLEの位置
+        private static uint _posRankingSuffix; // RANKING_SUFFIXのファイル上の埋め込み位置
+        private static uint _posRdataSection; // .rdataセクションのファイル上の開始位置
+        private static uint _posStrNLen; // strnlen0のファイル上の埋め込み位置
+        private static uint _posTermModelNameStart1; // モデル名の終端文字設定位置1
+        private static uint _posTermModelNameStart2; // モデル名の終端文字設定位置2
+        private static uint _posTermModelNameStart3; // モデル名の終端文字設定位置3
+        private static uint _posTermModelNameStart4; // モデル名の終端文字設定位置4
+        private static uint _posTermModelNameStart5; // モデル名の終端文字設定位置5
+        private static uint _posTermModelNameStart6; // モデル名の終端文字設定位置6
+        private static uint _posTermModelNameStart7; // モデル名の終端文字設定位置7
+        private static uint _posTermModelNameStart8; // モデル名の終端文字設定位置8
+        private static uint _posTextOutDc; // TextOutDC0/1/2のファイル上の埋め込み位置
+        private static uint _posTextOutDcFree; // TextOutの埋め込み位置後の空き領域
+        private static uint _posTextOutEnd; // TextOutの処理後のジャンプ位置
+        private static uint _posTextOutStart; // TextOutの処理開始位置
+        private static uint _posTextSection; // .textセクションのファイル上の開始位置
+        private static uint _posWinMmDll; // WINMM.DLLのファイル上の定義位置
+        private static uint _rvaImportSection; // インポートセクションのRVA
+        private static uint _rvaImportTable; // インポートテーブルのアドレス
+        private static uint _sizeDataSection; // .dataセクションのサイズ
+        private static uint _sizeRdataFree; // .rdataセクションの空きサイズ
+        private static uint _sizeRdataSection; // .rdataセクションのサイズ
+        private static uint _sizeTextFree; // .textセクションの空きサイズ
+        private static uint _sizeTextSection; // .textセクションのサイズ
+        private static uint _posChatBlockChar1; // チャットウィンドウの特殊文字ブロック処理の位置1
+        private static uint _posChatBlockChar2; // チャットウィンドウの特殊文字ブロック処理の位置2
+        private static uint _posChatBlockChar3; // チャットウィンドウの特殊文字ブロック処理の位置3
 
         #endregion
 
         #region メイン処理
 
         /// <summary>
-        ///     コンストラクタ
-        /// </summary>
-        internal PatchEngine(MainForm form)
-        {
-            _form = form;
-
-            IsAutoLineBreak = true;
-            IsWordOrder = false;
-        }
-
-        /// <summary>
         ///     実行ファイルにパッチを当てる
         /// </summary>
         /// <param name="fileName">実行ファイルのパス名</param>
-        /// <param name="patchType">パッチの種類</param>
+        /// <param name="gameType">ゲームの種類</param>
         /// <returns>パッチ当てに成功すればtrueを返す</returns>
-        internal bool PatchGameFile(string fileName, PatchType patchType)
+        public static bool Patch(string fileName, GameType gameType)
         {
             AppendLog(string.Format("Europe Engine Patcher Ver {0}\n", EuropaEnginePatcher.VersionName));
 
-            SetPatchType(fileName, patchType);
+            SetPatchType(gameType);
             if (_patchType == PatchType.Unknown)
             {
                 MessageBox.Show("パッチの種類が判別できません。", "エラー");
@@ -151,11 +125,11 @@ namespace EuropaEnginePatcher
             {
                 ReadGameFile(fileName);
 
-                if (!ParseHeader())
+                if (!IdentifyGameVersion())
                 {
                     return false;
                 }
-                if (!IdentifyGameVersion())
+                if (!ParseHeader())
                 {
                     return false;
                 }
@@ -180,7 +154,7 @@ namespace EuropaEnginePatcher
         ///     パッチ後の実行ファイルを保存する
         /// </summary>
         /// <param name="fileName">保存するファイルのパス名</param>
-        public void SavePatchedFile(string fileName)
+        public static void SavePatchedFile(string fileName)
         {
             var s = new FileStream(fileName, FileMode.Create, FileAccess.Write);
             s.Write(_data, 0, _data.Length);
@@ -191,7 +165,7 @@ namespace EuropaEnginePatcher
         ///     実行ファイルを読み込む
         /// </summary>
         /// <param name="fileName">実行ファイルのパス名</param>
-        private void ReadGameFile(string fileName)
+        private static void ReadGameFile(string fileName)
         {
             AppendLog("Phase 1 - ファイルの読み込み\n");
 
@@ -215,60 +189,70 @@ namespace EuropaEnginePatcher
         #region パッチ種類判別
 
         /// <summary>
-        ///     パッチの種類を判別する
+        ///     パッチの種類を設定する
         /// </summary>
-        /// <param name="fileName">実行ファイルのパス名</param>
-        /// <returns>パッチの種類</returns>
-        internal PatchType DetectPatchType(string fileName)
+        /// <param name="gameType">ゲームの種類</param>
+        private static void SetPatchType(GameType gameType)
         {
-            string singleFileName = Path.GetFileNameWithoutExtension(fileName);
-            if (string.IsNullOrEmpty(singleFileName))
+            switch (gameType)
             {
-                return PatchType.Unknown;
-            }
+                case GameType.Unknown: // 不明
+                    _patchType = PatchType.Unknown;
+                    AppendLog("PatchType: Unknown\n\n");
+                    break;
 
-            string gameName = singleFileName.ToLower();
-            if (gameName.Equals("crusaders"))
-            {
-                return PatchType.CrusaderKings;
-            }
-            if (gameName.Equals("eu2"))
-            {
-                return PatchType.EuropaUniversalis2;
-            }
-            if (gameName.Equals("ftg"))
-            {
-                return PatchType.ForTheGlory;
-            }
-            if (gameName.Equals("victoria"))
-            {
-                return PatchType.Victoria;
-            }
-            if (gameName.Equals("hoi"))
-            {
-                return PatchType.HeartsOfIron;
-            }
-            if (gameName.Equals("hoi2"))
-            {
-                return PatchType.HeartsOfIron2;
-            }
-            if (gameName.Equals("aodgame"))
-            {
-                return PatchType.ArsenalOfDemocracy;
-            }
-            if (gameName.Equals("darkest hour"))
-            {
-                return PatchType.DarkestHour;
-            }
+                case GameType.CrusaderKings:
+                    _patchType = PatchType.CrusaderKings;
+                    AppendLog("PatchType: Crusader Kings\n\n");
+                    break;
 
-            return PatchType.Unknown;
+                case GameType.EuropaUniversalis2:
+                    _patchType = PatchType.EuropaUniversalis2;
+                    AppendLog("PatchType: Europa Universalis 2\n\n");
+                    break;
+
+                case GameType.ForTheGlory:
+                    _patchType = PatchType.ForTheGlory;
+                    AppendLog("PatchType: For the Glory\n\n");
+                    break;
+
+                case GameType.Victoria:
+                    _patchType = PatchType.Victoria;
+                    AppendLog("PatchType: Victoria\n\n");
+                    break;
+
+                case GameType.HeartsOfIron:
+                    _patchType = PatchType.HeartsOfIron;
+                    AppendLog("PatchType: Hearts of Iron\n\n");
+                    break;
+
+                case GameType.HeartsOfIron2:
+                    _patchType = PatchType.HeartsOfIron2;
+                    AppendLog("PatchType: Hearts of Iron 2\n\n");
+                    break;
+
+                case GameType.ArsenalOfDemocracy:
+                    _patchType = PatchType.ArsenalOfDemocracy;
+                    AppendLog("PatchType: Arsenal of Democracy\n\n");
+                    break;
+
+                case GameType.DarkestHour:
+                    _patchType = PatchType.DarkestHour;
+                    AppendLog("PatchType: Darkest Hour\n\n");
+                    break;
+
+                default:
+                    _patchType = PatchType.Unknown;
+                    AppendLog("PatchType: Unknown\n\n");
+                    break;
+            }
         }
 
         /// <summary>
         ///     バージョンを判別する
         /// </summary>
         /// <returns>判別に成功すればtrueを返す</returns>
-        private bool IdentifyGameVersion()
+        private static bool IdentifyGameVersion()
         {
             switch (_patchType)
             {
@@ -293,21 +277,21 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                     // Doomsday Armageddon v X.X
                     pattern = new byte[]
-                                  {
-                                      0x44, 0x6F, 0x6F, 0x6D, 0x73, 0x64, 0x61, 0x79,
-                                      0x20, 0x41, 0x72, 0x6D, 0x61, 0x67, 0x65, 0x64,
-                                      0x64, 0x6F, 0x6E, 0x20, 0x76, 0x20
-                                  };
+                        {
+                            0x44, 0x6F, 0x6F, 0x6D, 0x73, 0x64, 0x61, 0x79,
+                            0x20, 0x41, 0x72, 0x6D, 0x61, 0x67, 0x65, 0x64,
+                            0x64, 0x6F, 0x6E, 0x20, 0x76, 0x20
+                        };
                     l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
                     if (l.Count == 0)
                     {
                         // Iron Cross Armageddon X.XX
                         pattern = new byte[]
-                                      {
-                                          0x49, 0x72, 0x6F, 0x6E, 0x20, 0x43, 0x72, 0x6F,
-                                          0x73, 0x73, 0x20, 0x41, 0x72, 0x6D, 0x61, 0x67,
-                                          0x65, 0x64, 0x64, 0x6F, 0x6E, 0x20
-                                      };
+                            {
+                                0x49, 0x72, 0x6F, 0x6E, 0x20, 0x43, 0x72, 0x6F,
+                                0x73, 0x73, 0x20, 0x41, 0x72, 0x6D, 0x61, 0x67,
+                                0x65, 0x64, 0x64, 0x6F, 0x6E, 0x20
+                            };
                         l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
                         if (l.Count == 0)
                         {
@@ -327,21 +311,21 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy:
                     // Arsenal of Democracy X.XX
                     pattern = new byte[]
-                                  {
-                                      0x41, 0x72, 0x73, 0x65, 0x6E, 0x61, 0x6C, 0x20,
-                                      0x6F, 0x66, 0x20, 0x44, 0x65, 0x6D, 0x6F, 0x63,
-                                      0x72, 0x61, 0x63, 0x79, 0x20
-                                  };
+                        {
+                            0x41, 0x72, 0x73, 0x65, 0x6E, 0x61, 0x6C, 0x20,
+                            0x6F, 0x66, 0x20, 0x44, 0x65, 0x6D, 0x6F, 0x63,
+                            0x72, 0x61, 0x63, 0x79, 0x20
+                        };
                     l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
                     if (l.Count == 0)
                     {
                         // Arsenal Of Democracy v X.XX
                         pattern = new byte[]
-                                      {
-                                          0x41, 0x72, 0x73, 0x65, 0x6E, 0x61, 0x6C, 0x20,
-                                          0x4F, 0x66, 0x20, 0x44, 0x65, 0x6D, 0x6F, 0x63,
-                                          0x72, 0x61, 0x63, 0x79, 0x20, 0x76, 0x20
-                                      };
+                            {
+                                0x41, 0x72, 0x73, 0x65, 0x6E, 0x61, 0x6C, 0x20,
+                                0x4F, 0x66, 0x20, 0x44, 0x65, 0x6D, 0x6F, 0x63,
+                                0x72, 0x61, 0x63, 0x79, 0x20, 0x76, 0x20
+                            };
                         l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
                         if (l.Count == 0)
                         {
@@ -355,10 +339,10 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                     // Darkest Hour v X.XX
                     pattern = new byte[]
-                                  {
-                                      0x44, 0x61, 0x72, 0x6B, 0x65, 0x73, 0x74, 0x20,
-                                      0x48, 0x6F, 0x75, 0x72, 0x20, 0x76, 0x20
-                                  };
+                        {
+                            0x44, 0x61, 0x72, 0x6B, 0x65, 0x73, 0x74, 0x20,
+                            0x48, 0x6F, 0x75, 0x72, 0x20, 0x76, 0x20
+                        };
                     l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
                     if (l.Count == 0)
                     {
@@ -371,11 +355,11 @@ namespace EuropaEnginePatcher
                 default:
                     // Doomsday Armageddon v X.X
                     pattern = new byte[]
-                                  {
-                                      0x44, 0x6F, 0x6F, 0x6D, 0x73, 0x64, 0x61, 0x79,
-                                      0x20, 0x41, 0x72, 0x6D, 0x61, 0x67, 0x65, 0x64,
-                                      0x64, 0x6F, 0x6E, 0x20, 0x76, 0x20
-                                  };
+                        {
+                            0x44, 0x6F, 0x6F, 0x6D, 0x73, 0x64, 0x61, 0x79,
+                            0x20, 0x41, 0x72, 0x6D, 0x61, 0x67, 0x65, 0x64,
+                            0x64, 0x6F, 0x6E, 0x20, 0x76, 0x20
+                        };
                     l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
                     if (l.Count == 0)
                     {
@@ -443,283 +427,6 @@ namespace EuropaEnginePatcher
             return true;
         }
 
-        /// <summary>
-        ///     パッチの種類を取得する
-        /// </summary>
-        /// <param name="index">パッチの種類のインデックス値</param>
-        /// <returns>パッチの種類</returns>
-        internal PatchType GetPatchType(int index)
-        {
-            switch (index)
-            {
-                case 0: // 不明
-                    return PatchType.Unknown;
-
-                case 1: // Crusader Kings
-                    return PatchType.CrusaderKings;
-
-                case 2: // Europa Universalis 2
-                    return PatchType.EuropaUniversalis2;
-
-                case 3: // For the Glory
-                    return PatchType.ForTheGlory;
-
-                case 4: // Victoria
-                    return PatchType.Victoria;
-
-                case 5: // Hearts of Iron
-                    return PatchType.HeartsOfIron;
-
-                case 6: // Hearts of Iron 2
-                    return PatchType.HeartsOfIron2;
-
-                case 7: // Arsenal of Democracy
-                    return PatchType.ArsenalOfDemocracy;
-
-                case 8: // Darkest Hour
-                    return PatchType.DarkestHour;
-            }
-
-            return PatchType.Unknown;
-        }
-
-        /// <summary>
-        ///     パッチの種類のインデックス値を取得する
-        /// </summary>
-        /// <param name="patchType">パッチの種類</param>
-        /// <returns>パッチの種類のインデックス値</returns>
-        internal int GetPatchIndex(PatchType patchType)
-        {
-            switch (patchType)
-            {
-                case PatchType.Unknown: // 不明
-                    return 0;
-
-                case PatchType.CrusaderKings:
-                    return 1;
-
-                case PatchType.EuropaUniversalis2:
-                    return 2;
-
-                case PatchType.ForTheGlory:
-                    return 3;
-
-                case PatchType.Victoria:
-                    return 4;
-
-                case PatchType.HeartsOfIron:
-                    return 5;
-
-                case PatchType.HeartsOfIron2:
-                case PatchType.HeartsOfIron212:
-                case PatchType.IronCrossHoI2:
-                    return 6;
-
-                case PatchType.ArsenalOfDemocracy:
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
-                    return 7;
-
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
-                    return 8;
-
-                default:
-                    return 0;
-            }
-        }
-
-        /// <summary>
-        ///     パッチの種類を設定する
-        /// </summary>
-        /// <param name="fileName">実行ファイルのパス名</param>
-        /// <param name="patchType">パッチの種類</param>
-        private void SetPatchType(string fileName, PatchType patchType)
-        {
-            // パッチの種類が指定されていなければ自動判別する
-            _patchType = patchType == PatchType.Unknown ? DetectPatchType(fileName) : patchType;
-
-            switch (_patchType)
-            {
-                case PatchType.Unknown: // 不明
-                    AppendLog("PatchType: Unknown\n\n");
-                    break;
-
-                case PatchType.CrusaderKings:
-                    AppendLog("PatchType: Crusader Kings\n\n");
-                    break;
-
-                case PatchType.EuropaUniversalis2:
-                    AppendLog("PatchType: Europa Universalis 2\n\n");
-                    break;
-
-                case PatchType.ForTheGlory:
-                    AppendLog("PatchType: For the Glory\n\n");
-                    break;
-
-                case PatchType.Victoria:
-                    AppendLog("PatchType: Victoria\n\n");
-                    break;
-
-                case PatchType.HeartsOfIron:
-                    AppendLog("PatchType: Hearts of Iron\n\n");
-                    break;
-
-                case PatchType.HeartsOfIron2:
-                    AppendLog("PatchType: Hearts of Iron 2\n\n");
-                    break;
-
-                case PatchType.HeartsOfIron212:
-                    AppendLog("PatchType: Hearts of Iron 2 1.2\n\n");
-                    break;
-
-                case PatchType.IronCrossHoI2:
-                    AppendLog("PatchType: Iron Cross / Hearts of Iron 2\n\n");
-                    break;
-
-                case PatchType.ArsenalOfDemocracy:
-                    AppendLog("PatchType: Arsenal of Democracy\n\n");
-                    break;
-
-                case PatchType.ArsenalOfDemocracy104:
-                    AppendLog("PatchType: Arsenal of Democracy 1.04\n\n");
-                    break;
-
-                case PatchType.ArsenalOfDemocracy107:
-                    AppendLog("PatchType: Arsenal of Democracy 1.07\n\n");
-                    break;
-
-                case PatchType.DarkestHour:
-                    AppendLog("PatchType: Darkest Hour\n\n");
-                    break;
-
-                case PatchType.DarkestHour102:
-                    AppendLog("PatchType: Darkest Hour 1.02\n\n");
-                    break;
-
-                default:
-                    AppendLog("PatchType: Unknown\n\n");
-                    break;
-            }
-        }
-
-        /// <summary>
-        ///     テキスト自動折り返しの設定が有効かを取得する
-        /// </summary>
-        /// <param name="patchType">パッチの種類</param>
-        /// <returns>テキスト自動折り返しの設定が有効ならばtrueを返す</returns>
-        internal bool GetAutoLineBreakEffective(PatchType patchType)
-        {
-            switch (patchType)
-            {
-                case PatchType.EuropaUniversalis2:
-                case PatchType.ForTheGlory:
-                case PatchType.CrusaderKings:
-                case PatchType.Victoria:
-                case PatchType.HeartsOfIron:
-                case PatchType.HeartsOfIron2:
-                case PatchType.HeartsOfIron212:
-                case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy:
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
-                    return true;
-
-                default:
-                    return true;
-            }
-        }
-
-        /// <summary>
-        ///     語順変更の設定が有効かを取得する
-        /// </summary>
-        /// <param name="patchType">パッチの種類</param>
-        /// <returns>語順変更の設定が有効ならばtrueを返す</returns>
-        internal bool GetWordOrderEffective(PatchType patchType)
-        {
-            switch (patchType)
-            {
-                case PatchType.Victoria:
-                case PatchType.HeartsOfIron:
-                case PatchType.HeartsOfIron2:
-                case PatchType.HeartsOfIron212:
-                case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy:
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
-                    return true;
-
-                case PatchType.CrusaderKings:
-                case PatchType.EuropaUniversalis2:
-                case PatchType.ForTheGlory:
-                    return false;
-
-                default:
-                    return true;
-            }
-        }
-
-        /// <summary>
-        ///     テキスト自動折り返しのデフォルト値を取得する
-        /// </summary>
-        /// <param name="patchType">パッチの種類</param>
-        /// <returns>テキスト自動折り返しのデフォルト値</returns>
-        internal bool GetAutoLineBreakDefault(PatchType patchType)
-        {
-            switch (patchType)
-            {
-                case PatchType.CrusaderKings:
-                case PatchType.EuropaUniversalis2:
-                case PatchType.ForTheGlory:
-                case PatchType.Victoria:
-                case PatchType.HeartsOfIron:
-                case PatchType.HeartsOfIron2:
-                case PatchType.HeartsOfIron212:
-                case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy:
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
-
-        /// <summary>
-        ///     語順変更のデフォルト値を取得する
-        /// </summary>
-        /// <param name="patchType">パッチの種類</param>
-        /// <returns>語順変更のデフォルト値</returns>
-        internal bool GetWordOrderDefault(PatchType patchType)
-        {
-            switch (patchType)
-            {
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
-                    return true;
-
-                case PatchType.Victoria:
-                case PatchType.HeartsOfIron:
-                case PatchType.HeartsOfIron2:
-                case PatchType.HeartsOfIron212:
-                case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy:
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
-                    return false;
-
-                default:
-                    return false;
-            }
-        }
-
         #endregion
 
         #region ヘッダ解析
@@ -728,7 +435,7 @@ namespace EuropaEnginePatcher
         ///     ヘッダを解析する
         /// </summary>
         /// <returns>解析に成功すればtrueを返す</returns>
-        private bool ParseHeader()
+        private static bool ParseHeader()
         {
             if (!ParseExeHeader())
             {
@@ -755,7 +462,7 @@ namespace EuropaEnginePatcher
         ///     EXEヘッダを解析する
         /// </summary>
         /// <returns>解析に成功すればtrueを返す</returns>
-        private bool ParseExeHeader()
+        private static bool ParseExeHeader()
         {
             AppendLog("Phase 2 - 実行ファイルの確認\n");
 
@@ -777,7 +484,7 @@ namespace EuropaEnginePatcher
         ///     PEヘッダを解析する
         /// </summary>
         /// <returns>解析に成功すればtrueを返す</returns>
-        private bool ParsePeHeader()
+        private static bool ParsePeHeader()
         {
             AppendLog("Phase 3 - PEヘッダの確認\n");
 
@@ -806,7 +513,7 @@ namespace EuropaEnginePatcher
         ///     オプションヘッダを解析する
         /// </summary>
         /// <returns>解析に成功すればtrueを返す</returns>
-        private bool ParseOptionHeader()
+        private static bool ParseOptionHeader()
         {
             AppendLog("Phase 4 - オプションヘッダの表示\n");
 
@@ -883,7 +590,7 @@ namespace EuropaEnginePatcher
         ///     セクションテーブルを解析する
         /// </summary>
         /// <returns>解析に成功すればtrueを返す</returns>
-        private bool ParseSection()
+        private static bool ParseSection()
         {
             AppendLog("Phase 5 - セクションテーブルの表示");
 
@@ -1016,7 +723,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     インポートディレクトリテーブルを解析する
         /// </summary>
-        private void ParseImportTable()
+        private static void ParseImportTable()
         {
             AppendLog("Phase 6 - インポートディレクトリテーブルの表示\n");
             AppendLog(string.Format("  インポートディレクトリテーブル数: {0}\n", _countImportDir));
@@ -1098,7 +805,7 @@ namespace EuropaEnginePatcher
         ///     パッチを当てる位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanPatchLocation()
+        private static bool ScanPatchLocation()
         {
             // 日本語化コア部分
             if (!ScanWinMmDll())
@@ -1142,7 +849,7 @@ namespace EuropaEnginePatcher
                     break;
             }
             // テキスト自動折り返し
-            if (IsAutoLineBreak)
+            if (PatchController.AutoLineBreak)
             {
                 if (!ScanCalcLineBreakStart())
                 {
@@ -1154,7 +861,7 @@ namespace EuropaEnginePatcher
                 }
             }
             // 語順入れ替え
-            if (IsWordOrder)
+            if (PatchController.WordOrder)
             {
                 switch (_patchType)
                 {
@@ -1247,15 +954,15 @@ namespace EuropaEnginePatcher
         ///     WINMM.dllの位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanWinMmDll()
+        private static bool ScanWinMmDll()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%06 WINMM.dll\"を探します\n");
             var pattern = new byte[]
-                              {
-                                  0x57, 0x49, 0x4E, 0x4D, 0x4D, 0x2E, 0x64, 0x6C,
-                                  0x6C
-                              };
+                {
+                    0x57, 0x49, 0x4E, 0x4D, 0x4D, 0x2E, 0x64, 0x6C,
+                    0x6C
+                };
             List<uint> l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
             if (l.Count == 0)
             {
@@ -1274,15 +981,15 @@ namespace EuropaEnginePatcher
         ///     TextOutの処理を埋め込む位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanTextOutStart()
+        private static bool ScanTextOutStart()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%07 TextOutの処理を埋め込む位置\"を探します\n");
 
             var pattern = new byte[]
-                              {
-                                  0x8B, 0x45, 0x18, 0x8B, 0x48, 0x0C, 0x89, 0x4D
-                              };
+                {
+                    0x8B, 0x45, 0x18, 0x8B, 0x48, 0x0C, 0x89, 0x4D
+                };
             List<uint> l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
             if (l.Count == 0)
             {
@@ -1298,7 +1005,7 @@ namespace EuropaEnginePatcher
         ///     TextOutの処理が終了したらジャンプさせる位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanTextOutEnd()
+        private static bool ScanTextOutEnd()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%08 TextOutの処理が終了したらジャンプさせる位置\"を探します\n");
@@ -1313,39 +1020,39 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0x4D, 0x18, 0x8B, 0x11, 0x8B, 0x4D, 0x18,
-                                      0xFF, 0x52, 0x0C, 0x8B, 0x45, 0x0C, 0x8B, 0xE5,
-                                      0x5D, 0xC2, 0x18, 0x00
-                                  };
+                        {
+                            0x8B, 0x4D, 0x18, 0x8B, 0x11, 0x8B, 0x4D, 0x18,
+                            0xFF, 0x52, 0x0C, 0x8B, 0x45, 0x0C, 0x8B, 0xE5,
+                            0x5D, 0xC2, 0x18, 0x00
+                        };
                     break;
 
                 case PatchType.ForTheGlory:
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0x55, 0x18, 0x8B, 0x02, 0x8B, 0x4D, 0x18,
-                                      0x8B, 0x50, 0x0C, 0xFF, 0xD2, 0x8B, 0x45, 0x0C,
-                                      0x8B, 0xE5, 0x5D, 0xC2, 0x18, 0x00
-                                  };
+                        {
+                            0x8B, 0x55, 0x18, 0x8B, 0x02, 0x8B, 0x4D, 0x18,
+                            0x8B, 0x50, 0x0C, 0xFF, 0xD2, 0x8B, 0x45, 0x0C,
+                            0x8B, 0xE5, 0x5D, 0xC2, 0x18, 0x00
+                        };
                     break;
 
                 case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy107:
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0x55, 0x18, 0x8B, 0x02, 0x8B, 0x4D, 0x18,
-                                      0x8B, 0x50, 0x0C, 0xFF, 0xD2, 0x8B, 0x45, 0x0C,
-                                      0x8B, 0xE5, 0x5D, 0xC2, 0x18, 0x00
-                                  };
+                        {
+                            0x8B, 0x55, 0x18, 0x8B, 0x02, 0x8B, 0x4D, 0x18,
+                            0x8B, 0x50, 0x0C, 0xFF, 0xD2, 0x8B, 0x45, 0x0C,
+                            0x8B, 0xE5, 0x5D, 0xC2, 0x18, 0x00
+                        };
                     break;
 
                 default:
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0x45, 0x18, 0x8B, 0x10, 0x8B, 0x4D, 0x18,
-                                      0xFF, 0x52, 0x0C, 0x8B, 0x45, 0x0C, 0x8B, 0xE5,
-                                      0x5D, 0xC2, 0x18, 0x00
-                                  };
+                        {
+                            0x8B, 0x45, 0x18, 0x8B, 0x10, 0x8B, 0x4D, 0x18,
+                            0xFF, 0x52, 0x0C, 0x8B, 0x45, 0x0C, 0x8B, 0xE5,
+                            0x5D, 0xC2, 0x18, 0x00
+                        };
                     break;
             }
 
@@ -1365,7 +1072,7 @@ namespace EuropaEnginePatcher
         ///     文字列幅の処理を埋め込む位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanGetTextWidthStart()
+        private static bool ScanGetTextWidthStart()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%09 文字列幅の処理を埋め込む位置\"を探します\n");
@@ -1376,19 +1083,19 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                                  {
-                                      0xC7, 0x45, 0xFC, 0x00, 0x00, 0x00, 0x00, 0xC6,
-                                      0x45, 0xF4, 0x00, 0x8B, 0x45, 0x08, 0x8A, 0x08,
-                                      0x88, 0x4D
-                                  };
+                        {
+                            0xC7, 0x45, 0xFC, 0x00, 0x00, 0x00, 0x00, 0xC6,
+                            0x45, 0xF4, 0x00, 0x8B, 0x45, 0x08, 0x8A, 0x08,
+                            0x88, 0x4D
+                        };
                     break;
 
                 default:
                     pattern = new byte[]
-                                  {
-                                      0xC7, 0x45, 0xFC, 0x00, 0x00, 0x00, 0x00, 0x8B,
-                                      0x45, 0x08, 0x8A, 0x08, 0x88, 0x4D
-                                  };
+                        {
+                            0xC7, 0x45, 0xFC, 0x00, 0x00, 0x00, 0x00, 0x8B,
+                            0x45, 0x08, 0x8A, 0x08, 0x88, 0x4D
+                        };
                     break;
             }
 
@@ -1407,15 +1114,15 @@ namespace EuropaEnginePatcher
         ///     文字列幅の処理が終了したらジャンプさせる位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanGetTextWidthEnd()
+        private static bool ScanGetTextWidthEnd()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%10 文字列幅の処理が終了したらジャンプさせる位置(の3バイト前)\"を探します\n");
             var pattern = new byte[]
-                              {
-                                  0x8B, 0x45, 0xFC, 0x8B, 0xE5, 0x5D, 0xC2, 0x04,
-                                  0x00
-                              };
+                {
+                    0x8B, 0x45, 0xFC, 0x8B, 0xE5, 0x5D, 0xC2, 0x04,
+                    0x00
+                };
             List<uint> l = BinaryScan(_data, pattern, _posGetTextWidthStart,
                                       _sizeTextSection - (_posGetTextWidthStart - _posTextSection));
             if (l.Count == 0)
@@ -1432,7 +1139,7 @@ namespace EuropaEnginePatcher
         ///     Latin文字を大文字化している処理の位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanLatinToUpper()
+        private static bool ScanLatinToUpper()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%XX Latin文字を大文字化している処理の位置\"を探します。\n");
@@ -1443,16 +1150,16 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy107:
                     pattern = new byte[]
-                                  {
-                                      0x75, 0x1A, 0x8B, 0xC7, 0x8D, 0x50, 0x01
-                                  };
+                        {
+                            0x75, 0x1A, 0x8B, 0xC7, 0x8D, 0x50, 0x01
+                        };
                     break;
 
                 default:
                     pattern = new byte[]
-                                  {
-                                      0x75, 0x18, 0x8B, 0xFB, 0x83, 0xC9, 0xFF, 0x33
-                                  };
+                        {
+                            0x75, 0x18, 0x8B, 0xFB, 0x83, 0xC9, 0xFF, 0x33
+                        };
                     break;
             }
             List<uint> l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
@@ -1467,10 +1174,10 @@ namespace EuropaEnginePatcher
         }
 
         /// <summary>
-        /// チャットウィンドウの特殊文字ブロック処理の位置を探索する
+        ///     チャットウィンドウの特殊文字ブロック処理の位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanChatBlockChar()
+        private static bool ScanChatBlockChar()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%XX チャットウィンドウの特殊文字ブロック処理の位置\"を探します。\n");
@@ -1481,28 +1188,30 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy107:
-                pattern = new byte[]
+                    pattern = new byte[]
+                        {
+                            0x3D, 0xA7, 0x00, 0x00, 0x00, 0x0F, 0x8F
+                        };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
                     {
-                        0x3D, 0xA7, 0x00, 0x00, 0x00, 0x0F, 0x8F
-                    };
-                l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
-                if (l.Count == 0)
-                {
-                    return false;
-                }
-                _posChatBlockChar3 = l[0] + 11;
+                        return false;
+                    }
+                    _posChatBlockChar3 = l[0] + 11;
 
-                pattern = new byte[]
-                    {
-                        0x00, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08
-                    };
+                    pattern = new byte[]
+                        {
+                            0x00, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08,
+                            0x08
+                        };
                     break;
 
                 default:
                     pattern = new byte[]
-                    {
-                        0x00, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x02, 0x03, 0x03, 0x03, 0x03
-                    };
+                        {
+                            0x00, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x02, 0x03, 0x03, 0x03,
+                            0x03
+                        };
                     break;
             }
             l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
@@ -1536,7 +1245,7 @@ namespace EuropaEnginePatcher
         ///     改行位置計算処理へジャンプする位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanCalcLineBreakStart()
+        private static bool ScanCalcLineBreakStart()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%XX 改行位置計算処理へジャンプする位置\"を探します。\n");
@@ -1548,10 +1257,10 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.CrusaderKings:
                     pattern = new byte[]
-                                  {
-                                      0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
-                                      0x01, 0x00, 0x00
-                                  };
+                        {
+                            0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
+                            0x01, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1561,10 +1270,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[1];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
-                                      0x84, 0xDB
-                                  };
+                        {
+                            0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
+                            0x84, 0xDB
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1576,10 +1285,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.EuropaUniversalis2:
                     pattern = new byte[]
-                                  {
-                                      0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
-                                      0x01, 0x00, 0x00
-                                  };
+                        {
+                            0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
+                            0x01, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1589,10 +1298,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[1];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x8C, 0x04, 0x24, 0x01, 0x00, 0x00, 0x40,
-                                      0x38, 0x5C, 0x24, 0x13
-                                  };
+                        {
+                            0x88, 0x8C, 0x04, 0x24, 0x01, 0x00, 0x00, 0x40,
+                            0x38, 0x5C, 0x24, 0x13
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1601,10 +1310,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart3 = l[0];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x9C, 0x04, 0x38, 0x01, 0x00, 0x00, 0x40,
-                                      0x84, 0xDB
-                                  };
+                        {
+                            0x88, 0x9C, 0x04, 0x38, 0x01, 0x00, 0x00, 0x40,
+                            0x84, 0xDB
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1613,10 +1322,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart4 = l[0];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
-                                      0x84, 0xDB
-                                  };
+                        {
+                            0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
+                            0x84, 0xDB
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1628,10 +1337,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.ForTheGlory:
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x5C, 0x04, 0x14, 0x40, 0x84, 0xDB, 0x0F,
-                                      0x85
-                                  };
+                        {
+                            0x88, 0x5C, 0x04, 0x14, 0x40, 0x84, 0xDB, 0x0F,
+                            0x85
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1640,10 +1349,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart1 = l[0];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x5C, 0x04, 0x20, 0x40, 0x84, 0xDB, 0x0F,
-                                      0x85
-                                  };
+                        {
+                            0x88, 0x5C, 0x04, 0x20, 0x40, 0x84, 0xDB, 0x0F,
+                            0x85
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1652,10 +1361,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[0];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x5C, 0x04, 0x30, 0x40, 0x84, 0xDB, 0x0F,
-                                      0x85
-                                  };
+                        {
+                            0x88, 0x5C, 0x04, 0x30, 0x40, 0x84, 0xDB, 0x0F,
+                            0x85
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1664,10 +1373,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart3 = l[0];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x54, 0x04, 0x1C, 0x40, 0x38, 0x5C, 0x24,
-                                      0x17, 0x0F, 0x85
-                                  };
+                        {
+                            0x88, 0x54, 0x04, 0x1C, 0x40, 0x38, 0x5C, 0x24,
+                            0x17, 0x0F, 0x85
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1680,10 +1389,10 @@ namespace EuropaEnginePatcher
                 case PatchType.Victoria:
                 case PatchType.HeartsOfIron:
                     pattern = new byte[]
-                                  {
-                                      0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
-                                      0x01, 0x00, 0x00
-                                  };
+                        {
+                            0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
+                            0x01, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1693,10 +1402,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[1];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x8C, 0x04, 0x24, 0x01, 0x00, 0x00, 0x40,
-                                      0x38, 0x5C, 0x24, 0x13
-                                  };
+                        {
+                            0x88, 0x8C, 0x04, 0x24, 0x01, 0x00, 0x00, 0x40,
+                            0x38, 0x5C, 0x24, 0x13
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1705,10 +1414,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart3 = l[0];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
-                                      0x84, 0xDB
-                                  };
+                        {
+                            0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
+                            0x84, 0xDB
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1725,10 +1434,10 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                                  {
-                                      0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
-                                      0x01, 0x00, 0x00
-                                  };
+                        {
+                            0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
+                            0x01, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1738,10 +1447,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[1];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x8C, 0x04, 0x24, 0x01, 0x00, 0x00, 0x40,
-                                      0x38, 0x5C, 0x24, 0x13
-                                  };
+                        {
+                            0x88, 0x8C, 0x04, 0x24, 0x01, 0x00, 0x00, 0x40,
+                            0x38, 0x5C, 0x24, 0x13
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1750,10 +1459,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart3 = l[0];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x8C, 0x04, 0x20, 0x01, 0x00, 0x00, 0x40,
-                                      0x38, 0x5C, 0x24, 0x13
-                                  };
+                        {
+                            0x88, 0x8C, 0x04, 0x20, 0x01, 0x00, 0x00, 0x40,
+                            0x38, 0x5C, 0x24, 0x13
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1762,10 +1471,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart5 = l[0];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
-                                      0x84, 0xDB
-                                  };
+                        {
+                            0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
+                            0x84, 0xDB
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1776,10 +1485,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.ArsenalOfDemocracy107:
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x5C, 0x04, 0x0C, 0x40, 0x84, 0xDB, 0x0F,
-                                      0x85
-                                  };
+                        {
+                            0x88, 0x5C, 0x04, 0x0C, 0x40, 0x84, 0xDB, 0x0F,
+                            0x85
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1789,10 +1498,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[1];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x5C, 0x04, 0x2C, 0x40, 0x84, 0xDB, 0x0F,
-                                      0x85
-                                  };
+                        {
+                            0x88, 0x5C, 0x04, 0x2C, 0x40, 0x84, 0xDB, 0x0F,
+                            0x85
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1801,10 +1510,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart3 = l[0];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x54, 0x04, 0x1C, 0x40, 0x38, 0x5C, 0x24,
-                                      0x17
-                                  };
+                        {
+                            0x88, 0x54, 0x04, 0x1C, 0x40, 0x38, 0x5C, 0x24,
+                            0x17
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1816,9 +1525,9 @@ namespace EuropaEnginePatcher
 
                 case PatchType.ArsenalOfDemocracy:
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x9C, 0x05, 0xFC, 0xFB, 0xFF, 0xFF, 0x40
-                                  };
+                        {
+                            0x88, 0x9C, 0x05, 0xFC, 0xFB, 0xFF, 0xFF, 0x40
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1828,9 +1537,9 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[1];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x9C, 0x05, 0xF0, 0xFB, 0xFF, 0xFF, 0x40
-                                  };
+                        {
+                            0x88, 0x9C, 0x05, 0xF0, 0xFB, 0xFF, 0xFF, 0x40
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1840,9 +1549,9 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart6 = l[1];
 
                     pattern = new byte[]
-                                  {
-                                      0x88, 0x94, 0x05, 0xF0, 0xFD, 0xFF, 0xFF, 0x40
-                                  };
+                        {
+                            0x88, 0x94, 0x05, 0xF0, 0xFD, 0xFF, 0xFF, 0x40
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1861,7 +1570,7 @@ namespace EuropaEnginePatcher
         ///     改行位置計算処理が終了したらジャンプさせる位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanCalcLineBreakEnd()
+        private static bool ScanCalcLineBreakEnd()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%XX 改行位置計算処理が終了したらジャンプさせる位置\"を探します。\n");
@@ -1873,11 +1582,11 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.CrusaderKings:
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x04, 0x14, 0x01, 0x00, 0x00, 0x20,
-                                      0x51, 0x8B, 0x4D, 0x54, 0x88, 0x9C, 0x04, 0x19,
-                                      0x01, 0x00, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x04, 0x14, 0x01, 0x00, 0x00, 0x20,
+                            0x51, 0x8B, 0x4D, 0x54, 0x88, 0x9C, 0x04, 0x19,
+                            0x01, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1887,11 +1596,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x20,
-                                      0x51, 0x8B, 0x4D, 0x54, 0xC6, 0x84, 0x04, 0x21,
-                                      0x01, 0x00, 0x00, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x20,
+                            0x51, 0x8B, 0x4D, 0x54, 0xC6, 0x84, 0x04, 0x21,
+                            0x01, 0x00, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1903,10 +1612,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.EuropaUniversalis2:
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
-                                      0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
+                            0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1916,10 +1625,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0x4D, 0x40, 0x88, 0x9C, 0x04, 0x29, 0x01,
-                                      0x00, 0x00
-                                  };
+                        {
+                            0x8B, 0x4D, 0x40, 0x88, 0x9C, 0x04, 0x29, 0x01,
+                            0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1928,10 +1637,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x04, 0x38, 0x01, 0x00, 0x00, 0x20,
-                                      0xC6, 0x84, 0x04, 0x39, 0x01, 0x00, 0x00, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x04, 0x38, 0x01, 0x00, 0x00, 0x20,
+                            0xC6, 0x84, 0x04, 0x39, 0x01, 0x00, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1940,10 +1649,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd4 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0x4D, 0x4C, 0xC6, 0x84, 0x04, 0x21, 0x01,
-                                      0x00, 0x00, 0x00
-                                  };
+                        {
+                            0x8B, 0x4D, 0x4C, 0xC6, 0x84, 0x04, 0x21, 0x01,
+                            0x00, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1955,10 +1664,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.ForTheGlory:
                     pattern = new byte[]
-                                  {
-                                      0x8D, 0x7C, 0x24, 0x18, 0xC6, 0x44, 0x04, 0x19,
-                                      0x00
-                                  };
+                        {
+                            0x8D, 0x7C, 0x24, 0x18, 0xC6, 0x44, 0x04, 0x19,
+                            0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1967,10 +1676,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd1 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0x8D, 0x94, 0x24, 0x20, 0x01, 0x00, 0x00, 0xC6,
-                                      0x44, 0x04, 0x21, 0x00
-                                  };
+                        {
+                            0x8D, 0x94, 0x24, 0x20, 0x01, 0x00, 0x00, 0xC6,
+                            0x44, 0x04, 0x21, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1979,10 +1688,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0x8D, 0x8C, 0x24, 0x30, 0x01, 0x00, 0x00, 0xC6,
-                                      0x44, 0x04, 0x31, 0x00
-                                  };
+                        {
+                            0x8D, 0x8C, 0x24, 0x30, 0x01, 0x00, 0x00, 0xC6,
+                            0x44, 0x04, 0x31, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1991,10 +1700,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x44, 0x04, 0x1C, 0x20, 0x88, 0x5C, 0x04,
-                                      0x1D
-                                  };
+                        {
+                            0xC6, 0x44, 0x04, 0x1C, 0x20, 0x88, 0x5C, 0x04,
+                            0x1D
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -2006,10 +1715,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.Victoria:
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
-                                      0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
+                            0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -2019,11 +1728,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x04, 0x24, 0x01, 0x00, 0x00, 0x20,
-                                      0x51, 0x8B, 0x4D, 0x48, 0x88, 0x9C, 0x04, 0x29,
-                                      0x01, 0x00, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x04, 0x24, 0x01, 0x00, 0x00, 0x20,
+                            0x51, 0x8B, 0x4D, 0x48, 0x88, 0x9C, 0x04, 0x29,
+                            0x01, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2032,11 +1741,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x20,
-                                      0x51, 0x8B, 0x4D, 0x54, 0xC6, 0x84, 0x04, 0x21,
-                                      0x01, 0x00, 0x00, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x20,
+                            0x51, 0x8B, 0x4D, 0x54, 0xC6, 0x84, 0x04, 0x21,
+                            0x01, 0x00, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -2048,10 +1757,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.HeartsOfIron:
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
-                                      0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
+                            0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -2061,11 +1770,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x04, 0x24, 0x01, 0x00, 0x00, 0x20,
-                                      0x51, 0x8B, 0x4D, 0x40, 0x88, 0x9C, 0x04, 0x29,
-                                      0x01, 0x00, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x04, 0x24, 0x01, 0x00, 0x00, 0x20,
+                            0x51, 0x8B, 0x4D, 0x40, 0x88, 0x9C, 0x04, 0x29,
+                            0x01, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2074,11 +1783,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x20,
-                                      0x51, 0x8B, 0x4D, 0x4C, 0xC6, 0x84, 0x04, 0x21,
-                                      0x01, 0x00, 0x00, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x20,
+                            0x51, 0x8B, 0x4D, 0x4C, 0xC6, 0x84, 0x04, 0x21,
+                            0x01, 0x00, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -2095,10 +1804,10 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
-                                      0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
+                            0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -2108,10 +1817,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0x4D, 0x40, 0x88, 0x9C, 0x04, 0x29, 0x01,
-                                      0x00, 0x00
-                                  };
+                        {
+                            0x8B, 0x4D, 0x40, 0x88, 0x9C, 0x04, 0x29, 0x01,
+                            0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2120,10 +1829,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0x4D, 0x4C, 0x88, 0x9C, 0x04, 0x25, 0x01,
-                                      0x00, 0x00
-                                  };
+                        {
+                            0x8B, 0x4D, 0x4C, 0x88, 0x9C, 0x04, 0x25, 0x01,
+                            0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2132,10 +1841,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0x4D, 0x4C, 0xC6, 0x84, 0x04, 0x21, 0x01,
-                                      0x00, 0x00, 0x00
-                                  };
+                        {
+                            0x8B, 0x4D, 0x4C, 0xC6, 0x84, 0x04, 0x21, 0x01,
+                            0x00, 0x00, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2146,11 +1855,11 @@ namespace EuropaEnginePatcher
 
                 case PatchType.ArsenalOfDemocracy107:
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x44, 0x04, 0x0C, 0x20, 0x8D, 0x94, 0x24,
-                                      0x0C, 0x02, 0x00, 0x00, 0xC6, 0x44, 0x04, 0x0D,
-                                      0x00
-                                  };
+                        {
+                            0xC6, 0x44, 0x04, 0x0C, 0x20, 0x8D, 0x94, 0x24,
+                            0x0C, 0x02, 0x00, 0x00, 0xC6, 0x44, 0x04, 0x0D,
+                            0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -2160,11 +1869,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x44, 0x04, 0x2C, 0x20, 0x8D, 0x94, 0x24,
-                                      0x2C, 0x02, 0x00, 0x00, 0xC6, 0x44, 0x04, 0x2D,
-                                      0x00
-                                  };
+                        {
+                            0xC6, 0x44, 0x04, 0x2C, 0x20, 0x8D, 0x94, 0x24,
+                            0x2C, 0x02, 0x00, 0x00, 0xC6, 0x44, 0x04, 0x2D,
+                            0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2173,10 +1882,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x44, 0x04, 0x1C, 0x20, 0x8D, 0x94, 0x24,
-                                      0x1C, 0x02, 0x00, 0x00, 0x88, 0x5C, 0x04, 0x1D
-                                  };
+                        {
+                            0xC6, 0x44, 0x04, 0x1C, 0x20, 0x8D, 0x94, 0x24,
+                            0x1C, 0x02, 0x00, 0x00, 0x88, 0x5C, 0x04, 0x1D
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -2188,11 +1897,11 @@ namespace EuropaEnginePatcher
 
                 case PatchType.ArsenalOfDemocracy:
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x05, 0xFC, 0xFB, 0xFF, 0xFF, 0x20,
-                                      0x52, 0x8B, 0xCE, 0xC6, 0x84, 0x05, 0xFD, 0xFB,
-                                      0xFF, 0xFF, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x05, 0xFC, 0xFB, 0xFF, 0xFF, 0x20,
+                            0x52, 0x8B, 0xCE, 0xC6, 0x84, 0x05, 0xFD, 0xFB,
+                            0xFF, 0xFF, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -2202,10 +1911,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x05, 0xF0, 0xFB, 0xFF, 0xFF, 0x20,
-                                      0xC6, 0x84, 0x05, 0xF1, 0xFB, 0xFF, 0xFF, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x05, 0xF0, 0xFB, 0xFF, 0xFF, 0x20,
+                            0xC6, 0x84, 0x05, 0xF1, 0xFB, 0xFF, 0xFF, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2214,11 +1923,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x05, 0xF0, 0xFD, 0xFF, 0xFF, 0x20,
-                                      0x8D, 0x95, 0xF0, 0xF9, 0xFF, 0xFF, 0x88, 0x9C,
-                                      0x05, 0xF1, 0xFD, 0xFF, 0xFF
-                                  };
+                        {
+                            0xC6, 0x84, 0x05, 0xF0, 0xFD, 0xFF, 0xFF, 0x20,
+                            0x8D, 0x95, 0xF0, 0xF9, 0xFF, 0xFF, 0x88, 0x9C,
+                            0x05, 0xF1, 0xFD, 0xFF, 0xFF
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2227,11 +1936,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                                  {
-                                      0xC6, 0x84, 0x05, 0xF0, 0xFB, 0xFF, 0xFF, 0x20,
-                                      0x8D, 0x95, 0xF0, 0xFD, 0xFF, 0xFF, 0xC6, 0x84,
-                                      0x05, 0xF1, 0xFB, 0xFF, 0xFF, 0x00
-                                  };
+                        {
+                            0xC6, 0x84, 0x05, 0xF0, 0xFB, 0xFF, 0xFF, 0x20,
+                            0x8D, 0x95, 0xF0, 0xFD, 0xFF, 0xFF, 0xC6, 0x84,
+                            0x05, 0xF1, 0xFB, 0xFF, 0xFF, 0x00
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2254,7 +1963,7 @@ namespace EuropaEnginePatcher
         ///     師団名の取得処理を埋め込む位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanGetDivisionName()
+        private static bool ScanGetDivisionName()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%XX 師団名の取得処理を埋め込む位置\"を探します\n");
@@ -2267,10 +1976,10 @@ namespace EuropaEnginePatcher
                 case PatchType.Victoria:
                 case PatchType.HeartsOfIron:
                     pattern = new byte[]
-                                  {
-                                      0xB9, 0x0A, 0x00, 0x00, 0x00, 0x50, 0x8B, 0xC6,
-                                      0x99, 0xF7, 0xF9, 0x8B, 0x54, 0x94, 0x1C, 0x52
-                                  };
+                        {
+                            0xB9, 0x0A, 0x00, 0x00, 0x00, 0x50, 0x8B, 0xC6,
+                            0x99, 0xF7, 0xF9, 0x8B, 0x54, 0x94, 0x1C, 0x52
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2288,10 +1997,10 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0x45, 0xF8, 0x99, 0xB9, 0x64, 0x00, 0x00,
-                                      0x00, 0xF7, 0xF9, 0x83, 0xFA, 0x0D
-                                  };
+                        {
+                            0x8B, 0x45, 0xF8, 0x99, 0xB9, 0x64, 0x00, 0x00,
+                            0x00, 0xF7, 0xF9, 0x83, 0xFA, 0x0D
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2300,10 +2009,10 @@ namespace EuropaEnginePatcher
                     _posGetDivisionName1 = l[0];
 
                     pattern = new byte[]
-                                  {
-                                      0x99, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0xF7, 0xF9,
-                                      0x8B, 0x54, 0x95, 0xC0, 0x52, 0xB9
-                                  };
+                        {
+                            0x99, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0xF7, 0xF9,
+                            0x8B, 0x54, 0x95, 0xC0, 0x52, 0xB9
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2322,16 +2031,16 @@ namespace EuropaEnginePatcher
         ///     師団名の書式文字列の定義位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanDivisionNameFormat()
+        private static bool ScanDivisionNameFormat()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%XX 師団名の書式文字列の定義位置\"を探します\n");
 
             var pattern = new byte[]
-                              {
-                                  0x25, 0x64, 0x25, 0x73, 0x20, 0x25, 0x73, 0x2E,
-                                  0x20, 0x25, 0x73, 0x00
-                              };
+                {
+                    0x25, 0x64, 0x25, 0x73, 0x20, 0x25, 0x73, 0x2E,
+                    0x20, 0x25, 0x73, 0x00
+                };
             List<uint> l;
             switch (_patchType)
             {
@@ -2358,7 +2067,7 @@ namespace EuropaEnginePatcher
         ///     軍団名の取得処理を埋め込む位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanGetArmyName()
+        private static bool ScanGetArmyName()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%XX 軍団名の取得処理を埋め込む位置\"を探します\n");
@@ -2370,10 +2079,10 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.Victoria:
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0xC6, 0xB9, 0x64, 0x00, 0x00, 0x00, 0x99,
-                                      0xF7, 0xF9, 0x83, 0xFA, 0x0D, 0x75, 0x1E
-                                  };
+                        {
+                            0x8B, 0xC6, 0xB9, 0x64, 0x00, 0x00, 0x00, 0x99,
+                            0xF7, 0xF9, 0x83, 0xFA, 0x0D, 0x75, 0x1E
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2382,10 +2091,10 @@ namespace EuropaEnginePatcher
                     _posGetArmyName1 = l[0];
 
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0xC6, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0x99,
-                                      0xF7, 0xF9, 0x8B, 0x54, 0x94, 0x14, 0x52
-                                  };
+                        {
+                            0x8B, 0xC6, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0x99,
+                            0xF7, 0xF9, 0x8B, 0x54, 0x94, 0x14, 0x52
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2396,10 +2105,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.HeartsOfIron:
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0xC6, 0xB9, 0x64, 0x00, 0x00, 0x00, 0x99,
-                                      0xF7, 0xF9, 0x83, 0xFA, 0x0D, 0x75, 0x1E
-                                  };
+                        {
+                            0x8B, 0xC6, 0xB9, 0x64, 0x00, 0x00, 0x00, 0x99,
+                            0xF7, 0xF9, 0x83, 0xFA, 0x0D, 0x75, 0x1E
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2408,10 +2117,10 @@ namespace EuropaEnginePatcher
                     _posGetArmyName1 = l[0];
 
                     pattern = new byte[]
-                                  {
-                                      0x8B, 0xC6, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0x99,
-                                      0xF7, 0xF9, 0x8B, 0x54, 0x94, 0x1C, 0x52
-                                  };
+                        {
+                            0x8B, 0xC6, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0x99,
+                            0xF7, 0xF9, 0x8B, 0x54, 0x94, 0x1C, 0x52
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2429,10 +2138,10 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                                  {
-                                      0xFF, 0xFF, 0x99, 0xB9, 0x64, 0x00, 0x00, 0x00,
-                                      0xF7, 0xF9, 0x83, 0xFA, 0x0D
-                                  };
+                        {
+                            0xFF, 0xFF, 0x99, 0xB9, 0x64, 0x00, 0x00, 0x00,
+                            0xF7, 0xF9, 0x83, 0xFA, 0x0D
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2441,10 +2150,10 @@ namespace EuropaEnginePatcher
                     _posGetArmyName1 = l[0] - 4;
 
                     pattern = new byte[]
-                                  {
-                                      0x99, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0xF7, 0xF9,
-                                      0x8B, 0x94, 0x95
-                                  };
+                        {
+                            0x99, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0xF7, 0xF9,
+                            0x8B, 0x94, 0x95
+                        };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2463,15 +2172,15 @@ namespace EuropaEnginePatcher
         ///     軍団名の書式文字列の定義位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanArmyNameFormat()
+        private static bool ScanArmyNameFormat()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%XX 軍団名の書式文字列の定義位置\"を探します\n");
 
             var pattern = new byte[]
-                              {
-                                  0x25, 0x64, 0x25, 0x73, 0x20, 0x25, 0x73, 0x00
-                              };
+                {
+                    0x25, 0x64, 0x25, 0x73, 0x20, 0x25, 0x73, 0x00
+                };
             List<uint> l;
             switch (_patchType)
             {
@@ -2498,16 +2207,16 @@ namespace EuropaEnginePatcher
         ///     国家序列の取得処理を埋め込む位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanGetRankingName()
+        private static bool ScanGetRankingName()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%XX 国家序列の取得処理を埋め込む位置\"を探します\n");
 
             var pattern = new byte[]
-                              {
-                                  0x8B, 0xC6, 0xB9, 0x64, 0x00, 0x00, 0x00, 0x99,
-                                  0xF7, 0xF9, 0xC7, 0x44, 0x24
-                              };
+                {
+                    0x8B, 0xC6, 0xB9, 0x64, 0x00, 0x00, 0x00, 0x99,
+                    0xF7, 0xF9, 0xC7, 0x44, 0x24
+                };
             List<uint> l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
             if (l.Count == 0)
             {
@@ -2516,9 +2225,9 @@ namespace EuropaEnginePatcher
             _posGetRankingName1 = l[0];
 
             pattern = new byte[]
-                          {
-                              0x83, 0xFA, 0x0D, 0x75, 0x28
-                          };
+                {
+                    0x83, 0xFA, 0x0D, 0x75, 0x28
+                };
             l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
             if (l.Count == 0)
             {
@@ -2539,17 +2248,17 @@ namespace EuropaEnginePatcher
         ///     EE_MAX_AMPHIB_MOD_TITLEの呼び出し位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanEeMaxAmphibModTitle()
+        private static bool ScanEeMaxAmphibModTitle()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
 
             AppendLog("  \"%XX EE_MAX_AMPHIB_MODの定義位置\"を探します\n");
             var pattern = new byte[]
-                              {
-                                  0x45, 0x45, 0x5F, 0x4D, 0x41, 0x58, 0x5F, 0x41,
-                                  0x4D, 0x50, 0x48, 0x49, 0x42, 0x5F, 0x4D, 0x4F,
-                                  0x44
-                              };
+                {
+                    0x45, 0x45, 0x5F, 0x4D, 0x41, 0x58, 0x5F, 0x41,
+                    0x4D, 0x50, 0x48, 0x49, 0x42, 0x5F, 0x4D, 0x4F,
+                    0x44
+                };
             List<uint> l = BinaryScan(_data, pattern, _posDataSection, _sizeDataSection);
             if (l.Count == 0)
             {
@@ -2580,7 +2289,7 @@ namespace EuropaEnginePatcher
         ///     モデル名の終端文字設定位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private bool ScanTermModelName()
+        private static bool ScanTermModelName()
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
 
@@ -2591,27 +2300,27 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.ArsenalOfDemocracy:
                     pattern = new byte[]
-                                  {
-                                      0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x45, 0x90,
-                                      0x00
-                                  };
+                        {
+                            0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x45, 0x90,
+                            0x00
+                        };
                     break;
 
                 case PatchType.HeartsOfIron2:
                 case PatchType.ArsenalOfDemocracy107:
                     pattern = new byte[]
-                                  {
-                                      0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
-                                      0x68, 0x00
-                                  };
+                        {
+                            0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
+                            0x68, 0x00
+                        };
                     break;
 
                 case PatchType.DarkestHour:
                     pattern = new byte[]
-                                  {
-                                      0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
-                                      0x64, 0x00
-                                  };
+                        {
+                            0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
+                            0x64, 0x00
+                        };
                     break;
 
                 case PatchType.HeartsOfIron212:
@@ -2619,10 +2328,10 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                                  {
-                                      0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
-                                      0x60, 0x00
-                                  };
+                        {
+                            0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
+                            0x60, 0x00
+                        };
                     break;
             }
             List<uint> l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
@@ -2676,7 +2385,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     パッチを当てる
         /// </summary>
-        private void PatchBinary()
+        private static void PatchBinary()
         {
             AppendLog("PatchBinary - パッチをあてる\n");
 
@@ -2707,17 +2416,17 @@ namespace EuropaEnginePatcher
             }
             EmbedTextOutDc2();
             EmbedGetTextWidth();
-            if (IsAutoLineBreak)
+            if (PatchController.AutoLineBreak)
             {
                 EmbedCalcLineBreak();
             }
             // テキスト自動折り返し
-            if (IsAutoLineBreak)
+            if (PatchController.AutoLineBreak)
             {
                 PatchCalcLineBreak();
             }
             // 語順入れ替え
-            if (IsWordOrder)
+            if (PatchController.WordOrder)
             {
                 switch (_patchType)
                 {
@@ -2778,7 +2487,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     TextOutの処理を埋め込む
         /// </summary>
-        private void PatchTextOut()
+        private static void PatchTextOut()
         {
             AppendLog("  proc TextOut書き換え\n");
             uint offset = _posTextOutStart;
@@ -3183,7 +2892,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     文字列幅の処理を埋め込む
         /// </summary>
-        private void PatchGetTextWidth()
+        private static void PatchGetTextWidth()
         {
             AppendLog("  proc GetTextWidth書き換え\n");
             uint offset = _posGetTextWidthStart;
@@ -3481,7 +3190,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     Latin文字を大文字に変換する処理をスキップするように書き換える
         /// </summary>
-        private void PatchLatinToUpper()
+        private static void PatchLatinToUpper()
         {
             AppendLog("  proc LatinToUpper書き換え\n");
             uint offset = _posLatinToUpper;
@@ -3505,9 +3214,9 @@ namespace EuropaEnginePatcher
         }
 
         /// <summary>
-        /// チャットウィンドウの特殊文字ブロック処理を書き換える
+        ///     チャットウィンドウの特殊文字ブロック処理を書き換える
         /// </summary>
-        private void PatchChatBlockChar()
+        private static void PatchChatBlockChar()
         {
             AppendLog("  proc ChatBlockChar書き換え\n");
             switch (_patchType)
@@ -3558,7 +3267,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     改行位置の計算処理を埋め込む
         /// </summary>
-        private void PatchCalcLineBreak()
+        private static void PatchCalcLineBreak()
         {
             AppendLog("  proc 改行位置の計算処理書き換え\n");
 
@@ -5766,7 +5475,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     WINMM.dllを_INMM.dllに書き換える
         /// </summary>
-        private void PatchWinMmDll()
+        private static void PatchWinMmDll()
         {
             AppendLog("  WINMM.dll書き換え\n");
             AppendLog(string.Format("  ${0:X8}\n\n", _posWinMmDll));
@@ -5776,7 +5485,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     IsDebuggerPresentをGetModuleHandleAに書き換える
         /// </summary>
-        private void PatchIsDebuggerPresent()
+        private static void PatchIsDebuggerPresent()
         {
             uint offset = _posIsDebuggerPresent;
             AppendLog("  IsDebuggerPresent書き換え\n");
@@ -5803,7 +5512,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     TextOutDC2を埋め込む
         /// </summary>
-        private void EmbedTextOutDc2()
+        private static void EmbedTextOutDc2()
         {
             uint offset = _posTextOutDc;
             AppendLog("  TextOutDC2埋め込み\n");
@@ -5824,7 +5533,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     GetTextWidthを埋め込む
         /// </summary>
-        private void EmbedGetTextWidth()
+        private static void EmbedGetTextWidth()
         {
             uint offset = _posGetTextWidth;
             AppendLog("  GetTextWidth埋め込み\n");
@@ -5847,7 +5556,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     CalcLineBreakを埋め込む
         /// </summary>
-        private void EmbedCalcLineBreak()
+        private static void EmbedCalcLineBreak()
         {
             uint offset = _posCalcLineBreak;
             AppendLog("  CalcLineBreak埋め込み\n");
@@ -5871,7 +5580,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     strnlen0を埋め込む
         /// </summary>
-        private void EmbedStrNLen0()
+        private static void EmbedStrNLen0()
         {
             uint offset = _posStrNLen;
             AppendLog("  strnlen0埋め込み\n");
@@ -5894,7 +5603,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     師団名を取得する処理を埋め込む
         /// </summary>
-        private void PatchGetDivisionName()
+        private static void PatchGetDivisionName()
         {
             AppendLog("  proc GetDivisionName書き換え\n");
 
@@ -5989,7 +5698,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     軍団名を取得する処理を埋め込む
         /// </summary>
-        private void PatchGetArmyName()
+        private static void PatchGetArmyName()
         {
             AppendLog("  proc GetArmyName書き換え\n");
 
@@ -6154,7 +5863,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     国家序列を取得する処理を埋め込む
         /// </summary>
-        private void PatchGetRankingName()
+        private static void PatchGetRankingName()
         {
             AppendLog("  proc GetRankingName書き換え\n");
 
@@ -6176,7 +5885,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     師団名の書式文字列埋め込み
         /// </summary>
-        private void EmbedDivisionNameFormat()
+        private static void EmbedDivisionNameFormat()
         {
             uint offset = _posDivisionNameFormat;
             AppendLog("  師団名の書式文字列埋め込み\n");
@@ -6197,7 +5906,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     軍団名の書式文字列埋め込み
         /// </summary>
-        private void EmbedArmyNameFormat()
+        private static void EmbedArmyNameFormat()
         {
             uint offset = _posArmyNameFormat;
             AppendLog("  軍団名の書式文字列埋め込み\n");
@@ -6216,7 +5925,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     NATION_RANKING埋め込み
         /// </summary>
-        private void EmbedRankingSuffix()
+        private static void EmbedRankingSuffix()
         {
             uint offset = _posRankingSuffix;
             AppendLog("  RANKING_SUFFIX埋め込み\n");
@@ -6245,7 +5954,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     EE_MAX_AMPHIB_MODの呼び出しをEE_MAX_AMPHIB_MOD_TITLEに書き換える
         /// </summary>
-        private void PatchPushEeMaxAmphibModTitle()
+        private static void PatchPushEeMaxAmphibModTitle()
         {
             AppendLog("  push EE_MAX_AMPHIB_MOD書き換え\n");
             uint offset = _posPushEeMaxAmphibModTitle;
@@ -6257,7 +5966,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     EE_MAX_AMPHIB_MOD_TITLE埋め込み
         /// </summary>
-        private void EmbedEeMaxAmphibModTitle()
+        private static void EmbedEeMaxAmphibModTitle()
         {
             uint offset = _posEeMaxAmphibModTitle;
             AppendLog("  EE_MAX_AMPHIB_MOD_TITLE埋め込み\n");
@@ -6291,7 +6000,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     モデル名の終端文字設定処理書き換え
         /// </summary>
-        private void PatchTermModelName()
+        private static void PatchTermModelName()
         {
             AppendLog("  proc モデル名の終端文字設定処理書き換え\n");
 
@@ -6671,7 +6380,7 @@ namespace EuropaEnginePatcher
         /// <param name="start">開始位置</param>
         /// <param name="size">探索するバイトサイズ</param>
         /// <returns>探索に成功すればtrueを返す</returns>
-        private List<uint> BinaryScan(byte[] target, byte[] pattern, uint start, uint size)
+        private static List<uint> BinaryScan(byte[] target, byte[] pattern, uint start, uint size)
         {
             var sb = new StringBuilder("  Binary:");
             for (int i = 0; i < pattern.Length; i++)
@@ -6722,7 +6431,7 @@ namespace EuropaEnginePatcher
         /// <param name="target">パッチ対象のデータ</param>
         /// <param name="offset">パッチを当てる位置</param>
         /// <param name="val">書き換える値</param>
-        private void PatchByte(byte[] target, uint offset, byte val)
+        private static void PatchByte(byte[] target, uint offset, byte val)
         {
             AppendLog(string.Format("  ${0:X8} {1:X2}->{2:X2}\n", offset, target[offset], val));
             target[offset] = val;
@@ -6735,7 +6444,7 @@ namespace EuropaEnginePatcher
         /// <param name="offset">パッチを当てる位置</param>
         /// <param name="val">書き換える値</param>
         /// <param name="message">ログ出力するメッセージ</param>
-        private void PatchLong(byte[] target, uint offset, uint val, string message)
+        private static void PatchLong(byte[] target, uint offset, uint val, string message)
         {
             AppendLog(string.Format("  ${0:X8} {1:X8}->{2:X8} ({3})\n", offset, GetLong(offset), val, message));
             target[offset] = (byte) (val & 0x000000FF);
@@ -6749,7 +6458,7 @@ namespace EuropaEnginePatcher
         /// </summary>
         /// <param name="offset">取得する位置</param>
         /// <returns>取得した値</returns>
-        private ushort GetWord(uint offset)
+        private static ushort GetWord(uint offset)
         {
             return (ushort) (_data[offset] + _data[offset + 1]*0x0100);
         }
@@ -6759,7 +6468,7 @@ namespace EuropaEnginePatcher
         /// </summary>
         /// <param name="offset">取得する位置</param>
         /// <returns>取得した値</returns>
-        private uint GetLong(uint offset)
+        private static uint GetLong(uint offset)
         {
             return
                 (uint)
@@ -6773,7 +6482,7 @@ namespace EuropaEnginePatcher
         /// <param name="offset">取得する位置</param>
         /// <param name="max">取得する最大値</param>
         /// <returns>取得した値</returns>
-        private string GetString(uint offset, int max)
+        private static string GetString(uint offset, int max)
         {
             string result = "";
             for (int i = 0;; i++)
@@ -6796,7 +6505,7 @@ namespace EuropaEnginePatcher
         /// </summary>
         /// <param name="pos">ファイル上の位置</param>
         /// <returns>変換したアドレス</returns>
-        private uint GetTextAddress(uint pos)
+        private static uint GetTextAddress(uint pos)
         {
             return _addrBase + _addrTextSection - _posTextSection + pos;
         }
@@ -6806,7 +6515,7 @@ namespace EuropaEnginePatcher
         /// </summary>
         /// <param name="pos">ファイル上の位置</param>
         /// <returns>変換したアドレス</returns>
-        private uint GetDataAddress(uint pos)
+        private static uint GetDataAddress(uint pos)
         {
             return _addrBase + _addrDataSection - _posDataSection + pos;
         }
@@ -6816,7 +6525,7 @@ namespace EuropaEnginePatcher
         /// </summary>
         /// <param name="pos">ファイル上の位置</param>
         /// <returns>変換したアドレス</returns>
-        private uint GetRdataAddress(uint pos)
+        private static uint GetRdataAddress(uint pos)
         {
             return _addrBase + _addrRdataSection - _posRdataSection + pos;
         }
@@ -6826,7 +6535,7 @@ namespace EuropaEnginePatcher
         /// </summary>
         /// <param name="pos">ファイル上の位置</param>
         /// <returns>変換したアドレス</returns>
-        private uint GetIdataAddress(uint pos)
+        private static uint GetIdataAddress(uint pos)
         {
             return _addrBase + _addrIdataSection - _posIdataSection + pos;
         }
@@ -6837,7 +6546,7 @@ namespace EuropaEnginePatcher
         /// <param name="current">現在のアドレス/ファイル上の位置</param>
         /// <param name="target">参照先のアドレス/ファイル上の位置</param>
         /// <returns>計算結果のオフセット</returns>
-        private uint GetRelativeOffset(uint current, uint target)
+        private static uint GetRelativeOffset(uint current, uint target)
         {
             if (target < current)
             {
@@ -6852,7 +6561,7 @@ namespace EuropaEnginePatcher
         /// <param name="current">現在のアドレス/ファイル上の位置</param>
         /// <param name="offset">オフセット</param>
         /// <returns>計算結果のアドレス</returns>
-        private uint GetRelativeAddress(uint current, uint offset)
+        private static uint GetRelativeAddress(uint current, uint offset)
         {
             if (offset >= 0x80000000)
             {
@@ -6878,9 +6587,9 @@ namespace EuropaEnginePatcher
         ///     ログを追記する
         /// </summary>
         /// <param name="s">追記する文字列</param>
-        private void AppendLog(string s)
+        private static void AppendLog(string s)
         {
-            _form.AppendLog(s);
+            MainForm.AppendLog(s);
         }
 
         #endregion
@@ -6889,7 +6598,7 @@ namespace EuropaEnginePatcher
     /// <summary>
     ///     パッチの種類
     /// </summary>
-    internal enum PatchType
+    public enum PatchType
     {
         Unknown, // 不明
         CrusaderKings, // Crusader Kings
