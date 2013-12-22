@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+            this.components = new System.ComponentModel.Container();
             this.clearButton = new System.Windows.Forms.Button();
             this.logRichTextBox = new System.Windows.Forms.RichTextBox();
             this.exitButton = new System.Windows.Forms.Button();
@@ -41,6 +42,7 @@
             this.renameOriginalCheckBox = new System.Windows.Forms.CheckBox();
             this.autoLineBreakCheckBox = new System.Windows.Forms.CheckBox();
             this.wordOrderCheckBox = new System.Windows.Forms.CheckBox();
+            this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.optionGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,6 +54,7 @@
             this.clearButton.Size = new System.Drawing.Size(75, 23);
             this.clearButton.TabIndex = 3;
             this.clearButton.Text = "クリア";
+            this.mainToolTip.SetToolTip(this.clearButton, "ツールの設定を初期状態に戻します。");
             this.clearButton.UseVisualStyleBackColor = true;
             this.clearButton.Click += new System.EventHandler(this.OnClearButtonClick);
             // 
@@ -76,6 +79,7 @@
             this.exitButton.Size = new System.Drawing.Size(75, 23);
             this.exitButton.TabIndex = 6;
             this.exitButton.Text = "終了";
+            this.mainToolTip.SetToolTip(this.exitButton, "ツールを終了します。");
             this.exitButton.UseVisualStyleBackColor = true;
             this.exitButton.Click += new System.EventHandler(this.OnExitButtonClick);
             // 
@@ -88,6 +92,7 @@
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 5;
             this.saveButton.Text = "保存";
+            this.mainToolTip.SetToolTip(this.saveButton, "パッチを当てたファイルの保存、および日本語化DLLのコピーを実行します。");
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.OnSaveButtonClick);
             // 
@@ -99,6 +104,7 @@
             this.startButton.Size = new System.Drawing.Size(75, 23);
             this.startButton.TabIndex = 4;
             this.startButton.Text = "開始";
+            this.mainToolTip.SetToolTip(this.startButton, "パッチ当ての処理を開始します。");
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Click += new System.EventHandler(this.OnStartButtonClick);
             // 
@@ -110,6 +116,7 @@
             this.browseButton.Size = new System.Drawing.Size(75, 23);
             this.browseButton.TabIndex = 2;
             this.browseButton.Text = "参照";
+            this.mainToolTip.SetToolTip(this.browseButton, "パッチ対象の実行ファイルを選択するために、ダイアログボックスを開きます。");
             this.browseButton.UseVisualStyleBackColor = true;
             this.browseButton.Click += new System.EventHandler(this.OnBrowseButtonClick);
             // 
@@ -121,6 +128,7 @@
             this.pathTextBox.Name = "pathTextBox";
             this.pathTextBox.Size = new System.Drawing.Size(359, 19);
             this.pathTextBox.TabIndex = 1;
+            this.mainToolTip.SetToolTip(this.pathTextBox, "ここにゲームの実行ファイルをドロップして下さい。");
             this.pathTextBox.TextChanged += new System.EventHandler(this.OnPathTextBoxTextChanged);
             // 
             // typeComboBox
@@ -143,6 +151,7 @@
             this.typeComboBox.Name = "typeComboBox";
             this.typeComboBox.Size = new System.Drawing.Size(359, 20);
             this.typeComboBox.TabIndex = 7;
+            this.mainToolTip.SetToolTip(this.typeComboBox, "ゲームの種類を指定します。\r\nわからなければ自動判別を選択して下さい。");
             this.typeComboBox.SelectedIndexChanged += new System.EventHandler(this.OnTypeComboBoxSelectedIndexChanged);
             // 
             // optionGroupBox
@@ -170,6 +179,7 @@
             this.autoModeCheckBox.Size = new System.Drawing.Size(100, 16);
             this.autoModeCheckBox.TabIndex = 3;
             this.autoModeCheckBox.Text = "自動処理モード";
+            this.mainToolTip.SetToolTip(this.autoModeCheckBox, "実行ファイルをドロップした時、参照キーで選択した時、開始キーを押した時に、\r\nパッチ当て、保存、日本語化DLLのコピーを連続して実行します。");
             this.autoModeCheckBox.UseVisualStyleBackColor = true;
             this.autoModeCheckBox.CheckedChanged += new System.EventHandler(this.OnAutoModeCheckedBoxCheckedChanged);
             // 
@@ -183,6 +193,7 @@
             this.renameOriginalCheckBox.Size = new System.Drawing.Size(126, 16);
             this.renameOriginalCheckBox.TabIndex = 2;
             this.renameOriginalCheckBox.Text = "元のファイルをリネーム";
+            this.mainToolTip.SetToolTip(this.renameOriginalCheckBox, "チェックを入れると元のファイルを～En.exeに変更し、\r\nパッチを当てた後のファイルで元のファイルを置き換えます。");
             this.renameOriginalCheckBox.UseVisualStyleBackColor = true;
             this.renameOriginalCheckBox.CheckedChanged += new System.EventHandler(this.OnRenameOriginalCheckBoxCheckedChanged);
             // 
@@ -196,6 +207,7 @@
             this.autoLineBreakCheckBox.Size = new System.Drawing.Size(125, 16);
             this.autoLineBreakCheckBox.TabIndex = 1;
             this.autoLineBreakCheckBox.Text = "テキスト自動折り返し";
+            this.mainToolTip.SetToolTip(this.autoLineBreakCheckBox, "表示領域の端に到達した時に文字列を自動で折り返します。\r\nわからなければチェックを入れたままにして下さい。");
             this.autoLineBreakCheckBox.UseVisualStyleBackColor = true;
             this.autoLineBreakCheckBox.CheckedChanged += new System.EventHandler(this.OnAutoLineBreakCheckBoxCheckedChanged);
             // 
@@ -207,6 +219,8 @@
             this.wordOrderCheckBox.Size = new System.Drawing.Size(142, 16);
             this.wordOrderCheckBox.TabIndex = 0;
             this.wordOrderCheckBox.Text = "自動命名時の語順変更";
+            this.mainToolTip.SetToolTip(this.wordOrderCheckBox, "新規部隊名が「第」+数字の順になるようにします。\r\nDarkest Hourの和訳は標準でこの機能をサポートしています。\r\nArsenal of Democrac" +
+        "yの和訳はオプションでこの機能をサポートしています。\r\nわからなければ変更しないで下さい。");
             this.wordOrderCheckBox.UseVisualStyleBackColor = true;
             this.wordOrderCheckBox.CheckedChanged += new System.EventHandler(this.OnWordOrderCheckBoxCheckedChanged);
             // 
@@ -252,5 +266,6 @@
 		private System.Windows.Forms.CheckBox autoLineBreakCheckBox;
         private System.Windows.Forms.CheckBox renameOriginalCheckBox;
         private System.Windows.Forms.CheckBox autoModeCheckBox;
+        private System.Windows.Forms.ToolTip mainToolTip;
 	}
 }

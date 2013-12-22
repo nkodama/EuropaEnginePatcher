@@ -264,27 +264,6 @@ namespace EuropaEnginePatcher
             return true;
         }
 
-        /// <summary>
-        /// 実行ファイル名を取得する
-        /// </summary>
-        /// <param name="pathName">パス名</param>
-        /// <param name="suffix">ファイル名の接尾辞(En/Jp)</param>
-        /// <returns>実行ファイル名</returns>
-        private static string GetExeFileName(string pathName, string suffix)
-        {
-            string dirName = Path.GetDirectoryName(pathName) ?? Environment.CurrentDirectory;
-            string fileName = Path.GetFileNameWithoutExtension(pathName);
-            if (string.IsNullOrEmpty(fileName))
-            {
-                fileName = "HoI2";
-            }
-            if (fileName.Length > 2 && fileName.Substring(fileName.Length - 2).ToLower().Equals("en"))
-            {
-                fileName = fileName.Substring(0, fileName.Length - 2);
-            }
-            return Path.Combine(dirName, fileName + suffix + ".exe");
-        }
-
         #endregion
 
         #region ゲーム種類判別
@@ -305,6 +284,27 @@ namespace EuropaEnginePatcher
                 }
             }
             return folderName;
+        }
+
+        /// <summary>
+        /// 実行ファイル名を取得する
+        /// </summary>
+        /// <param name="pathName">パス名</param>
+        /// <param name="suffix">ファイル名の接尾辞(En/Jp)</param>
+        /// <returns>実行ファイル名</returns>
+        private static string GetExeFileName(string pathName, string suffix)
+        {
+            string dirName = Path.GetDirectoryName(pathName) ?? Environment.CurrentDirectory;
+            string fileName = Path.GetFileNameWithoutExtension(pathName);
+            if (string.IsNullOrEmpty(fileName))
+            {
+                fileName = "HoI2";
+            }
+            if (fileName.Length > 2 && fileName.Substring(fileName.Length - 2).ToLower().Equals("en"))
+            {
+                fileName = fileName.Substring(0, fileName.Length - 2);
+            }
+            return Path.Combine(dirName, fileName + suffix + ".exe");
         }
 
         /// <summary>
