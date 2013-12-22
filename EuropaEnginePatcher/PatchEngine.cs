@@ -156,9 +156,11 @@ namespace EuropaEnginePatcher
         /// <param name="fileName">保存するファイルのパス名</param>
         public static void SavePatchedFile(string fileName)
         {
-            var s = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            s.Write(_data, 0, _data.Length);
-            s.Close();
+            using (var s = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+            {
+                s.Write(_data, 0, _data.Length);
+                s.Close();
+            }
         }
 
         /// <summary>
@@ -174,9 +176,11 @@ namespace EuropaEnginePatcher
 
             _data = new byte[_fileSize];
 
-            FileStream s = info.OpenRead();
-            s.Read(_data, 0, (int) _fileSize);
-            s.Close();
+            using (FileStream s = info.OpenRead())
+            {
+                s.Read(_data, 0, (int)_fileSize);
+                s.Close();
+            }
 
             AppendLog(string.Format("  TargetFile: {0}\n", fileName));
             AppendLog(string.Format("  FileSize: {0}Bytes\n", _fileSize));

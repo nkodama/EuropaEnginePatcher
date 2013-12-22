@@ -61,6 +61,33 @@ namespace EuropaEnginePatcher
         #region パッチ処理
 
         /// <summary>
+        /// 自動処理
+        /// </summary>
+        /// <returns>パッチ処理が成功すればtrueを返す</returns>
+        /// <remarks>
+        /// 戻り値は保存キーを有効化するかの判定に使用するので、保存/DLLコピーに失敗してもtrueを返す
+        /// </remarks>
+        public static bool AutoProcess()
+        {
+            if (!Patch())
+            {
+                return false;
+            }
+            if (!Save())
+            {
+                return true;
+            }
+            if (!CopyDll())
+            {
+                return true;
+            }
+
+            MessageBox.Show("成功しました。", "Europa Engine Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            return true;
+        }
+
+        /// <summary>
         ///     パッチ処理
         /// </summary>
         /// <returns>パッチ処理が成功すればtrueを返す</returns>
@@ -86,97 +113,149 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     パッチ後のファイル保存処理
         /// </summary>
-        public static void Save()
+        /// <returns>保存が成功すればtrueを返す</returns>
+        public static bool Save()
         {
             if (!File.Exists(TargetFileName))
             {
-                return;
+                return false;
             }
 
             string jpFileName;
             if (RenameOriginal)
             {
-                var dialog = new SaveFileDialog
+                string enFileName = GetExeFileName(TargetFileName, "En");
+                if (!AutoMode)
+                {
+                    var dialog = new SaveFileDialog
                     {
-                        FileName = Path.GetFileNameWithoutExtension(TargetFileName) + "En",
+                        FileName = Path.GetFileNameWithoutExtension(enFileName),
                         DefaultExt = "exe",
                         Filter = "実行ファイル (*.exe)|*.exe",
-                        InitialDirectory = Path.GetDirectoryName(TargetFileName),
+                        InitialDirectory = Path.GetDirectoryName(enFileName),
                         OverwritePrompt = true,
                         Title = "元のファイルをリネームして保存"
                     };
-                if (dialog.ShowDialog() == DialogResult.Cancel)
-                {
-                    return;
+                    if (dialog.ShowDialog() == DialogResult.Cancel)
+                    {
+                        return false;
+                    }
+                    enFileName = dialog.FileName;
                 }
-                string enFileName = dialog.FileName;
-                jpFileName = Path.Combine(Path.GetDirectoryName(enFileName) ?? Environment.CurrentDirectory,
-                                          Path.GetFileName(TargetFileName) ?? "HoI2.exe");
-                if (File.Exists(enFileName))
+                jpFileName = GetExeFileName(TargetFileName, "");
+                if (!Path.GetFullPath(enFileName).Equals(Path.GetFullPath(TargetFileName)))
                 {
-                    File.Delete(enFileName);
-                }
-                if (File.Exists(jpFileName))
-                {
-                    File.Move(jpFileName, enFileName);
+                    if (File.Exists(enFileName))
+                    {
+                        File.Delete(enFileName);
+                    }
+                    if (File.Exists(TargetFileName))
+                    {
+                        File.Move(TargetFileName, enFileName);
+                    }
                 }
             }
             else
             {
-                var dialog = new SaveFileDialog
+                jpFileName = GetExeFileName(TargetFileName, "Jp");
+                if (!AutoMode)
+                {
+                    var dialog = new SaveFileDialog
                     {
-                        FileName = Path.GetFileNameWithoutExtension(TargetFileName) + "Jp",
+                        FileName = Path.GetFileNameWithoutExtension(jpFileName),
                         DefaultExt = "exe",
                         Filter = "実行ファイル (*.exe)|*.exe",
-                        InitialDirectory = Path.GetDirectoryName(TargetFileName),
+                        InitialDirectory = Path.GetDirectoryName(jpFileName),
                         OverwritePrompt = true,
                         Title = "パッチを当てたファイルを保存"
                     };
-                if (dialog.ShowDialog() == DialogResult.Cancel)
-                {
-                    return;
-                }
-                jpFileName = dialog.FileName;
-                if (File.Exists(jpFileName))
-                {
-                    File.Delete(jpFileName);
+                    if (dialog.ShowDialog() == DialogResult.Cancel)
+                    {
+                        return false;
+                    }
+                    jpFileName = dialog.FileName;
                 }
             }
+
             PatchEngine.SavePatchedFile(jpFileName);
-            CopyDll(Path.GetDirectoryName(jpFileName));
+
+            return true;
         }
 
         /// <summary>
         ///     _inmm.dllをコピーする
         /// </summary>
-        /// <param name="dirName">対象ディレクトリ名</param>
-        private static void CopyDll(string dirName)
+        /// <returns>コピーが成功すればtrueを返す</returns>
+        public static bool CopyDll()
         {
-            string destName = Path.Combine(dirName, "_inmm.dll");
-            string srcName = Path.Combine(Environment.CurrentDirectory, "_inmm.dll");
-            if (File.Exists(srcName))
+            string folderName = Path.GetDirectoryName(TargetFileName);
+            if (string.IsNullOrEmpty(folderName))
             {
-                if (File.Exists(destName))
+                folderName = Environment.CurrentDirectory;
+            }
+
+            string destName = Path.Combine(folderName, "_inmm.dll");
+            string srcName = Path.Combine(Environment.CurrentDirectory, "_inmm.dll");
+
+            if (!File.Exists(srcName))
+            {
+                MessageBox.Show("_inmm.dllが存在しません。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (File.Exists(destName))
+            {
+                if (!File.GetLastWriteTimeUtc(destName).Equals(File.GetLastWriteTimeUtc(srcName)))
                 {
-                    if (!File.GetLastWriteTimeUtc(destName).Equals(File.GetLastWriteTimeUtc(srcName)))
+                    if (!AutoMode)
                     {
                         if (MessageBox.Show("_inmm.dllのバージョンが一致しません。\n上書きコピーしてもよろしいですか？",
-                                            "日本語化DLLのコピー", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                            "日本語化DLLのコピー",
+                                            MessageBoxButtons.YesNo) == DialogResult.No)
                         {
-                            File.Copy(srcName, destName, true);
+                            return false;
                         }
                     }
-                }
-                else
-                {
-                    if (MessageBox.Show("_inmm.dllがありません。\nコピーしてもよろしいですか？",
-                                        "日本語化DLLのコピー", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
-                        DialogResult.Yes)
-                    {
-                        File.Copy(srcName, destName);
-                    }
+                    File.Copy(srcName, destName, true);
                 }
             }
+            else
+            {
+                if (!AutoMode)
+                {
+                    if (MessageBox.Show("_inmm.dllがありません。\nコピーしてもよろしいですか？",
+                                        "日本語化DLLのコピー",
+                                        MessageBoxButtons.YesNo,
+                                        MessageBoxIcon.Question) == DialogResult.No)
+                    {
+                        return false;
+                    }
+                }
+                File.Copy(srcName, destName, true);
+            }
+            
+            return true;
+        }
+
+        /// <summary>
+        /// 実行ファイル名を取得する
+        /// </summary>
+        /// <param name="pathName">パス名</param>
+        /// <param name="suffix">ファイル名の接尾辞(En/Jp)</param>
+        /// <returns>実行ファイル名</returns>
+        private static string GetExeFileName(string pathName, string suffix)
+        {
+            string dirName = Path.GetDirectoryName(pathName) ?? Environment.CurrentDirectory;
+            string fileName = Path.GetFileNameWithoutExtension(pathName);
+            if (string.IsNullOrEmpty(fileName))
+            {
+                fileName = "HoI2";
+            }
+            if (fileName.Length > 2 && fileName.Substring(fileName.Length - 2).ToLower().Equals("en"))
+            {
+                fileName = fileName.Substring(0, fileName.Length - 2);
+            }
+            return Path.Combine(dirName, fileName + suffix + ".exe");
         }
 
         #endregion
@@ -197,42 +276,42 @@ namespace EuropaEnginePatcher
             }
 
             string gameName = singleFileName.ToLower();
-            if (gameName.Equals("crusaders"))
+            if (gameName.Equals("crusaders") || gameName.Equals("crusadersen"))
             {
                 GameType = GameType.CrusaderKings;
                 return;
             }
-            if (gameName.Equals("eu2"))
+            if (gameName.Equals("eu2") || gameName.Equals("eu2en"))
             {
                 GameType = GameType.EuropaUniversalis2;
                 return;
             }
-            if (gameName.Equals("ftg"))
+            if (gameName.Equals("ftg") || gameName.Equals("ftgen"))
             {
                 GameType = GameType.ForTheGlory;
                 return;
             }
-            if (gameName.Equals("victoria"))
+            if (gameName.Equals("victoria") || gameName.Equals("victoriaen"))
             {
                 GameType = GameType.Victoria;
                 return;
             }
-            if (gameName.Equals("hoi"))
+            if (gameName.Equals("hoi") || gameName.Equals("hoien"))
             {
                 GameType = GameType.HeartsOfIron;
                 return;
             }
-            if (gameName.Equals("hoi2"))
+            if (gameName.Equals("hoi2") || gameName.Equals("hoi2en"))
             {
                 GameType = GameType.HeartsOfIron2;
                 return;
             }
-            if (gameName.Equals("aodgame"))
+            if (gameName.Equals("aodgame") || gameName.Equals("aodgameen"))
             {
                 GameType = GameType.ArsenalOfDemocracy;
                 return;
             }
-            if (gameName.Equals("darkest hour"))
+            if (gameName.Equals("darkest hour") || gameName.Equals("darkest houren"))
             {
                 GameType = GameType.DarkestHour;
                 return;

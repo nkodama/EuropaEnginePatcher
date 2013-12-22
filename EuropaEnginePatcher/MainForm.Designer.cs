@@ -155,7 +155,7 @@
             this.optionGroupBox.Controls.Add(this.wordOrderCheckBox);
             this.optionGroupBox.Location = new System.Drawing.Point(12, 65);
             this.optionGroupBox.Name = "optionGroupBox";
-            this.optionGroupBox.Size = new System.Drawing.Size(295, 83);
+            this.optionGroupBox.Size = new System.Drawing.Size(359, 83);
             this.optionGroupBox.TabIndex = 9;
             this.optionGroupBox.TabStop = false;
             this.optionGroupBox.Text = "オプション";

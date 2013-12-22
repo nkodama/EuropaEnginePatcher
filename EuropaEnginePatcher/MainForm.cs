@@ -58,15 +58,21 @@ namespace EuropaEnginePatcher
         private void OnBrowseButtonClick(object sender, EventArgs e)
         {
             var dialog = new OpenFileDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (dialog.ShowDialog() == DialogResult.Cancel)
             {
-                pathTextBox.Text = dialog.FileName;
-                // 自動判別処理
-                if (typeComboBox.SelectedIndex == 0)
-                {
-                    PatchController.DetectGameType(pathTextBox.Text);
-                    typeComboBox.SelectedIndex = PatchController.GetGameIndex();
-                }
+                return;
+            }
+            pathTextBox.Text = dialog.FileName;
+            // 自動判別処理
+            if (typeComboBox.SelectedIndex == 0)
+            {
+                PatchController.DetectGameType(pathTextBox.Text);
+                typeComboBox.SelectedIndex = PatchController.GetGameIndex();
+            }
+            // 自動処理モード
+            if (PatchController.AutoMode && PatchController.AutoProcess())
+            {
+                saveButton.Enabled = true;
             }
         }
 
@@ -94,7 +100,7 @@ namespace EuropaEnginePatcher
             {
                 return;
             }
-            saveButton.Enabled = PatchController.Patch();
+            saveButton.Enabled = PatchController.AutoMode ? PatchController.AutoProcess() : PatchController.Patch();
         }
 
         /// <summary>
@@ -109,6 +115,7 @@ namespace EuropaEnginePatcher
                 return;
             }
             PatchController.Save();
+            PatchController.CopyDll();
         }
 
         /// <summary>
@@ -146,6 +153,11 @@ namespace EuropaEnginePatcher
                 PatchController.DetectGameType(pathTextBox.Text);
                 typeComboBox.SelectedIndex = PatchController.GetGameIndex();
             }
+            // 自動処理モード
+            if (PatchController.AutoMode && PatchController.AutoProcess())
+            {
+                saveButton.Enabled = true;
+            }
         }
 
         /// <summary>
@@ -171,6 +183,7 @@ namespace EuropaEnginePatcher
         private void OnPathTextBoxTextChanged(object sender, EventArgs e)
         {
             PatchController.TargetFileName = pathTextBox.Text;
+            saveButton.Enabled = false;
         }
 
         /// <summary>
@@ -191,6 +204,7 @@ namespace EuropaEnginePatcher
         private void OnRenameOriginalCheckBoxCheckedChanged(object sender, EventArgs e)
         {
             PatchController.RenameOriginal = renameOriginalCheckBox.Checked;
+            saveButton.Enabled = false;
         }
 
         /// <summary>
@@ -201,6 +215,7 @@ namespace EuropaEnginePatcher
         private void OnAutoLineBreakCheckBoxCheckedChanged(object sender, EventArgs e)
         {
             PatchController.AutoLineBreak = autoLineBreakCheckBox.Checked;
+            saveButton.Enabled = false;
         }
 
         /// <summary>
@@ -211,6 +226,7 @@ namespace EuropaEnginePatcher
         private void OnWordOrderCheckBoxCheckedChanged(object sender, EventArgs e)
         {
             PatchController.WordOrder = wordOrderCheckBox.Checked;
+            saveButton.Enabled = false;
         }
     }
 }

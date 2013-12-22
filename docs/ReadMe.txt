@@ -1,4 +1,4 @@
-Europa Engine Patcher Ver 0.45
+Europa Engine Patcher Ver 0.50
 
 ■はじめに
   Paradox社のEuropa Engineを使用したゲームを日本語化するためのツールです。
@@ -18,11 +18,6 @@ Europa Engine Patcher Ver 0.45
   1. 以下のランタイムライブラリをインストールして下さい。
      Microsoft .NET Framework 3.5 Service Pack 1 (フル パッケージ)
        http://www.microsoft.com/ja-jp/download/details.aspx?id=25150
-     Microsoft Visual C++ 2010 再頒布可能パッケージ
-       32bit Windowsの場合
-       http://www.microsoft.com/ja-jp/download/details.aspx?id=8328
-       64bit Windowsの場合
-       http://www.microsoft.com/ja-jp/download/details.aspx?id=13523
   2. EuropaEnginePatcher.exeを起動します。
   3. ウィンドウ上部のテキストボックスに実行ファイル名を入力します。
      右にある参照ボタンで読み込みダイアログが開きます。
@@ -106,6 +101,9 @@ RANKING_SUFFIX;位;;;;;;;;;;X
   2. チャットウィンドウで日本語変換中にCtrlキーを押すと文字化けします。
 
 ■更新履歴
+  2013/12/22 Ver 0.50   自動処理モードを実装。
+                        英語版のファイルをリネームするモードを追加。
+                        _inmm.dllがVCランタイムに依存しないように改良。
   2013/05/04 Ver 0.45   チャットウィンドウの文字化け問題を一部修正。
   2013/03/20 Ver 0.44   0.42の変更により発生したDDA1.2およびIC/DDAのパッチ当てに失敗する不具合を修正。
   2012/10/06 Ver 0.43   DH1.03RC1に対応。
