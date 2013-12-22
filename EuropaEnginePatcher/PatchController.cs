@@ -43,6 +43,33 @@ namespace EuropaEnginePatcher
 
         #endregion
 
+        #region 内部定数
+
+        /// <summary>
+        /// 実行ファイル名リスト
+        /// </summary>
+        private static readonly string[] ExeNames =
+        {
+            "CrusadersEn.exe",
+            "Crusaders.exe",
+            "EU2En.exe",
+            "EU2.exe",
+            "FTGEn.exe",
+            "FTG.exe",
+            "VictoriaEn.exe",
+            "Victoria.exe",
+            "HoIEn.exe",
+            "HoI.exe",
+            "Hoi2En.exe",
+            "Hoi2.exe",
+            "AODGameEn.exe",
+            "AODGame.exe",
+            "Darkest HourEn.exe",
+            "Darkest Hour.exe"
+        };
+
+        #endregion
+
         #region 初期化
 
         /// <summary>
@@ -261,6 +288,24 @@ namespace EuropaEnginePatcher
         #endregion
 
         #region ゲーム種類判別
+
+        /// <summary>
+        /// ゲームの実行ファイルを判別する
+        /// </summary>
+        /// <param name="folderName">対象フォルダ名</param>
+        /// <returns>実行ファイル名</returns>
+        public static string DetectExeFileName(string folderName)
+        {
+            foreach (string exeName in ExeNames)
+            {
+                string name = Path.Combine(folderName, exeName);
+                if (File.Exists(name))
+                {
+                    return name;
+                }
+            }
+            return folderName;
+        }
 
         /// <summary>
         ///     ゲームの種類を判別する

@@ -70,9 +70,9 @@ namespace EuropaEnginePatcher
                 typeComboBox.SelectedIndex = PatchController.GetGameIndex();
             }
             // 自動処理モード
-            if (PatchController.AutoMode && PatchController.AutoProcess())
+            if (PatchController.AutoMode)
             {
-                saveButton.Enabled = true;
+                saveButton.Enabled = PatchController.AutoProcess();
             }
         }
 
@@ -145,8 +145,13 @@ namespace EuropaEnginePatcher
         /// <param name="e"></param>
         private void OnFormDragDrop(object sender, DragEventArgs e)
         {
-            var fileNames = (string[]) e.Data.GetData(DataFormats.FileDrop, false);
-            pathTextBox.Text = fileNames[0];
+            string fileName = ((string[]) e.Data.GetData(DataFormats.FileDrop, false))[0];
+            // フォルダをドロップした場合はその下の実行ファイルを対象とする
+            if (Directory.Exists(fileName))
+            {
+                fileName = PatchController.DetectExeFileName(fileName);
+            }
+            pathTextBox.Text = fileName;
             // 自動判別処理
             if (typeComboBox.SelectedIndex == 0)
             {
@@ -154,9 +159,9 @@ namespace EuropaEnginePatcher
                 typeComboBox.SelectedIndex = PatchController.GetGameIndex();
             }
             // 自動処理モード
-            if (PatchController.AutoMode && PatchController.AutoProcess())
+            if (PatchController.AutoMode)
             {
-                saveButton.Enabled = true;
+                saveButton.Enabled = PatchController.AutoProcess();
             }
         }
 
