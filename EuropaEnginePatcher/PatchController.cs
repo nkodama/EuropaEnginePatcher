@@ -46,7 +46,7 @@ namespace EuropaEnginePatcher
         #region 内部定数
 
         /// <summary>
-        /// 実行ファイル名リスト
+        ///     実行ファイル名リスト
         /// </summary>
         private static readonly string[] ExeNames =
         {
@@ -88,11 +88,11 @@ namespace EuropaEnginePatcher
         #region パッチ処理
 
         /// <summary>
-        /// 自動処理
+        ///     自動処理
         /// </summary>
         /// <returns>パッチ処理が成功すればtrueを返す</returns>
         /// <remarks>
-        /// 戻り値は保存キーを有効化するかの判定に使用するので、保存/DLLコピーに失敗してもtrueを返す
+        ///     戻り値は保存キーを有効化するかの判定に使用するので、保存/DLLコピーに失敗してもtrueを返す
         /// </remarks>
         public static bool AutoProcess()
         {
@@ -143,68 +143,77 @@ namespace EuropaEnginePatcher
         /// <returns>保存が成功すればtrueを返す</returns>
         public static bool Save()
         {
-            if (!File.Exists(TargetFileName))
+            try
             {
+                if (!File.Exists(TargetFileName))
+                {
+                    return false;
+                }
+
+                string jpFileName;
+                if (RenameOriginal)
+                {
+                    string enFileName = GetExeFileName(TargetFileName, "En");
+                    if (!AutoMode)
+                    {
+                        var dialog = new SaveFileDialog
+                        {
+                            FileName = Path.GetFileNameWithoutExtension(enFileName),
+                            DefaultExt = "exe",
+                            Filter = "実行ファイル (*.exe)|*.exe",
+                            InitialDirectory = Path.GetDirectoryName(enFileName),
+                            OverwritePrompt = true,
+                            Title = "元のファイルをリネームして保存"
+                        };
+                        if (dialog.ShowDialog() == DialogResult.Cancel)
+                        {
+                            return false;
+                        }
+                        enFileName = dialog.FileName;
+                    }
+                    jpFileName = GetExeFileName(TargetFileName, "");
+                    if (!Path.GetFullPath(enFileName).Equals(Path.GetFullPath(TargetFileName)))
+                    {
+                        if (File.Exists(enFileName))
+                        {
+                            File.Delete(enFileName);
+                        }
+                        if (File.Exists(TargetFileName))
+                        {
+                            File.Move(TargetFileName, enFileName);
+                        }
+                    }
+                }
+                else
+                {
+                    jpFileName = GetExeFileName(TargetFileName, "Jp");
+                    if (!AutoMode)
+                    {
+                        var dialog = new SaveFileDialog
+                        {
+                            FileName = Path.GetFileNameWithoutExtension(jpFileName),
+                            DefaultExt = "exe",
+                            Filter = "実行ファイル (*.exe)|*.exe",
+                            InitialDirectory = Path.GetDirectoryName(jpFileName),
+                            OverwritePrompt = true,
+                            Title = "パッチを当てたファイルを保存"
+                        };
+                        if (dialog.ShowDialog() == DialogResult.Cancel)
+                        {
+                            return false;
+                        }
+                        jpFileName = dialog.FileName;
+                    }
+                }
+
+                PatchEngine.SavePatchedFile(jpFileName);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("パッチを当てたファイルの保存に失敗しました。", "ファイルの保存", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 return false;
             }
-
-            string jpFileName;
-            if (RenameOriginal)
-            {
-                string enFileName = GetExeFileName(TargetFileName, "En");
-                if (!AutoMode)
-                {
-                    var dialog = new SaveFileDialog
-                    {
-                        FileName = Path.GetFileNameWithoutExtension(enFileName),
-                        DefaultExt = "exe",
-                        Filter = "実行ファイル (*.exe)|*.exe",
-                        InitialDirectory = Path.GetDirectoryName(enFileName),
-                        OverwritePrompt = true,
-                        Title = "元のファイルをリネームして保存"
-                    };
-                    if (dialog.ShowDialog() == DialogResult.Cancel)
-                    {
-                        return false;
-                    }
-                    enFileName = dialog.FileName;
-                }
-                jpFileName = GetExeFileName(TargetFileName, "");
-                if (!Path.GetFullPath(enFileName).Equals(Path.GetFullPath(TargetFileName)))
-                {
-                    if (File.Exists(enFileName))
-                    {
-                        File.Delete(enFileName);
-                    }
-                    if (File.Exists(TargetFileName))
-                    {
-                        File.Move(TargetFileName, enFileName);
-                    }
-                }
-            }
-            else
-            {
-                jpFileName = GetExeFileName(TargetFileName, "Jp");
-                if (!AutoMode)
-                {
-                    var dialog = new SaveFileDialog
-                    {
-                        FileName = Path.GetFileNameWithoutExtension(jpFileName),
-                        DefaultExt = "exe",
-                        Filter = "実行ファイル (*.exe)|*.exe",
-                        InitialDirectory = Path.GetDirectoryName(jpFileName),
-                        OverwritePrompt = true,
-                        Title = "パッチを当てたファイルを保存"
-                    };
-                    if (dialog.ShowDialog() == DialogResult.Cancel)
-                    {
-                        return false;
-                    }
-                    jpFileName = dialog.FileName;
-                }
-            }
-
-            PatchEngine.SavePatchedFile(jpFileName);
 
             return true;
         }
@@ -215,30 +224,47 @@ namespace EuropaEnginePatcher
         /// <returns>コピーが成功すればtrueを返す</returns>
         public static bool CopyDll()
         {
-            string folderName = Path.GetDirectoryName(TargetFileName);
-            if (string.IsNullOrEmpty(folderName))
+            try
             {
-                folderName = Environment.CurrentDirectory;
-            }
+                string folderName = Path.GetDirectoryName(TargetFileName);
+                if (string.IsNullOrEmpty(folderName))
+                {
+                    folderName = Environment.CurrentDirectory;
+                }
 
-            string destName = Path.Combine(folderName, "_inmm.dll");
-            string srcName = Path.Combine(Environment.CurrentDirectory, "_inmm.dll");
+                string destName = Path.Combine(folderName, "_inmm.dll");
+                string srcName = Path.Combine(Environment.CurrentDirectory, "_inmm.dll");
 
-            if (!File.Exists(srcName))
-            {
-                MessageBox.Show("_inmm.dllが存在しません。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
+                if (!File.Exists(srcName))
+                {
+                    MessageBox.Show("_inmm.dllが存在しません。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
 
-            if (File.Exists(destName))
-            {
-                if (!File.GetLastWriteTimeUtc(destName).Equals(File.GetLastWriteTimeUtc(srcName)))
+                if (File.Exists(destName))
+                {
+                    if (!File.GetLastWriteTimeUtc(destName).Equals(File.GetLastWriteTimeUtc(srcName)))
+                    {
+                        if (!AutoMode)
+                        {
+                            if (MessageBox.Show("_inmm.dllのバージョンが一致しません。\n上書きコピーしてもよろしいですか？",
+                                "日本語化DLLのコピー",
+                                MessageBoxButtons.YesNo) == DialogResult.No)
+                            {
+                                return false;
+                            }
+                        }
+                        File.Copy(srcName, destName, true);
+                    }
+                }
+                else
                 {
                     if (!AutoMode)
                     {
-                        if (MessageBox.Show("_inmm.dllのバージョンが一致しません。\n上書きコピーしてもよろしいですか？",
-                                            "日本語化DLLのコピー",
-                                            MessageBoxButtons.YesNo) == DialogResult.No)
+                        if (MessageBox.Show("_inmm.dllがありません。\nコピーしてもよろしいですか？",
+                            "日本語化DLLのコピー",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question) == DialogResult.No)
                         {
                             return false;
                         }
@@ -246,21 +272,13 @@ namespace EuropaEnginePatcher
                     File.Copy(srcName, destName, true);
                 }
             }
-            else
+            catch (Exception)
             {
-                if (!AutoMode)
-                {
-                    if (MessageBox.Show("_inmm.dllがありません。\nコピーしてもよろしいですか？",
-                                        "日本語化DLLのコピー",
-                                        MessageBoxButtons.YesNo,
-                                        MessageBoxIcon.Question) == DialogResult.No)
-                    {
-                        return false;
-                    }
-                }
-                File.Copy(srcName, destName, true);
+                MessageBox.Show("日本語化DLLのコピーに失敗しました。", "日本語化DLLのコピー", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return false;
             }
-            
+
             return true;
         }
 
@@ -269,7 +287,7 @@ namespace EuropaEnginePatcher
         #region ゲーム種類判別
 
         /// <summary>
-        /// ゲームの実行ファイルを判別する
+        ///     ゲームの実行ファイルを判別する
         /// </summary>
         /// <param name="folderName">対象フォルダ名</param>
         /// <returns>実行ファイル名</returns>
@@ -287,7 +305,7 @@ namespace EuropaEnginePatcher
         }
 
         /// <summary>
-        /// 実行ファイル名を取得する
+        ///     実行ファイル名を取得する
         /// </summary>
         /// <param name="pathName">パス名</param>
         /// <param name="suffix">ファイル名の接尾辞(En/Jp)</param>

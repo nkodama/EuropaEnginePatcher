@@ -178,7 +178,7 @@ namespace EuropaEnginePatcher
 
             using (FileStream s = info.OpenRead())
             {
-                s.Read(_data, 0, (int)_fileSize);
+                s.Read(_data, 0, (int) _fileSize);
                 s.Close();
             }
 
@@ -281,21 +281,21 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                     // Doomsday Armageddon v X.X
                     pattern = new byte[]
-                        {
-                            0x44, 0x6F, 0x6F, 0x6D, 0x73, 0x64, 0x61, 0x79,
-                            0x20, 0x41, 0x72, 0x6D, 0x61, 0x67, 0x65, 0x64,
-                            0x64, 0x6F, 0x6E, 0x20, 0x76, 0x20
-                        };
+                    {
+                        0x44, 0x6F, 0x6F, 0x6D, 0x73, 0x64, 0x61, 0x79,
+                        0x20, 0x41, 0x72, 0x6D, 0x61, 0x67, 0x65, 0x64,
+                        0x64, 0x6F, 0x6E, 0x20, 0x76, 0x20
+                    };
                     l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
                     if (l.Count == 0)
                     {
                         // Iron Cross Armageddon X.XX
                         pattern = new byte[]
-                            {
-                                0x49, 0x72, 0x6F, 0x6E, 0x20, 0x43, 0x72, 0x6F,
-                                0x73, 0x73, 0x20, 0x41, 0x72, 0x6D, 0x61, 0x67,
-                                0x65, 0x64, 0x64, 0x6F, 0x6E, 0x20
-                            };
+                        {
+                            0x49, 0x72, 0x6F, 0x6E, 0x20, 0x43, 0x72, 0x6F,
+                            0x73, 0x73, 0x20, 0x41, 0x72, 0x6D, 0x61, 0x67,
+                            0x65, 0x64, 0x64, 0x6F, 0x6E, 0x20
+                        };
                         l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
                         if (l.Count == 0)
                         {
@@ -315,21 +315,21 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy:
                     // Arsenal of Democracy X.XX
                     pattern = new byte[]
-                        {
-                            0x41, 0x72, 0x73, 0x65, 0x6E, 0x61, 0x6C, 0x20,
-                            0x6F, 0x66, 0x20, 0x44, 0x65, 0x6D, 0x6F, 0x63,
-                            0x72, 0x61, 0x63, 0x79, 0x20
-                        };
+                    {
+                        0x41, 0x72, 0x73, 0x65, 0x6E, 0x61, 0x6C, 0x20,
+                        0x6F, 0x66, 0x20, 0x44, 0x65, 0x6D, 0x6F, 0x63,
+                        0x72, 0x61, 0x63, 0x79, 0x20
+                    };
                     l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
                     if (l.Count == 0)
                     {
                         // Arsenal Of Democracy v X.XX
                         pattern = new byte[]
-                            {
-                                0x41, 0x72, 0x73, 0x65, 0x6E, 0x61, 0x6C, 0x20,
-                                0x4F, 0x66, 0x20, 0x44, 0x65, 0x6D, 0x6F, 0x63,
-                                0x72, 0x61, 0x63, 0x79, 0x20, 0x76, 0x20
-                            };
+                        {
+                            0x41, 0x72, 0x73, 0x65, 0x6E, 0x61, 0x6C, 0x20,
+                            0x4F, 0x66, 0x20, 0x44, 0x65, 0x6D, 0x6F, 0x63,
+                            0x72, 0x61, 0x63, 0x79, 0x20, 0x76, 0x20
+                        };
                         l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
                         if (l.Count == 0)
                         {
@@ -343,10 +343,10 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                     // Darkest Hour v X.XX
                     pattern = new byte[]
-                        {
-                            0x44, 0x61, 0x72, 0x6B, 0x65, 0x73, 0x74, 0x20,
-                            0x48, 0x6F, 0x75, 0x72, 0x20, 0x76, 0x20
-                        };
+                    {
+                        0x44, 0x61, 0x72, 0x6B, 0x65, 0x73, 0x74, 0x20,
+                        0x48, 0x6F, 0x75, 0x72, 0x20, 0x76, 0x20
+                    };
                     l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
                     if (l.Count == 0)
                     {
@@ -359,11 +359,11 @@ namespace EuropaEnginePatcher
                 default:
                     // Doomsday Armageddon v X.X
                     pattern = new byte[]
-                        {
-                            0x44, 0x6F, 0x6F, 0x6D, 0x73, 0x64, 0x61, 0x79,
-                            0x20, 0x41, 0x72, 0x6D, 0x61, 0x67, 0x65, 0x64,
-                            0x64, 0x6F, 0x6E, 0x20, 0x76, 0x20
-                        };
+                    {
+                        0x44, 0x6F, 0x6F, 0x6D, 0x73, 0x64, 0x61, 0x79,
+                        0x20, 0x41, 0x72, 0x6D, 0x61, 0x67, 0x65, 0x64,
+                        0x64, 0x6F, 0x6E, 0x20, 0x76, 0x20
+                    };
                     l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
                     if (l.Count == 0)
                     {
@@ -572,17 +572,17 @@ namespace EuropaEnginePatcher
             uint rvaResourceTable = GetLong(offsetOptionHeader + 112);
             uint sizeResourceTable = GetLong(offsetOptionHeader + 116);
             AppendLog(string.Format("  Resource Table address/size: ${0:X8}/${1:X8}\n", rvaResourceTable,
-                                    sizeResourceTable));
+                sizeResourceTable));
 
             uint rvaImportAddressTable = GetLong(offsetOptionHeader + 192);
             uint sizeImportAddressTable = GetLong(offsetOptionHeader + 196);
             _countImportDir = sizeImportAddressTable/0x14;
             AppendLog(string.Format("  Import Address Table address/size: ${0:X8}/${1:X8}\n", rvaImportAddressTable,
-                                    sizeImportAddressTable));
+                sizeImportAddressTable));
 
             AppendLog(string.Format("  * コード領域: ${0:X8}～${1:X8} (ファイル上: ${2:X8}～${3:X8})\n", _addrBase + posCodeSection,
-                                    _addrBase + posCodeSection + sizeCodeSection - 1, posCodeSection,
-                                    posCodeSection + sizeCodeSection - 1));
+                _addrBase + posCodeSection + sizeCodeSection - 1, posCodeSection,
+                posCodeSection + sizeCodeSection - 1));
             AppendLog(string.Format("  * プログラムが開始されるアドレス: ${0:X8}\n", _addrBase + addressEntryPoint));
 
             AppendLog("Phase 4 passed\n\n");
@@ -622,7 +622,7 @@ namespace EuropaEnginePatcher
                 if (nameSection.Equals(".text"))
                 {
                     AppendLog(string.Format("  * 未使用領域: ${0:X8}～${1:X8}\n", _addrBase + virtualAddress + virtualSize + 1,
-                                            _addrBase + virtualAddress + sizeRawData - 1));
+                        _addrBase + virtualAddress + sizeRawData - 1));
                     _sizeTextSection = sizeRawData;
                     _sizeTextFree = sizeRawData - virtualSize;
                     _posTextSection = posRawData;
@@ -631,7 +631,7 @@ namespace EuropaEnginePatcher
                 else if (nameSection.Equals(".rdata"))
                 {
                     AppendLog(string.Format("  * 未使用領域: ${0:X8}～${1:X8}\n", _addrBase + virtualAddress + virtualSize + 1,
-                                            _addrBase + virtualAddress + sizeRawData - 1));
+                        _addrBase + virtualAddress + sizeRawData - 1));
                     _sizeRdataSection = sizeRawData;
                     _sizeRdataFree = sizeRawData - virtualSize;
                     _sizeDataSection = sizeRawData;
@@ -642,7 +642,7 @@ namespace EuropaEnginePatcher
                 {
                     uint addrDataSectionEnd = Ceiling(_addrBase + virtualAddress + virtualSize, _alignSection) - 1;
                     AppendLog(string.Format("  * 未使用領域: ${0:X8}～${1:X8}\n", _addrBase + virtualAddress + virtualSize + 1,
-                                            addrDataSectionEnd));
+                        addrDataSectionEnd));
                     _addrVarTextOutDcAddress = addrDataSectionEnd - 0x0000000F;
                     _addrVarGetTextWidthAddress = addrDataSectionEnd - 0x0000000B;
                     _addrVarCalcLineBreakAddress = addrDataSectionEnd - 0x00000007;
@@ -963,10 +963,10 @@ namespace EuropaEnginePatcher
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%06 WINMM.dll\"を探します\n");
             var pattern = new byte[]
-                {
-                    0x57, 0x49, 0x4E, 0x4D, 0x4D, 0x2E, 0x64, 0x6C,
-                    0x6C
-                };
+            {
+                0x57, 0x49, 0x4E, 0x4D, 0x4D, 0x2E, 0x64, 0x6C,
+                0x6C
+            };
             List<uint> l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
             if (l.Count == 0)
             {
@@ -974,8 +974,8 @@ namespace EuropaEnginePatcher
             }
             _posWinMmDll = l[0];
             _addrWinMmDll = _patchType == PatchType.ArsenalOfDemocracy104
-                                ? GetIdataAddress(_posWinMmDll)
-                                : GetRdataAddress(_posWinMmDll);
+                ? GetIdataAddress(_posWinMmDll)
+                : GetRdataAddress(_posWinMmDll);
             AppendLog("ScanBinary passed\n\n");
 
             return true;
@@ -991,9 +991,9 @@ namespace EuropaEnginePatcher
             AppendLog("  \"%07 TextOutの処理を埋め込む位置\"を探します\n");
 
             var pattern = new byte[]
-                {
-                    0x8B, 0x45, 0x18, 0x8B, 0x48, 0x0C, 0x89, 0x4D
-                };
+            {
+                0x8B, 0x45, 0x18, 0x8B, 0x48, 0x0C, 0x89, 0x4D
+            };
             List<uint> l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
             if (l.Count == 0)
             {
@@ -1024,44 +1024,44 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                        {
-                            0x8B, 0x4D, 0x18, 0x8B, 0x11, 0x8B, 0x4D, 0x18,
-                            0xFF, 0x52, 0x0C, 0x8B, 0x45, 0x0C, 0x8B, 0xE5,
-                            0x5D, 0xC2, 0x18, 0x00
-                        };
+                    {
+                        0x8B, 0x4D, 0x18, 0x8B, 0x11, 0x8B, 0x4D, 0x18,
+                        0xFF, 0x52, 0x0C, 0x8B, 0x45, 0x0C, 0x8B, 0xE5,
+                        0x5D, 0xC2, 0x18, 0x00
+                    };
                     break;
 
                 case PatchType.ForTheGlory:
                     pattern = new byte[]
-                        {
-                            0x8B, 0x55, 0x18, 0x8B, 0x02, 0x8B, 0x4D, 0x18,
-                            0x8B, 0x50, 0x0C, 0xFF, 0xD2, 0x8B, 0x45, 0x0C,
-                            0x8B, 0xE5, 0x5D, 0xC2, 0x18, 0x00
-                        };
+                    {
+                        0x8B, 0x55, 0x18, 0x8B, 0x02, 0x8B, 0x4D, 0x18,
+                        0x8B, 0x50, 0x0C, 0xFF, 0xD2, 0x8B, 0x45, 0x0C,
+                        0x8B, 0xE5, 0x5D, 0xC2, 0x18, 0x00
+                    };
                     break;
 
                 case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy107:
                     pattern = new byte[]
-                        {
-                            0x8B, 0x55, 0x18, 0x8B, 0x02, 0x8B, 0x4D, 0x18,
-                            0x8B, 0x50, 0x0C, 0xFF, 0xD2, 0x8B, 0x45, 0x0C,
-                            0x8B, 0xE5, 0x5D, 0xC2, 0x18, 0x00
-                        };
+                    {
+                        0x8B, 0x55, 0x18, 0x8B, 0x02, 0x8B, 0x4D, 0x18,
+                        0x8B, 0x50, 0x0C, 0xFF, 0xD2, 0x8B, 0x45, 0x0C,
+                        0x8B, 0xE5, 0x5D, 0xC2, 0x18, 0x00
+                    };
                     break;
 
                 default:
                     pattern = new byte[]
-                        {
-                            0x8B, 0x45, 0x18, 0x8B, 0x10, 0x8B, 0x4D, 0x18,
-                            0xFF, 0x52, 0x0C, 0x8B, 0x45, 0x0C, 0x8B, 0xE5,
-                            0x5D, 0xC2, 0x18, 0x00
-                        };
+                    {
+                        0x8B, 0x45, 0x18, 0x8B, 0x10, 0x8B, 0x4D, 0x18,
+                        0xFF, 0x52, 0x0C, 0x8B, 0x45, 0x0C, 0x8B, 0xE5,
+                        0x5D, 0xC2, 0x18, 0x00
+                    };
                     break;
             }
 
             List<uint> l = BinaryScan(_data, pattern, _posTextOutStart,
-                                      _sizeTextSection - (_posTextOutStart - _posTextSection));
+                _sizeTextSection - (_posTextOutStart - _posTextSection));
             if (l.Count == 0)
             {
                 return false;
@@ -1087,19 +1087,19 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                        {
-                            0xC7, 0x45, 0xFC, 0x00, 0x00, 0x00, 0x00, 0xC6,
-                            0x45, 0xF4, 0x00, 0x8B, 0x45, 0x08, 0x8A, 0x08,
-                            0x88, 0x4D
-                        };
+                    {
+                        0xC7, 0x45, 0xFC, 0x00, 0x00, 0x00, 0x00, 0xC6,
+                        0x45, 0xF4, 0x00, 0x8B, 0x45, 0x08, 0x8A, 0x08,
+                        0x88, 0x4D
+                    };
                     break;
 
                 default:
                     pattern = new byte[]
-                        {
-                            0xC7, 0x45, 0xFC, 0x00, 0x00, 0x00, 0x00, 0x8B,
-                            0x45, 0x08, 0x8A, 0x08, 0x88, 0x4D
-                        };
+                    {
+                        0xC7, 0x45, 0xFC, 0x00, 0x00, 0x00, 0x00, 0x8B,
+                        0x45, 0x08, 0x8A, 0x08, 0x88, 0x4D
+                    };
                     break;
             }
 
@@ -1123,12 +1123,12 @@ namespace EuropaEnginePatcher
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%10 文字列幅の処理が終了したらジャンプさせる位置(の3バイト前)\"を探します\n");
             var pattern = new byte[]
-                {
-                    0x8B, 0x45, 0xFC, 0x8B, 0xE5, 0x5D, 0xC2, 0x04,
-                    0x00
-                };
+            {
+                0x8B, 0x45, 0xFC, 0x8B, 0xE5, 0x5D, 0xC2, 0x04,
+                0x00
+            };
             List<uint> l = BinaryScan(_data, pattern, _posGetTextWidthStart,
-                                      _sizeTextSection - (_posGetTextWidthStart - _posTextSection));
+                _sizeTextSection - (_posGetTextWidthStart - _posTextSection));
             if (l.Count == 0)
             {
                 return false;
@@ -1154,16 +1154,16 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy107:
                     pattern = new byte[]
-                        {
-                            0x75, 0x1A, 0x8B, 0xC7, 0x8D, 0x50, 0x01
-                        };
+                    {
+                        0x75, 0x1A, 0x8B, 0xC7, 0x8D, 0x50, 0x01
+                    };
                     break;
 
                 default:
                     pattern = new byte[]
-                        {
-                            0x75, 0x18, 0x8B, 0xFB, 0x83, 0xC9, 0xFF, 0x33
-                        };
+                    {
+                        0x75, 0x18, 0x8B, 0xFB, 0x83, 0xC9, 0xFF, 0x33
+                    };
                     break;
             }
             List<uint> l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
@@ -1193,9 +1193,9 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy107:
                     pattern = new byte[]
-                        {
-                            0x3D, 0xA7, 0x00, 0x00, 0x00, 0x0F, 0x8F
-                        };
+                    {
+                        0x3D, 0xA7, 0x00, 0x00, 0x00, 0x0F, 0x8F
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1204,18 +1204,18 @@ namespace EuropaEnginePatcher
                     _posChatBlockChar3 = l[0] + 11;
 
                     pattern = new byte[]
-                        {
-                            0x00, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08,
-                            0x08
-                        };
+                    {
+                        0x00, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08,
+                        0x08
+                    };
                     break;
 
                 default:
                     pattern = new byte[]
-                        {
-                            0x00, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x02, 0x03, 0x03, 0x03,
-                            0x03
-                        };
+                    {
+                        0x00, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x02, 0x03, 0x03, 0x03,
+                        0x03
+                    };
                     break;
             }
             l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
@@ -1226,9 +1226,9 @@ namespace EuropaEnginePatcher
             _posChatBlockChar1 = l[0];
 
             pattern = new byte[]
-                {
-                    0x00, 0x01, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00
-                };
+            {
+                0x00, 0x01, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00
+            };
             l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
             if (l.Count == 0)
             {
@@ -1261,10 +1261,10 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.CrusaderKings:
                     pattern = new byte[]
-                        {
-                            0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
-                            0x01, 0x00, 0x00
-                        };
+                    {
+                        0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
+                        0x01, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1274,10 +1274,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[1];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
-                            0x84, 0xDB
-                        };
+                    {
+                        0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
+                        0x84, 0xDB
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1289,10 +1289,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.EuropaUniversalis2:
                     pattern = new byte[]
-                        {
-                            0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
-                            0x01, 0x00, 0x00
-                        };
+                    {
+                        0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
+                        0x01, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1302,10 +1302,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[1];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x8C, 0x04, 0x24, 0x01, 0x00, 0x00, 0x40,
-                            0x38, 0x5C, 0x24, 0x13
-                        };
+                    {
+                        0x88, 0x8C, 0x04, 0x24, 0x01, 0x00, 0x00, 0x40,
+                        0x38, 0x5C, 0x24, 0x13
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1314,10 +1314,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart3 = l[0];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x9C, 0x04, 0x38, 0x01, 0x00, 0x00, 0x40,
-                            0x84, 0xDB
-                        };
+                    {
+                        0x88, 0x9C, 0x04, 0x38, 0x01, 0x00, 0x00, 0x40,
+                        0x84, 0xDB
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1326,10 +1326,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart4 = l[0];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
-                            0x84, 0xDB
-                        };
+                    {
+                        0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
+                        0x84, 0xDB
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1341,10 +1341,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.ForTheGlory:
                     pattern = new byte[]
-                        {
-                            0x88, 0x5C, 0x04, 0x14, 0x40, 0x84, 0xDB, 0x0F,
-                            0x85
-                        };
+                    {
+                        0x88, 0x5C, 0x04, 0x14, 0x40, 0x84, 0xDB, 0x0F,
+                        0x85
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1353,10 +1353,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart1 = l[0];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x5C, 0x04, 0x20, 0x40, 0x84, 0xDB, 0x0F,
-                            0x85
-                        };
+                    {
+                        0x88, 0x5C, 0x04, 0x20, 0x40, 0x84, 0xDB, 0x0F,
+                        0x85
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1365,10 +1365,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[0];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x5C, 0x04, 0x30, 0x40, 0x84, 0xDB, 0x0F,
-                            0x85
-                        };
+                    {
+                        0x88, 0x5C, 0x04, 0x30, 0x40, 0x84, 0xDB, 0x0F,
+                        0x85
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1377,10 +1377,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart3 = l[0];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x54, 0x04, 0x1C, 0x40, 0x38, 0x5C, 0x24,
-                            0x17, 0x0F, 0x85
-                        };
+                    {
+                        0x88, 0x54, 0x04, 0x1C, 0x40, 0x38, 0x5C, 0x24,
+                        0x17, 0x0F, 0x85
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1393,10 +1393,10 @@ namespace EuropaEnginePatcher
                 case PatchType.Victoria:
                 case PatchType.HeartsOfIron:
                     pattern = new byte[]
-                        {
-                            0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
-                            0x01, 0x00, 0x00
-                        };
+                    {
+                        0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
+                        0x01, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1406,10 +1406,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[1];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x8C, 0x04, 0x24, 0x01, 0x00, 0x00, 0x40,
-                            0x38, 0x5C, 0x24, 0x13
-                        };
+                    {
+                        0x88, 0x8C, 0x04, 0x24, 0x01, 0x00, 0x00, 0x40,
+                        0x38, 0x5C, 0x24, 0x13
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1418,10 +1418,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart3 = l[0];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
-                            0x84, 0xDB
-                        };
+                    {
+                        0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
+                        0x84, 0xDB
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1438,10 +1438,10 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                        {
-                            0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
-                            0x01, 0x00, 0x00
-                        };
+                    {
+                        0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
+                        0x01, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1451,10 +1451,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[1];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x8C, 0x04, 0x24, 0x01, 0x00, 0x00, 0x40,
-                            0x38, 0x5C, 0x24, 0x13
-                        };
+                    {
+                        0x88, 0x8C, 0x04, 0x24, 0x01, 0x00, 0x00, 0x40,
+                        0x38, 0x5C, 0x24, 0x13
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1463,10 +1463,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart3 = l[0];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x8C, 0x04, 0x20, 0x01, 0x00, 0x00, 0x40,
-                            0x38, 0x5C, 0x24, 0x13
-                        };
+                    {
+                        0x88, 0x8C, 0x04, 0x20, 0x01, 0x00, 0x00, 0x40,
+                        0x38, 0x5C, 0x24, 0x13
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1475,10 +1475,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart5 = l[0];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
-                            0x84, 0xDB
-                        };
+                    {
+                        0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
+                        0x84, 0xDB
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1489,10 +1489,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.ArsenalOfDemocracy107:
                     pattern = new byte[]
-                        {
-                            0x88, 0x5C, 0x04, 0x0C, 0x40, 0x84, 0xDB, 0x0F,
-                            0x85
-                        };
+                    {
+                        0x88, 0x5C, 0x04, 0x0C, 0x40, 0x84, 0xDB, 0x0F,
+                        0x85
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1502,10 +1502,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[1];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x5C, 0x04, 0x2C, 0x40, 0x84, 0xDB, 0x0F,
-                            0x85
-                        };
+                    {
+                        0x88, 0x5C, 0x04, 0x2C, 0x40, 0x84, 0xDB, 0x0F,
+                        0x85
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1514,10 +1514,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart3 = l[0];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x54, 0x04, 0x1C, 0x40, 0x38, 0x5C, 0x24,
-                            0x17
-                        };
+                    {
+                        0x88, 0x54, 0x04, 0x1C, 0x40, 0x38, 0x5C, 0x24,
+                        0x17
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1529,9 +1529,9 @@ namespace EuropaEnginePatcher
 
                 case PatchType.ArsenalOfDemocracy:
                     pattern = new byte[]
-                        {
-                            0x88, 0x9C, 0x05, 0xFC, 0xFB, 0xFF, 0xFF, 0x40
-                        };
+                    {
+                        0x88, 0x9C, 0x05, 0xFC, 0xFB, 0xFF, 0xFF, 0x40
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1541,9 +1541,9 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart2 = l[1];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x9C, 0x05, 0xF0, 0xFB, 0xFF, 0xFF, 0x40
-                        };
+                    {
+                        0x88, 0x9C, 0x05, 0xF0, 0xFB, 0xFF, 0xFF, 0x40
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1553,9 +1553,9 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart6 = l[1];
 
                     pattern = new byte[]
-                        {
-                            0x88, 0x94, 0x05, 0xF0, 0xFD, 0xFF, 0xFF, 0x40
-                        };
+                    {
+                        0x88, 0x94, 0x05, 0xF0, 0xFD, 0xFF, 0xFF, 0x40
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1586,11 +1586,11 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.CrusaderKings:
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x04, 0x14, 0x01, 0x00, 0x00, 0x20,
-                            0x51, 0x8B, 0x4D, 0x54, 0x88, 0x9C, 0x04, 0x19,
-                            0x01, 0x00, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x04, 0x14, 0x01, 0x00, 0x00, 0x20,
+                        0x51, 0x8B, 0x4D, 0x54, 0x88, 0x9C, 0x04, 0x19,
+                        0x01, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1600,11 +1600,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x20,
-                            0x51, 0x8B, 0x4D, 0x54, 0xC6, 0x84, 0x04, 0x21,
-                            0x01, 0x00, 0x00, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x20,
+                        0x51, 0x8B, 0x4D, 0x54, 0xC6, 0x84, 0x04, 0x21,
+                        0x01, 0x00, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1616,10 +1616,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.EuropaUniversalis2:
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
-                            0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
+                        0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1629,10 +1629,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0x8B, 0x4D, 0x40, 0x88, 0x9C, 0x04, 0x29, 0x01,
-                            0x00, 0x00
-                        };
+                    {
+                        0x8B, 0x4D, 0x40, 0x88, 0x9C, 0x04, 0x29, 0x01,
+                        0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1641,10 +1641,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x04, 0x38, 0x01, 0x00, 0x00, 0x20,
-                            0xC6, 0x84, 0x04, 0x39, 0x01, 0x00, 0x00, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x04, 0x38, 0x01, 0x00, 0x00, 0x20,
+                        0xC6, 0x84, 0x04, 0x39, 0x01, 0x00, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1653,10 +1653,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd4 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0x8B, 0x4D, 0x4C, 0xC6, 0x84, 0x04, 0x21, 0x01,
-                            0x00, 0x00, 0x00
-                        };
+                    {
+                        0x8B, 0x4D, 0x4C, 0xC6, 0x84, 0x04, 0x21, 0x01,
+                        0x00, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1668,10 +1668,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.ForTheGlory:
                     pattern = new byte[]
-                        {
-                            0x8D, 0x7C, 0x24, 0x18, 0xC6, 0x44, 0x04, 0x19,
-                            0x00
-                        };
+                    {
+                        0x8D, 0x7C, 0x24, 0x18, 0xC6, 0x44, 0x04, 0x19,
+                        0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1680,10 +1680,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd1 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0x8D, 0x94, 0x24, 0x20, 0x01, 0x00, 0x00, 0xC6,
-                            0x44, 0x04, 0x21, 0x00
-                        };
+                    {
+                        0x8D, 0x94, 0x24, 0x20, 0x01, 0x00, 0x00, 0xC6,
+                        0x44, 0x04, 0x21, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1692,10 +1692,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0x8D, 0x8C, 0x24, 0x30, 0x01, 0x00, 0x00, 0xC6,
-                            0x44, 0x04, 0x31, 0x00
-                        };
+                    {
+                        0x8D, 0x8C, 0x24, 0x30, 0x01, 0x00, 0x00, 0xC6,
+                        0x44, 0x04, 0x31, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1704,10 +1704,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0xC6, 0x44, 0x04, 0x1C, 0x20, 0x88, 0x5C, 0x04,
-                            0x1D
-                        };
+                    {
+                        0xC6, 0x44, 0x04, 0x1C, 0x20, 0x88, 0x5C, 0x04,
+                        0x1D
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1719,10 +1719,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.Victoria:
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
-                            0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
+                        0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1732,11 +1732,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x04, 0x24, 0x01, 0x00, 0x00, 0x20,
-                            0x51, 0x8B, 0x4D, 0x48, 0x88, 0x9C, 0x04, 0x29,
-                            0x01, 0x00, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x04, 0x24, 0x01, 0x00, 0x00, 0x20,
+                        0x51, 0x8B, 0x4D, 0x48, 0x88, 0x9C, 0x04, 0x29,
+                        0x01, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1745,11 +1745,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x20,
-                            0x51, 0x8B, 0x4D, 0x54, 0xC6, 0x84, 0x04, 0x21,
-                            0x01, 0x00, 0x00, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x20,
+                        0x51, 0x8B, 0x4D, 0x54, 0xC6, 0x84, 0x04, 0x21,
+                        0x01, 0x00, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1761,10 +1761,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.HeartsOfIron:
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
-                            0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
+                        0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1774,11 +1774,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x04, 0x24, 0x01, 0x00, 0x00, 0x20,
-                            0x51, 0x8B, 0x4D, 0x40, 0x88, 0x9C, 0x04, 0x29,
-                            0x01, 0x00, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x04, 0x24, 0x01, 0x00, 0x00, 0x20,
+                        0x51, 0x8B, 0x4D, 0x40, 0x88, 0x9C, 0x04, 0x29,
+                        0x01, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1787,11 +1787,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x20,
-                            0x51, 0x8B, 0x4D, 0x4C, 0xC6, 0x84, 0x04, 0x21,
-                            0x01, 0x00, 0x00, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x20,
+                        0x51, 0x8B, 0x4D, 0x4C, 0xC6, 0x84, 0x04, 0x21,
+                        0x01, 0x00, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1808,10 +1808,10 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
-                            0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x04, 0x18, 0x01, 0x00, 0x00, 0x20,
+                        0x88, 0x9C, 0x04, 0x19, 0x01, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1821,10 +1821,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0x8B, 0x4D, 0x40, 0x88, 0x9C, 0x04, 0x29, 0x01,
-                            0x00, 0x00
-                        };
+                    {
+                        0x8B, 0x4D, 0x40, 0x88, 0x9C, 0x04, 0x29, 0x01,
+                        0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1833,10 +1833,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0x8B, 0x4D, 0x4C, 0x88, 0x9C, 0x04, 0x25, 0x01,
-                            0x00, 0x00
-                        };
+                    {
+                        0x8B, 0x4D, 0x4C, 0x88, 0x9C, 0x04, 0x25, 0x01,
+                        0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1845,10 +1845,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0x8B, 0x4D, 0x4C, 0xC6, 0x84, 0x04, 0x21, 0x01,
-                            0x00, 0x00, 0x00
-                        };
+                    {
+                        0x8B, 0x4D, 0x4C, 0xC6, 0x84, 0x04, 0x21, 0x01,
+                        0x00, 0x00, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1859,11 +1859,11 @@ namespace EuropaEnginePatcher
 
                 case PatchType.ArsenalOfDemocracy107:
                     pattern = new byte[]
-                        {
-                            0xC6, 0x44, 0x04, 0x0C, 0x20, 0x8D, 0x94, 0x24,
-                            0x0C, 0x02, 0x00, 0x00, 0xC6, 0x44, 0x04, 0x0D,
-                            0x00
-                        };
+                    {
+                        0xC6, 0x44, 0x04, 0x0C, 0x20, 0x8D, 0x94, 0x24,
+                        0x0C, 0x02, 0x00, 0x00, 0xC6, 0x44, 0x04, 0x0D,
+                        0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1873,11 +1873,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0xC6, 0x44, 0x04, 0x2C, 0x20, 0x8D, 0x94, 0x24,
-                            0x2C, 0x02, 0x00, 0x00, 0xC6, 0x44, 0x04, 0x2D,
-                            0x00
-                        };
+                    {
+                        0xC6, 0x44, 0x04, 0x2C, 0x20, 0x8D, 0x94, 0x24,
+                        0x2C, 0x02, 0x00, 0x00, 0xC6, 0x44, 0x04, 0x2D,
+                        0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1886,10 +1886,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0xC6, 0x44, 0x04, 0x1C, 0x20, 0x8D, 0x94, 0x24,
-                            0x1C, 0x02, 0x00, 0x00, 0x88, 0x5C, 0x04, 0x1D
-                        };
+                    {
+                        0xC6, 0x44, 0x04, 0x1C, 0x20, 0x8D, 0x94, 0x24,
+                        0x1C, 0x02, 0x00, 0x00, 0x88, 0x5C, 0x04, 0x1D
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1901,11 +1901,11 @@ namespace EuropaEnginePatcher
 
                 case PatchType.ArsenalOfDemocracy:
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x05, 0xFC, 0xFB, 0xFF, 0xFF, 0x20,
-                            0x52, 0x8B, 0xCE, 0xC6, 0x84, 0x05, 0xFD, 0xFB,
-                            0xFF, 0xFF, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x05, 0xFC, 0xFB, 0xFF, 0xFF, 0x20,
+                        0x52, 0x8B, 0xCE, 0xC6, 0x84, 0x05, 0xFD, 0xFB,
+                        0xFF, 0xFF, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
                     {
@@ -1915,10 +1915,10 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x05, 0xF0, 0xFB, 0xFF, 0xFF, 0x20,
-                            0xC6, 0x84, 0x05, 0xF1, 0xFB, 0xFF, 0xFF, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x05, 0xF0, 0xFB, 0xFF, 0xFF, 0x20,
+                        0xC6, 0x84, 0x05, 0xF1, 0xFB, 0xFF, 0xFF, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1927,11 +1927,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x05, 0xF0, 0xFD, 0xFF, 0xFF, 0x20,
-                            0x8D, 0x95, 0xF0, 0xF9, 0xFF, 0xFF, 0x88, 0x9C,
-                            0x05, 0xF1, 0xFD, 0xFF, 0xFF
-                        };
+                    {
+                        0xC6, 0x84, 0x05, 0xF0, 0xFD, 0xFF, 0xFF, 0x20,
+                        0x8D, 0x95, 0xF0, 0xF9, 0xFF, 0xFF, 0x88, 0x9C,
+                        0x05, 0xF1, 0xFD, 0xFF, 0xFF
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1940,11 +1940,11 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
 
                     pattern = new byte[]
-                        {
-                            0xC6, 0x84, 0x05, 0xF0, 0xFB, 0xFF, 0xFF, 0x20,
-                            0x8D, 0x95, 0xF0, 0xFD, 0xFF, 0xFF, 0xC6, 0x84,
-                            0x05, 0xF1, 0xFB, 0xFF, 0xFF, 0x00
-                        };
+                    {
+                        0xC6, 0x84, 0x05, 0xF0, 0xFB, 0xFF, 0xFF, 0x20,
+                        0x8D, 0x95, 0xF0, 0xFD, 0xFF, 0xFF, 0xC6, 0x84,
+                        0x05, 0xF1, 0xFB, 0xFF, 0xFF, 0x00
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -1980,10 +1980,10 @@ namespace EuropaEnginePatcher
                 case PatchType.Victoria:
                 case PatchType.HeartsOfIron:
                     pattern = new byte[]
-                        {
-                            0xB9, 0x0A, 0x00, 0x00, 0x00, 0x50, 0x8B, 0xC6,
-                            0x99, 0xF7, 0xF9, 0x8B, 0x54, 0x94, 0x1C, 0x52
-                        };
+                    {
+                        0xB9, 0x0A, 0x00, 0x00, 0x00, 0x50, 0x8B, 0xC6,
+                        0x99, 0xF7, 0xF9, 0x8B, 0x54, 0x94, 0x1C, 0x52
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2001,10 +2001,10 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                        {
-                            0x8B, 0x45, 0xF8, 0x99, 0xB9, 0x64, 0x00, 0x00,
-                            0x00, 0xF7, 0xF9, 0x83, 0xFA, 0x0D
-                        };
+                    {
+                        0x8B, 0x45, 0xF8, 0x99, 0xB9, 0x64, 0x00, 0x00,
+                        0x00, 0xF7, 0xF9, 0x83, 0xFA, 0x0D
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2013,10 +2013,10 @@ namespace EuropaEnginePatcher
                     _posGetDivisionName1 = l[0];
 
                     pattern = new byte[]
-                        {
-                            0x99, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0xF7, 0xF9,
-                            0x8B, 0x54, 0x95, 0xC0, 0x52, 0xB9
-                        };
+                    {
+                        0x99, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0xF7, 0xF9,
+                        0x8B, 0x54, 0x95, 0xC0, 0x52, 0xB9
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2041,10 +2041,10 @@ namespace EuropaEnginePatcher
             AppendLog("  \"%XX 師団名の書式文字列の定義位置\"を探します\n");
 
             var pattern = new byte[]
-                {
-                    0x25, 0x64, 0x25, 0x73, 0x20, 0x25, 0x73, 0x2E,
-                    0x20, 0x25, 0x73, 0x00
-                };
+            {
+                0x25, 0x64, 0x25, 0x73, 0x20, 0x25, 0x73, 0x2E,
+                0x20, 0x25, 0x73, 0x00
+            };
             List<uint> l;
             switch (_patchType)
             {
@@ -2083,10 +2083,10 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.Victoria:
                     pattern = new byte[]
-                        {
-                            0x8B, 0xC6, 0xB9, 0x64, 0x00, 0x00, 0x00, 0x99,
-                            0xF7, 0xF9, 0x83, 0xFA, 0x0D, 0x75, 0x1E
-                        };
+                    {
+                        0x8B, 0xC6, 0xB9, 0x64, 0x00, 0x00, 0x00, 0x99,
+                        0xF7, 0xF9, 0x83, 0xFA, 0x0D, 0x75, 0x1E
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2095,10 +2095,10 @@ namespace EuropaEnginePatcher
                     _posGetArmyName1 = l[0];
 
                     pattern = new byte[]
-                        {
-                            0x8B, 0xC6, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0x99,
-                            0xF7, 0xF9, 0x8B, 0x54, 0x94, 0x14, 0x52
-                        };
+                    {
+                        0x8B, 0xC6, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0x99,
+                        0xF7, 0xF9, 0x8B, 0x54, 0x94, 0x14, 0x52
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2109,10 +2109,10 @@ namespace EuropaEnginePatcher
 
                 case PatchType.HeartsOfIron:
                     pattern = new byte[]
-                        {
-                            0x8B, 0xC6, 0xB9, 0x64, 0x00, 0x00, 0x00, 0x99,
-                            0xF7, 0xF9, 0x83, 0xFA, 0x0D, 0x75, 0x1E
-                        };
+                    {
+                        0x8B, 0xC6, 0xB9, 0x64, 0x00, 0x00, 0x00, 0x99,
+                        0xF7, 0xF9, 0x83, 0xFA, 0x0D, 0x75, 0x1E
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2121,10 +2121,10 @@ namespace EuropaEnginePatcher
                     _posGetArmyName1 = l[0];
 
                     pattern = new byte[]
-                        {
-                            0x8B, 0xC6, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0x99,
-                            0xF7, 0xF9, 0x8B, 0x54, 0x94, 0x1C, 0x52
-                        };
+                    {
+                        0x8B, 0xC6, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0x99,
+                        0xF7, 0xF9, 0x8B, 0x54, 0x94, 0x1C, 0x52
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2142,10 +2142,10 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                        {
-                            0xFF, 0xFF, 0x99, 0xB9, 0x64, 0x00, 0x00, 0x00,
-                            0xF7, 0xF9, 0x83, 0xFA, 0x0D
-                        };
+                    {
+                        0xFF, 0xFF, 0x99, 0xB9, 0x64, 0x00, 0x00, 0x00,
+                        0xF7, 0xF9, 0x83, 0xFA, 0x0D
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2154,10 +2154,10 @@ namespace EuropaEnginePatcher
                     _posGetArmyName1 = l[0] - 4;
 
                     pattern = new byte[]
-                        {
-                            0x99, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0xF7, 0xF9,
-                            0x8B, 0x94, 0x95
-                        };
+                    {
+                        0x99, 0xB9, 0x0A, 0x00, 0x00, 0x00, 0xF7, 0xF9,
+                        0x8B, 0x94, 0x95
+                    };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
@@ -2182,9 +2182,9 @@ namespace EuropaEnginePatcher
             AppendLog("  \"%XX 軍団名の書式文字列の定義位置\"を探します\n");
 
             var pattern = new byte[]
-                {
-                    0x25, 0x64, 0x25, 0x73, 0x20, 0x25, 0x73, 0x00
-                };
+            {
+                0x25, 0x64, 0x25, 0x73, 0x20, 0x25, 0x73, 0x00
+            };
             List<uint> l;
             switch (_patchType)
             {
@@ -2217,10 +2217,10 @@ namespace EuropaEnginePatcher
             AppendLog("  \"%XX 国家序列の取得処理を埋め込む位置\"を探します\n");
 
             var pattern = new byte[]
-                {
-                    0x8B, 0xC6, 0xB9, 0x64, 0x00, 0x00, 0x00, 0x99,
-                    0xF7, 0xF9, 0xC7, 0x44, 0x24
-                };
+            {
+                0x8B, 0xC6, 0xB9, 0x64, 0x00, 0x00, 0x00, 0x99,
+                0xF7, 0xF9, 0xC7, 0x44, 0x24
+            };
             List<uint> l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
             if (l.Count == 0)
             {
@@ -2229,9 +2229,9 @@ namespace EuropaEnginePatcher
             _posGetRankingName1 = l[0];
 
             pattern = new byte[]
-                {
-                    0x83, 0xFA, 0x0D, 0x75, 0x28
-                };
+            {
+                0x83, 0xFA, 0x0D, 0x75, 0x28
+            };
             l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
             if (l.Count == 0)
             {
@@ -2258,11 +2258,11 @@ namespace EuropaEnginePatcher
 
             AppendLog("  \"%XX EE_MAX_AMPHIB_MODの定義位置\"を探します\n");
             var pattern = new byte[]
-                {
-                    0x45, 0x45, 0x5F, 0x4D, 0x41, 0x58, 0x5F, 0x41,
-                    0x4D, 0x50, 0x48, 0x49, 0x42, 0x5F, 0x4D, 0x4F,
-                    0x44
-                };
+            {
+                0x45, 0x45, 0x5F, 0x4D, 0x41, 0x58, 0x5F, 0x41,
+                0x4D, 0x50, 0x48, 0x49, 0x42, 0x5F, 0x4D, 0x4F,
+                0x44
+            };
             List<uint> l = BinaryScan(_data, pattern, _posDataSection, _sizeDataSection);
             if (l.Count == 0)
             {
@@ -2304,27 +2304,27 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.ArsenalOfDemocracy:
                     pattern = new byte[]
-                        {
-                            0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x45, 0x90,
-                            0x00
-                        };
+                    {
+                        0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x45, 0x90,
+                        0x00
+                    };
                     break;
 
                 case PatchType.HeartsOfIron2:
                 case PatchType.ArsenalOfDemocracy107:
                     pattern = new byte[]
-                        {
-                            0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
-                            0x68, 0x00
-                        };
+                    {
+                        0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
+                        0x68, 0x00
+                    };
                     break;
 
                 case PatchType.DarkestHour:
                     pattern = new byte[]
-                        {
-                            0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
-                            0x64, 0x00
-                        };
+                    {
+                        0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
+                        0x64, 0x00
+                    };
                     break;
 
                 case PatchType.HeartsOfIron212:
@@ -2332,10 +2332,10 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
-                        {
-                            0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
-                            0x60, 0x00
-                        };
+                    {
+                        0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
+                        0x60, 0x00
+                    };
                     break;
             }
             List<uint> l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
@@ -2500,7 +2500,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x3D);
             offset++;
             PatchLong(_data, offset, _addrVarTextOutDcAddress,
-                      string.Format("%02 ${0:X8} varTextOutDC2Address", _addrVarTextOutDcAddress));
+                string.Format("%02 ${0:X8} varTextOutDC2Address", _addrVarTextOutDcAddress));
             offset += 4;
             PatchByte(_data, offset, 0x00);
             offset++;
@@ -2530,12 +2530,12 @@ namespace EuropaEnginePatcher
                 case PatchType.ForTheGlory:
                 case PatchType.ArsenalOfDemocracy:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
-                              string.Format("%04 ${0:X8} IsDebuggerPresent", _addrIsDebuggerPresent));
+                        string.Format("%04 ${0:X8} IsDebuggerPresent", _addrIsDebuggerPresent));
                     break;
 
                 default:
                     PatchLong(_data, offset, _addrGetModuleHandleA,
-                              string.Format("%04 ${0:X8} GetModuleHandleA", _addrGetModuleHandleA));
+                        string.Format("%04 ${0:X8} GetModuleHandleA", _addrGetModuleHandleA));
                     break;
             }
             offset += 4;
@@ -2560,7 +2560,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrGetProcAddress,
-                      string.Format("%05 ${0:X8} GetProcAddress", _addrGetProcAddress));
+                string.Format("%05 ${0:X8} GetProcAddress", _addrGetProcAddress));
             offset += 4;
             PatchByte(_data, offset, 0x85);
             offset++;
@@ -2575,7 +2575,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xA3);
             offset++;
             PatchLong(_data, offset, _addrVarTextOutDcAddress,
-                      string.Format("%02 ${0:X8} varTextOutDC2Address", _addrVarTextOutDcAddress));
+                string.Format("%02 ${0:X8} varTextOutDC2Address", _addrVarTextOutDcAddress));
             offset += 4;
             PatchByte(_data, offset, 0x8B);
             offset++;
@@ -2880,12 +2880,12 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarTextOutDcAddress,
-                      string.Format("%02 ${0:X8} varTextOutDC2Address", _addrVarTextOutDcAddress));
+                string.Format("%02 ${0:X8} varTextOutDC2Address", _addrVarTextOutDcAddress));
             offset += 4;
             PatchByte(_data, offset, 0xE9); // jmp TEXT_OUT_END
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posTextOutEnd),
-                      string.Format("%08 ${0:X8} TextOutEnd", GetTextAddress(_posTextOutEnd)));
+                string.Format("%08 ${0:X8} TextOutEnd", GetTextAddress(_posTextOutEnd)));
             offset += 4;
 
             _posTextOutDcFree = offset;
@@ -2905,7 +2905,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x3D);
             offset++;
             PatchLong(_data, offset, _addrVarGetTextWidthAddress,
-                      string.Format("%03 ${0:X8} varGetTextWidthAddress", _addrVarGetTextWidthAddress));
+                string.Format("%03 ${0:X8} varGetTextWidthAddress", _addrVarGetTextWidthAddress));
             offset += 4;
             PatchByte(_data, offset, 0x00);
             offset++;
@@ -2926,12 +2926,12 @@ namespace EuropaEnginePatcher
                 case PatchType.ForTheGlory:
                 case PatchType.ArsenalOfDemocracy:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
-                              string.Format("%04 ${0:X8} IsDebuggerPresent", _addrIsDebuggerPresent));
+                        string.Format("%04 ${0:X8} IsDebuggerPresent", _addrIsDebuggerPresent));
                     break;
 
                 default:
                     PatchLong(_data, offset, _addrGetModuleHandleA,
-                              string.Format("%04 ${0:X8} GetModuleHandleA", _addrGetModuleHandleA));
+                        string.Format("%04 ${0:X8} GetModuleHandleA", _addrGetModuleHandleA));
                     break;
             }
             offset += 4;
@@ -2956,7 +2956,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrGetProcAddress,
-                      string.Format("%05 ${0:X8} GetProcAddress", _addrGetProcAddress));
+                string.Format("%05 ${0:X8} GetProcAddress", _addrGetProcAddress));
             offset += 4;
             PatchByte(_data, offset, 0x85);
             offset++;
@@ -2971,7 +2971,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xA3);
             offset++;
             PatchLong(_data, offset, _addrVarGetTextWidthAddress,
-                      string.Format("%03 ${0:X8} varGetTextWidthAddress", _addrVarGetTextWidthAddress));
+                string.Format("%03 ${0:X8} varGetTextWidthAddress", _addrVarGetTextWidthAddress));
             offset += 4;
             PatchByte(_data, offset, 0x8B);
             offset++;
@@ -3178,12 +3178,12 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarGetTextWidthAddress,
-                      string.Format("%03 ${0:X8} varGetTextWidthAddress", _addrVarGetTextWidthAddress));
+                string.Format("%03 ${0:X8} varGetTextWidthAddress", _addrVarGetTextWidthAddress));
             offset += 4;
             PatchByte(_data, offset, 0xE9);
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posGetTextWidthEnd),
-                      string.Format("%10 ${0:X8} GetTextWidthEnd", GetTextAddress(_posGetTextWidthEnd)));
+                string.Format("%10 ${0:X8} GetTextWidthEnd", GetTextAddress(_posGetTextWidthEnd)));
             offset += 4;
             PatchByte(_data, offset, 0x90);
             offset++;
@@ -3285,7 +3285,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x3D);
             offset++;
             PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                      string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
             offset += 4;
             PatchByte(_data, offset, 0x00);
             offset++;
@@ -3306,12 +3306,12 @@ namespace EuropaEnginePatcher
                 case PatchType.ForTheGlory:
                 case PatchType.ArsenalOfDemocracy:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
-                              string.Format("%04 ${0:X8} IsDebuggerPresent", _addrIsDebuggerPresent));
+                        string.Format("%04 ${0:X8} IsDebuggerPresent", _addrIsDebuggerPresent));
                     break;
 
                 default:
                     PatchLong(_data, offset, _addrGetModuleHandleA,
-                              string.Format("%04 ${0:X8} GetModuleHandleA", _addrGetModuleHandleA));
+                        string.Format("%04 ${0:X8} GetModuleHandleA", _addrGetModuleHandleA));
                     break;
             }
             offset += 4;
@@ -3337,7 +3337,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrGetProcAddress,
-                      string.Format("%05 ${0:X8} GetProcAddress", _addrGetProcAddress));
+                string.Format("%05 ${0:X8} GetProcAddress", _addrGetProcAddress));
             offset += 4;
             PatchByte(_data, offset, 0x85); // test eax,eax
             offset++;
@@ -3353,7 +3353,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xA3); // mov [varCalcLineBreakAddress],eax
             offset++;
             PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                      string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
             offset += 4;
             // GET_CALC_LINE_BREAK_ADDR_3
             PatchByte(_data, offset, 0xC3); // retn
@@ -3366,13 +3366,13 @@ namespace EuropaEnginePatcher
             // CALC_LINE_BREAK_START1
             PatchByte(_data, _posCalcLineBreakStart1, 0xE9); // jmp CALC_LINE_BREAK1
             PatchLong(_data, _posCalcLineBreakStart1 + 1, GetRelativeOffset(_posCalcLineBreakStart1 + 5, offset),
-                      string.Format("%XX ${0:X8} CalcLineBreak1", GetTextAddress(offset)));
+                string.Format("%XX ${0:X8} CalcLineBreak1", GetTextAddress(offset)));
 
             // CALC_LINE_BREAK1
             PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
-                      string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
+                string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
             offset += 4;
             switch (_patchType)
             {
@@ -3474,7 +3474,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                      string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
             offset += 4;
             switch (_patchType)
             {
@@ -3780,7 +3780,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END1
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd1),
-                      string.Format("%XX ${0:X8} CalcLineBreakEnd1", GetTextAddress(_posCalcLineBreakEnd1)));
+                string.Format("%XX ${0:X8} CalcLineBreakEnd1", GetTextAddress(_posCalcLineBreakEnd1)));
             offset += 4;
 
             #endregion
@@ -3790,13 +3790,13 @@ namespace EuropaEnginePatcher
             // CALC_LINE_BREAK_START2
             PatchByte(_data, _posCalcLineBreakStart2, 0xE9); // jmp CALC_LINE_BREAK2
             PatchLong(_data, _posCalcLineBreakStart2 + 1, GetRelativeOffset(_posCalcLineBreakStart2 + 5, offset),
-                      string.Format("%XX ${0:X8} CalcLineBreak2", GetTextAddress(offset)));
+                string.Format("%XX ${0:X8} CalcLineBreak2", GetTextAddress(offset)));
 
             // CALC_LINE_BREAK2
             PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
-                      string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
+                string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
             offset += 4;
             switch (_patchType)
             {
@@ -3906,7 +3906,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                      string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
             offset += 4;
             switch (_patchType)
             {
@@ -4218,7 +4218,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END2
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd2),
-                      string.Format("%XX ${0:X8} CalcLineBreakEnd2", GetTextAddress(_posCalcLineBreakEnd2)));
+                string.Format("%XX ${0:X8} CalcLineBreakEnd2", GetTextAddress(_posCalcLineBreakEnd2)));
             offset += 4;
 
             #endregion
@@ -4230,13 +4230,13 @@ namespace EuropaEnginePatcher
                 // CALC_LINE_BREAK_START3
                 PatchByte(_data, _posCalcLineBreakStart3, 0xE9); // jmp CALC_LINE_BREAK3
                 PatchLong(_data, _posCalcLineBreakStart3 + 1, GetRelativeOffset(_posCalcLineBreakStart3 + 5, offset),
-                          string.Format("%XX ${0:X8} CalcLineBreak3", GetTextAddress(offset)));
+                    string.Format("%XX ${0:X8} CalcLineBreak3", GetTextAddress(offset)));
 
                 // CALC_LINE_BREAK3
                 PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
-                          string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
+                    string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
                 offset += 4;
                 switch (_patchType)
                 {
@@ -4351,7 +4351,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0x15);
                 offset++;
                 PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                          string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                    string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
                 offset += 4;
                 switch (_patchType)
                 {
@@ -4550,7 +4550,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END3
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd3),
-                          string.Format("%XX ${0:X8} CalcLineBreakEnd3", GetTextAddress(_posCalcLineBreakEnd3)));
+                    string.Format("%XX ${0:X8} CalcLineBreakEnd3", GetTextAddress(_posCalcLineBreakEnd3)));
                 offset += 4;
             }
 
@@ -4563,13 +4563,13 @@ namespace EuropaEnginePatcher
                 // CALC_LINE_BREAK_START4
                 PatchByte(_data, _posCalcLineBreakStart4, 0xE9); // jmp CALC_LINE_BREAK4
                 PatchLong(_data, _posCalcLineBreakStart4 + 1, GetRelativeOffset(_posCalcLineBreakStart4 + 5, offset),
-                          string.Format("%XX ${0:X8} CalcLineBreak4", GetTextAddress(offset)));
+                    string.Format("%XX ${0:X8} CalcLineBreak4", GetTextAddress(offset)));
 
                 // CALC_LINE_BREAK4
                 PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
-                          string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
+                    string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
                 offset += 4;
                 PatchByte(_data, offset, 0x8B); // mov ecx,[esp+20h]
                 offset++;
@@ -4604,7 +4604,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0x15);
                 offset++;
                 PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                          string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                    string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
                 offset += 4;
                 PatchByte(_data, offset, 0x8B); // mov ecx,[esp+20h]
                 offset++;
@@ -4637,7 +4637,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END4
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd4),
-                          string.Format("%XX ${0:X8} CalcLineBreakEnd4", GetTextAddress(_posCalcLineBreakEnd4)));
+                    string.Format("%XX ${0:X8} CalcLineBreakEnd4", GetTextAddress(_posCalcLineBreakEnd4)));
                 offset += 4;
             }
 
@@ -4648,13 +4648,13 @@ namespace EuropaEnginePatcher
             // CALC_LINE_BREAK_START5
             PatchByte(_data, _posCalcLineBreakStart5, 0xE9); // jmp CALC_LINE_BREAK5
             PatchLong(_data, _posCalcLineBreakStart5 + 1, GetRelativeOffset(_posCalcLineBreakStart5 + 5, offset),
-                      string.Format("%XX ${0:X8} CalcLineBreak5", GetTextAddress(offset)));
+                string.Format("%XX ${0:X8} CalcLineBreak5", GetTextAddress(offset)));
 
             // CALC_LINE_BREAK5
             PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
-                      string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
+                string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
             offset += 4;
             switch (_patchType)
             {
@@ -4804,7 +4804,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                      string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
             offset += 4;
             switch (_patchType)
             {
@@ -5054,7 +5054,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END5
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd5),
-                      string.Format("%XX ${0:X8} CalcLineBreakEnd5", GetTextAddress(_posCalcLineBreakEnd5)));
+                string.Format("%XX ${0:X8} CalcLineBreakEnd5", GetTextAddress(_posCalcLineBreakEnd5)));
             offset += 4;
 
             #endregion
@@ -5064,13 +5064,13 @@ namespace EuropaEnginePatcher
             // CALC_LINE_BREAK_START6
             PatchByte(_data, _posCalcLineBreakStart6, 0xE9); // jmp CALC_LINE_BREAK6
             PatchLong(_data, _posCalcLineBreakStart6 + 1, GetRelativeOffset(_posCalcLineBreakStart6 + 5, offset),
-                      string.Format("%XX ${0:X8} CalcLineBreak6", GetTextAddress(offset)));
+                string.Format("%XX ${0:X8} CalcLineBreak6", GetTextAddress(offset)));
 
             // CALC_LINE_BREAK6
             PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
-                      string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
+                string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
             offset += 4;
             switch (_patchType)
             {
@@ -5200,7 +5200,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                      string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
             offset += 4;
             switch (_patchType)
             {
@@ -5462,7 +5462,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END6
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd6),
-                      string.Format("%XX ${0:X8} CalcLineBreakEnd6", GetTextAddress(_posCalcLineBreakEnd6)));
+                string.Format("%XX ${0:X8} CalcLineBreakEnd6", GetTextAddress(_posCalcLineBreakEnd6)));
             offset += 4;
 
             #endregion
@@ -5635,8 +5635,8 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0xE9); // jmp GetDivisionNameOtherCase
                     offset++;
                     PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posGetDivisionName2 - 20),
-                              string.Format("%XX ${0:X8} GetDivisionNameOtherCase",
-                                            GetTextAddress(_posGetDivisionName2 - 20)));
+                        string.Format("%XX ${0:X8} GetDivisionNameOtherCase",
+                            GetTextAddress(_posGetDivisionName2 - 20)));
                     offset += 4;
                     PatchByte(_data, offset, 0x90); // nop
                     offset++;
@@ -5686,13 +5686,13 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0xB9); // mov ecx,DivisionNameFormat
                     offset++;
                     PatchLong(_data, offset, addrDivisionNameFormat,
-                              string.Format("%XX ${0:X8} DivisionNameFormat", addrDivisionNameFormat));
+                        string.Format("%XX ${0:X8} DivisionNameFormat", addrDivisionNameFormat));
                     offset += 4;
                     PatchByte(_data, offset, 0xE8); // call GetDivisionOrderName
                     offset++;
                     PatchLong(_data, offset, offsetGetDivisionOrderName,
-                              string.Format("%XX ${0:X8} GetDivisionOrderName",
-                                            GetRelativeAddress(GetTextAddress(offset + 4), offsetGetDivisionOrderName)));
+                        string.Format("%XX ${0:X8} GetDivisionOrderName",
+                            GetRelativeAddress(GetTextAddress(offset + 4), offsetGetDivisionOrderName)));
                     break;
             }
 
@@ -5717,7 +5717,7 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0xE9); // jmp GetArmyNameOtherCase
                     offset++;
                     PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posGetArmyName2),
-                              string.Format("%XX ${0:X8} GetArmyNameOtherCase", GetTextAddress(_posGetArmyName2)));
+                        string.Format("%XX ${0:X8} GetArmyNameOtherCase", GetTextAddress(_posGetArmyName2)));
 
                     offset = _posGetArmyName2 + 25;
                     PatchByte(_data, offset, 0x56); // push esi
@@ -5732,7 +5732,7 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0xE9); // jmp GetArmyNameOtherCase
                     offset++;
                     PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posGetArmyName2),
-                              string.Format("%XX ${0:X8} GetArmyNameOtherCase", GetTextAddress(_posGetArmyName2)));
+                        string.Format("%XX ${0:X8} GetArmyNameOtherCase", GetTextAddress(_posGetArmyName2)));
 
                     offset = _posGetArmyName2 + 25;
                     PatchByte(_data, offset, 0x56); // push esi
@@ -5752,7 +5752,7 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0xE9); // jmp GetArmyNameOtherCase
                     offset++;
                     PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posGetArmyName2 - 13),
-                              string.Format("%XX ${0:X8} GetArmyNameOtherCase", GetTextAddress(_posGetArmyName2 - 13)));
+                        string.Format("%XX ${0:X8} GetArmyNameOtherCase", GetTextAddress(_posGetArmyName2 - 13)));
                     offset += 4;
                     PatchByte(_data, offset, 0x90); // nop
 
@@ -5850,13 +5850,13 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0xB9); // mov ecx,ArmyNameFormat
                     offset++;
                     PatchLong(_data, offset, addrArmyNameFormat,
-                              string.Format("%XX ${0:X8} ArmyNameFormat", addrArmyNameFormat));
+                        string.Format("%XX ${0:X8} ArmyNameFormat", addrArmyNameFormat));
                     offset += 4;
                     PatchByte(_data, offset, 0xE8); // call GetArmyOrderName
                     offset++;
                     PatchLong(_data, offset, offsetGetArmyOrderName,
-                              string.Format("%XX ${0:X8} GetArmyOrderName",
-                                            GetRelativeAddress(GetTextAddress(offset + 4), offsetGetArmyOrderName)));
+                        string.Format("%XX ${0:X8} GetArmyOrderName",
+                            GetRelativeAddress(GetTextAddress(offset + 4), offsetGetArmyOrderName)));
                     break;
             }
 
@@ -5875,13 +5875,13 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xE9); // jmp GetRankingNameOtherCase
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posGetRankingName2),
-                      string.Format("%XX ${0:X8} GetRankingNameOtherCase", GetTextAddress(_posGetRankingName2)));
+                string.Format("%XX ${0:X8} GetRankingNameOtherCase", GetTextAddress(_posGetRankingName2)));
 
             offset = _posGetRankingName2;
             PatchByte(_data, offset, 0x68); // push NATION_RANKING
             offset++;
             PatchLong(_data, offset, _addrRankingSuffix,
-                      string.Format("%XX ${0:X8} push RANKING_SUFFIX", _addrRankingSuffix));
+                string.Format("%XX ${0:X8} push RANKING_SUFFIX", _addrRankingSuffix));
 
             AppendLog("\n");
         }
@@ -5963,7 +5963,7 @@ namespace EuropaEnginePatcher
             AppendLog("  push EE_MAX_AMPHIB_MOD書き換え\n");
             uint offset = _posPushEeMaxAmphibModTitle;
             PatchLong(_data, offset, _addrEeMaxAmphibModTitle,
-                      string.Format("%XX ${0:X8} push EE_MAX_AMPHIB_MOD", _addrEeMaxAmphibModTitle));
+                string.Format("%XX ${0:X8} push EE_MAX_AMPHIB_MOD", _addrEeMaxAmphibModTitle));
             AppendLog("\n");
         }
 
@@ -6016,7 +6016,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x3D);
             offset++;
             PatchLong(_data, offset, _addrVarStrNLenAddress,
-                      string.Format("%XX ${0:X8} varStrNLenAddress", _addrVarStrNLenAddress));
+                string.Format("%XX ${0:X8} varStrNLenAddress", _addrVarStrNLenAddress));
             offset += 4;
             PatchByte(_data, offset, 0x00);
             offset++;
@@ -6036,12 +6036,12 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.ArsenalOfDemocracy:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
-                              string.Format("%04 ${0:X8} IsDebuggerPresent", _addrIsDebuggerPresent));
+                        string.Format("%04 ${0:X8} IsDebuggerPresent", _addrIsDebuggerPresent));
                     break;
 
                 default:
                     PatchLong(_data, offset, _addrGetModuleHandleA,
-                              string.Format("%04 ${0:X8} GetModuleHandleA", _addrGetModuleHandleA));
+                        string.Format("%04 ${0:X8} GetModuleHandleA", _addrGetModuleHandleA));
                     break;
             }
             offset += 4;
@@ -6067,7 +6067,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrGetProcAddress,
-                      string.Format("%05 ${0:X8} GetProcAddress", _addrGetProcAddress));
+                string.Format("%05 ${0:X8} GetProcAddress", _addrGetProcAddress));
             offset += 4;
             PatchByte(_data, offset, 0x85); // test eax,eax
             offset++;
@@ -6083,7 +6083,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xA3); // mov [varStrNLenAddress],eax
             offset++;
             PatchLong(_data, offset, _addrVarStrNLenAddress,
-                      string.Format("%XX ${0:X8} varStrNLenAddress", _addrVarStrNLenAddress));
+                string.Format("%XX ${0:X8} varStrNLenAddress", _addrVarStrNLenAddress));
             offset += 4;
             // GET_STRNLEN0_ADDR_3
             PatchByte(_data, offset, 0xC3); // retn
@@ -6094,7 +6094,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xE8); // call GET_STRNLEN0_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetStrNLenAddr),
-                      string.Format("%XX ${0:X8} GetStrNLenAddr", GetTextAddress(posGetStrNLenAddr)));
+                string.Format("%XX ${0:X8} GetStrNLenAddr", GetTextAddress(posGetStrNLenAddr)));
             offset += 4;
             PatchByte(_data, offset, 0x6A); // push 0000001Ch
             offset++;
@@ -6161,7 +6161,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarStrNLenAddress,
-                      string.Format("%02 ${0:X8} varStrNLenAddress", _addrVarStrNLenAddress));
+                string.Format("%02 ${0:X8} varStrNLenAddress", _addrVarStrNLenAddress));
             offset += 4;
             switch (_patchType)
             {
@@ -6236,7 +6236,7 @@ namespace EuropaEnginePatcher
                 // TERM_MODEL_NAME_START1
                 PatchByte(_data, _posTermModelNameStart1, 0xE9); // jmp TERM_MODEL_NAME
                 PatchLong(_data, _posTermModelNameStart1 + 1, GetRelativeOffset(_posTermModelNameStart1 + 5, offset),
-                          string.Format("%XX ${0:X8} TermBrigModelName", GetTextAddress(offset)));
+                    string.Format("%XX ${0:X8} TermBrigModelName", GetTextAddress(offset)));
                 PatchByte(_data, _posTermModelNameStart1 + 5, 0x90); // nop
                 PatchByte(_data, _posTermModelNameStart1 + 6, 0x90); // nop
                 PatchByte(_data, _posTermModelNameStart1 + 7, 0x90); // nop
@@ -6246,7 +6246,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0xE8); // call TERM_MODEL_NAME
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, posTermModelName),
-                          string.Format("%08 ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                    string.Format("%08 ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
                 offset += 4;
                 PatchByte(_data, offset, 0x68); // push 000000FFh
                 offset++;
@@ -6261,7 +6261,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0xE9); // jmp TermBrigModelNameEnd
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posTermModelNameStart1 + 9),
-                          string.Format("%08 ${0:X8} TermBrigModelNameEnd", GetTextAddress(_posTermModelNameStart1 + 9)));
+                    string.Format("%08 ${0:X8} TermBrigModelNameEnd", GetTextAddress(_posTermModelNameStart1 + 9)));
                 offset += 4;
 
                 // TERM_MODEL_NAME_START2
@@ -6274,7 +6274,7 @@ namespace EuropaEnginePatcher
                 _posTermModelNameStart2 += 6;
                 PatchByte(_data, _posTermModelNameStart2, 0xE9); // jmp TERM_DIV_MODEL_NAME
                 PatchLong(_data, _posTermModelNameStart2 + 1, GetRelativeOffset(_posTermModelNameStart2 + 5, offset),
-                          string.Format("%XX ${0:X8} TermDivModelName", GetTextAddress(offset)));
+                    string.Format("%XX ${0:X8} TermDivModelName", GetTextAddress(offset)));
                 PatchByte(_data, _posTermModelNameStart2 + 5, 0x90); // nop
                 PatchByte(_data, _posTermModelNameStart2 + 6, 0x90); // nop
                 PatchByte(_data, _posTermModelNameStart2 + 7, 0x90); // nop
@@ -6284,7 +6284,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0xE8); // call TERM_MODEL_NAME
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, posTermModelName),
-                          string.Format("%08 ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                    string.Format("%08 ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
                 offset += 4;
                 PatchByte(_data, offset, 0x68); // push 000000FFh
                 offset++;
@@ -6299,7 +6299,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0xE9); // jmp TermDivModelNameEnd
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posTermModelNameStart2 + 9),
-                          string.Format("%08 ${0:X8} TermDivModelNameEnd", GetTextAddress(_posTermModelNameStart2 + 9)));
+                    string.Format("%08 ${0:X8} TermDivModelNameEnd", GetTextAddress(_posTermModelNameStart2 + 9)));
                 offset += 4;
             }
             else
@@ -6318,52 +6318,52 @@ namespace EuropaEnginePatcher
                 }
                 PatchByte(_data, _posTermModelNameStart1, 0xE8); // call TERM_MODEL_NAME
                 PatchLong(_data, _posTermModelNameStart1 + 1,
-                          GetRelativeOffset(_posTermModelNameStart1 + 5, posTermModelName),
-                          string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                    GetRelativeOffset(_posTermModelNameStart1 + 5, posTermModelName),
+                    string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
 
                 // TERM_MODEL_NAME_START2
                 PatchByte(_data, _posTermModelNameStart2, 0xE8); // call TERM_MODEL_NAME
                 PatchLong(_data, _posTermModelNameStart2 + 1,
-                          GetRelativeOffset(_posTermModelNameStart2 + 5, posTermModelName),
-                          string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                    GetRelativeOffset(_posTermModelNameStart2 + 5, posTermModelName),
+                    string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
 
                 if (_patchType == PatchType.DarkestHour)
                 {
                     // TERM_MODEL_NAME_START3
                     PatchByte(_data, _posTermModelNameStart3, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart3 + 1,
-                              GetRelativeOffset(_posTermModelNameStart3 + 5, posTermModelName),
-                              string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                        GetRelativeOffset(_posTermModelNameStart3 + 5, posTermModelName),
+                        string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
 
                     // TERM_MODEL_NAME_START2
                     PatchByte(_data, _posTermModelNameStart4, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart4 + 1,
-                              GetRelativeOffset(_posTermModelNameStart4 + 5, posTermModelName),
-                              string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                        GetRelativeOffset(_posTermModelNameStart4 + 5, posTermModelName),
+                        string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
 
                     // TERM_MODEL_NAME_START2
                     PatchByte(_data, _posTermModelNameStart5, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart5 + 1,
-                              GetRelativeOffset(_posTermModelNameStart5 + 5, posTermModelName),
-                              string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                        GetRelativeOffset(_posTermModelNameStart5 + 5, posTermModelName),
+                        string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
 
                     // TERM_MODEL_NAME_START2
                     PatchByte(_data, _posTermModelNameStart6, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart6 + 1,
-                              GetRelativeOffset(_posTermModelNameStart6 + 5, posTermModelName),
-                              string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                        GetRelativeOffset(_posTermModelNameStart6 + 5, posTermModelName),
+                        string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
 
                     // TERM_MODEL_NAME_START2
                     PatchByte(_data, _posTermModelNameStart7, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart7 + 1,
-                              GetRelativeOffset(_posTermModelNameStart7 + 5, posTermModelName),
-                              string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                        GetRelativeOffset(_posTermModelNameStart7 + 5, posTermModelName),
+                        string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
 
                     // TERM_MODEL_NAME_START2
                     PatchByte(_data, _posTermModelNameStart8, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart8 + 1,
-                              GetRelativeOffset(_posTermModelNameStart8 + 5, posTermModelName),
-                              string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                        GetRelativeOffset(_posTermModelNameStart8 + 5, posTermModelName),
+                        string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
                 }
             }
 
@@ -6405,7 +6405,7 @@ namespace EuropaEnginePatcher
                     result.Add(offset);
                     AppendLog(string.Format("  *** Find ${0:X8}\n", offset));
                     AppendLog(string.Format("  検索範囲 ${0:X8}～${1:X8} (のこり{2}Bytes)\n", offset + 1, start + size - 1,
-                                            start + size - offset - 1));
+                        start + size - offset - 1));
                 }
             }
             return result;
@@ -6476,8 +6476,8 @@ namespace EuropaEnginePatcher
         {
             return
                 (uint)
-                (_data[offset] + _data[offset + 1]*0x00000100 + _data[offset + 2]*0x00010000 +
-                 _data[offset + 3]*0x01000000);
+                    (_data[offset] + _data[offset + 1]*0x00000100 + _data[offset + 2]*0x00010000 +
+                     _data[offset + 3]*0x01000000);
         }
 
         /// <summary>
