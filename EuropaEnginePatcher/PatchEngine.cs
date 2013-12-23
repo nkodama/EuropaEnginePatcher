@@ -925,9 +925,22 @@ namespace EuropaEnginePatcher
             // 強制ウィンドウ化
             if (PatchController.Windowed)
             {
-                if (!ScanWindowed())
+                switch (_patchType)
                 {
-                    return false;
+                    case PatchType.CrusaderKings:
+                    case PatchType.EuropaUniversalis2:
+                    case PatchType.Victoria:
+                    case PatchType.HeartsOfIron:
+                    case PatchType.HeartsOfIron2:
+                    case PatchType.HeartsOfIron212:
+                        if (!ScanWindowed())
+                        {
+                            return false;
+                        }
+                        break;
+                    case PatchType.IronCrossHoI2:
+                        // Iron Crossの場合は付属ツールでウィンドウ化できるのでパッチを当てない
+                        break;
                 }
             }
             // ゲーム固有
@@ -2572,7 +2585,20 @@ namespace EuropaEnginePatcher
             // 強制ウィンドウ化
             if (PatchController.Windowed)
             {
-                PatchWindowed();
+                switch (_patchType)
+                {
+                    case PatchType.CrusaderKings:
+                    case PatchType.EuropaUniversalis2:
+                    case PatchType.Victoria:
+                    case PatchType.HeartsOfIron:
+                    case PatchType.HeartsOfIron2:
+                    case PatchType.HeartsOfIron212:
+                        PatchWindowed();
+                        break;
+                    case PatchType.IronCrossHoI2:
+                        // Iron Crossの場合は付属ツールでウィンドウ化できるのでパッチを当てない
+                        break;
+                }
             }
             // ゲーム固有
             switch (_patchType)
@@ -6540,9 +6566,9 @@ namespace EuropaEnginePatcher
         private static List<uint> BinaryScan(byte[] target, byte[] pattern, uint start, uint size)
         {
             var sb = new StringBuilder("  Binary:");
-            for (int i = 0; i < pattern.Length; i++)
+            foreach (byte b in pattern)
             {
-                sb.AppendFormat(" {0:X2}", pattern[i]);
+                sb.AppendFormat(" {0:X2}", b);
             }
             sb.AppendLine();
             AppendLog(sb.ToString());
