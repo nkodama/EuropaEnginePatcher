@@ -194,7 +194,7 @@
             this.autoModeCheckBox.Size = new System.Drawing.Size(100, 16);
             this.autoModeCheckBox.TabIndex = 3;
             this.autoModeCheckBox.Text = "自動処理モード";
-            this.mainToolTip.SetToolTip(this.autoModeCheckBox, "実行ファイルをドロップした時、参照キーで選択した時、開始キーを押した時に、\r\nパッチ当て、保存、日本語化DLLのコピーを連続して実行します。");
+            this.mainToolTip.SetToolTip(this.autoModeCheckBox, "ゲームの実行ファイルをドロップした時、参照キーで選択した時、\r\n開始キーを押した時に、パッチ当て、保存、日本語化DLLのコピーを\r\n連続して実行します。");
             this.autoModeCheckBox.UseVisualStyleBackColor = true;
             this.autoModeCheckBox.CheckedChanged += new System.EventHandler(this.OnAutoModeCheckedBoxCheckedChanged);
             // 

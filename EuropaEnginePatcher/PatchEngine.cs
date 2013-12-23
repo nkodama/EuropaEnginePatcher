@@ -99,6 +99,8 @@ namespace EuropaEnginePatcher
         private static uint _posChatBlockChar1; // チャットウィンドウの特殊文字ブロック処理の位置1
         private static uint _posChatBlockChar2; // チャットウィンドウの特殊文字ブロック処理の位置2
         private static uint _posChatBlockChar3; // チャットウィンドウの特殊文字ブロック処理の位置3
+        private static uint _posWindowed1; // 強制ウィンドウ化処理の位置1
+        private static uint _posWindowed2; // 強制ウィンドウ化処理の位置2
 
         #endregion
 
@@ -918,6 +920,14 @@ namespace EuropaEnginePatcher
                             return false;
                         }
                         break;
+                }
+            }
+            // 強制ウィンドウ化
+            if (PatchController.Windowed)
+            {
+                if (!ScanWindowed())
+                {
+                    return false;
                 }
             }
             // ゲーム固有
@@ -2246,6 +2256,106 @@ namespace EuropaEnginePatcher
 
         #endregion
 
+        #region パッチ位置探索 - ゲーム設定
+
+        /// <summary>
+        /// 強制ウィンドウ化処理を埋め込む位置を探索する
+        /// </summary>
+        /// <returns>探索に成功すればtrueを返す</returns>
+        private static bool ScanWindowed()
+        {
+            AppendLog("ScanBinary - 特定バイナリを探す\n");
+            AppendLog("  \"%XX 強制ウィンドウ化処理を埋め込む位置\"を探します\n");
+
+            byte[] pattern;
+            List<uint> l;
+
+            switch (_patchType)
+            {
+                case PatchType.CrusaderKings:
+                     pattern = new byte[]
+                    {
+                        0x00, 0x00, 0x00, 0x00, 0x83, 0x7D, 0x10, 0x00,
+                        0x74, 0x1C
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posWindowed1 = l[0];
+                    break;
+
+                case PatchType.EuropaUniversalis2:
+                case PatchType.HeartsOfIron:
+                     pattern = new byte[]
+                    {
+                        0x00, 0x00, 0x00, 0x00, 0x8B, 0x4D, 0x08, 0x89,
+                        0x0D
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posWindowed1 = l[0];
+                    break;
+
+                case PatchType.Victoria:
+                     pattern = new byte[]
+                    {
+                        0x00, 0x00, 0x00, 0x00, 0x8B, 0x55, 0x08, 0x89,
+                        0x15
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posWindowed1 = l[0];
+                    break;
+
+                case PatchType.HeartsOfIron2:
+                    pattern = new byte[]
+                    {
+                        0x83, 0xFA, 0x57, 0x0F, 0x85
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posWindowed1 = l[0] + 3;
+                    _posWindowed2 = _posWindowed1 + 6 + GetLong(_posWindowed1 + 2) - 10;
+                    break;
+
+                case PatchType.HeartsOfIron212:
+                    pattern = new byte[]
+                    {
+                        0xFF, 0xFF, 0x83, 0xFA, 0x57, 0x75
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posWindowed1 = l[0] + 5;
+                    _posWindowed2 = _posWindowed1 + 2 + _data[_posWindowed1 + 1] - 10;
+                    break;
+
+                case PatchType.IronCrossHoI2:
+                    // Iron Crossの場合はゲーム付属のツールで設定変更できるのでパッチを当てない
+                    break;
+            }
+
+
+            AppendLog("ScanBinary passed\n\n");
+
+            return true;
+        }
+
+        #endregion
+
         #region パッチ位置探索 - ゲーム固有
 
         /// <summary>
@@ -2458,6 +2568,11 @@ namespace EuropaEnginePatcher
                         EmbedArmyNameFormat();
                         break;
                 }
+            }
+            // 強制ウィンドウ化
+            if (PatchController.Windowed)
+            {
+                PatchWindowed();
             }
             // ゲーム固有
             switch (_patchType)
@@ -5949,6 +6064,44 @@ namespace EuropaEnginePatcher
             _data[offset++] = (byte) 'I';
             _data[offset++] = (byte) 'X';
             _data[offset] = (byte) '\0';
+        }
+
+        #endregion
+
+        #region パッチ処理 - ゲーム設定
+
+        /// <summary>
+        ///     強制ウィンドウ化処理を埋め込む
+        /// </summary>
+        private static void PatchWindowed()
+        {
+            AppendLog("  push 強制ウィンドウ化処理埋め込み\n");
+            uint offset = _posWindowed1;
+            switch (_patchType)
+            {
+                case PatchType.CrusaderKings:
+                case PatchType.EuropaUniversalis2:
+                case PatchType.Victoria:
+                case PatchType.HeartsOfIron:
+                    PatchByte(_data, offset, 0x01);
+                    break;
+
+                case PatchType.HeartsOfIron2:
+                    PatchByte(_data, offset, 0xE9); // jmp SetWindowed
+                    offset++;
+                    PatchLong(_data, offset, _posWindowed2 - (offset + 4),
+                        string.Format("%XX ${0:X8} SetWindowed", GetTextAddress(_posWindowed2)));
+                    offset += 4;
+                    PatchByte(_data, offset, 0x90); // nop
+                    break;
+
+                case PatchType.HeartsOfIron212:
+                    PatchByte(_data, offset, 0xEB); // jmp SetWindowed
+                    offset++;
+                    PatchByte(_data, offset, (byte) (_posWindowed2 - (offset + 1)));
+                    break;
+            }
+            AppendLog("\n");
         }
 
         #endregion
