@@ -42,7 +42,7 @@ namespace EuropaEnginePatcher
         public static bool WordOrder { get; set; }
 
         /// <summary>
-        /// 強制ウィンドウ化
+        ///     強制ウィンドウ化
         /// </summary>
         public static bool Windowed { get; set; }
 
@@ -556,21 +556,7 @@ namespace EuropaEnginePatcher
         /// <returns>テキスト自動折り返しのデフォルト値</returns>
         public static bool GetAutoLineBreakDefault()
         {
-            switch (GameType)
-            {
-                case GameType.CrusaderKings:
-                case GameType.EuropaUniversalis2:
-                case GameType.ForTheGlory:
-                case GameType.Victoria:
-                case GameType.HeartsOfIron:
-                case GameType.HeartsOfIron2:
-                case GameType.ArsenalOfDemocracy:
-                case GameType.DarkestHour:
-                    return true;
-
-                default:
-                    return false;
-            }
+            return true;
         }
 
         /// <summary>

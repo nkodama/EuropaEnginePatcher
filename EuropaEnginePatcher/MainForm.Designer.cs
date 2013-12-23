@@ -38,12 +38,12 @@
             this.pathTextBox = new System.Windows.Forms.TextBox();
             this.typeComboBox = new System.Windows.Forms.ComboBox();
             this.optionGroupBox = new System.Windows.Forms.GroupBox();
+            this.windowedCheckBox = new System.Windows.Forms.CheckBox();
             this.autoModeCheckBox = new System.Windows.Forms.CheckBox();
             this.renameOriginalCheckBox = new System.Windows.Forms.CheckBox();
             this.autoLineBreakCheckBox = new System.Windows.Forms.CheckBox();
             this.wordOrderCheckBox = new System.Windows.Forms.CheckBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.windowedCheckBox = new System.Windows.Forms.CheckBox();
             this.optionGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -171,6 +171,19 @@
             this.optionGroupBox.TabStop = false;
             this.optionGroupBox.Text = "オプション";
             // 
+            // windowedCheckBox
+            // 
+            this.windowedCheckBox.AutoSize = true;
+            this.windowedCheckBox.Location = new System.Drawing.Point(15, 60);
+            this.windowedCheckBox.Name = "windowedCheckBox";
+            this.windowedCheckBox.Size = new System.Drawing.Size(103, 16);
+            this.windowedCheckBox.TabIndex = 4;
+            this.windowedCheckBox.Text = "強制ウィンドウ化";
+            this.mainToolTip.SetToolTip(this.windowedCheckBox, "強制的にウィンドウ化します。\r\n一旦パッチを当てた後は、フルスクリーンに戻すことができません。\r\nArsenal of Democracy、Darkest Hou" +
+        "r、Iron Cross、For The Gloryではこの設定が無視されます。");
+            this.windowedCheckBox.UseVisualStyleBackColor = true;
+            this.windowedCheckBox.CheckedChanged += new System.EventHandler(this.OnWindowedCheckBoxCheckedChanged);
+            // 
             // autoModeCheckBox
             // 
             this.autoModeCheckBox.AutoSize = true;
@@ -195,7 +208,8 @@
             this.renameOriginalCheckBox.Size = new System.Drawing.Size(126, 16);
             this.renameOriginalCheckBox.TabIndex = 2;
             this.renameOriginalCheckBox.Text = "元のファイルをリネーム";
-            this.mainToolTip.SetToolTip(this.renameOriginalCheckBox, "チェックを入れると元のファイルを～En.exeに変更し、\r\nパッチを当てた後のファイルで元のファイルを置き換えます。");
+            this.mainToolTip.SetToolTip(this.renameOriginalCheckBox, "チェックを入れると元のファイルを～En.exeに変更し、\r\nパッチを当てた後のファイルで元のファイルを置き換えます。\r\nチェックを入れていないとパッチを当てた後の" +
+        "ファイルを\r\n～Jp.exeで保存し、元のファイルを変更しません。");
             this.renameOriginalCheckBox.UseVisualStyleBackColor = true;
             this.renameOriginalCheckBox.CheckedChanged += new System.EventHandler(this.OnRenameOriginalCheckBoxCheckedChanged);
             // 
@@ -209,7 +223,7 @@
             this.autoLineBreakCheckBox.Size = new System.Drawing.Size(125, 16);
             this.autoLineBreakCheckBox.TabIndex = 1;
             this.autoLineBreakCheckBox.Text = "テキスト自動折り返し";
-            this.mainToolTip.SetToolTip(this.autoLineBreakCheckBox, "表示領域の端に到達した時に文字列を自動で折り返します。\r\nわからなければチェックを入れたままにして下さい。");
+            this.mainToolTip.SetToolTip(this.autoLineBreakCheckBox, "表示領域の端に到達した時に文字列を自動で折り返します。\r\nわからなければ変更しないで下さい。");
             this.autoLineBreakCheckBox.UseVisualStyleBackColor = true;
             this.autoLineBreakCheckBox.CheckedChanged += new System.EventHandler(this.OnAutoLineBreakCheckBoxCheckedChanged);
             // 
@@ -225,18 +239,6 @@
         "yの和訳はオプションでこの機能をサポートしています。\r\nわからなければ変更しないで下さい。");
             this.wordOrderCheckBox.UseVisualStyleBackColor = true;
             this.wordOrderCheckBox.CheckedChanged += new System.EventHandler(this.OnWordOrderCheckBoxCheckedChanged);
-            // 
-            // windowedCheckBox
-            // 
-            this.windowedCheckBox.AutoSize = true;
-            this.windowedCheckBox.Location = new System.Drawing.Point(15, 60);
-            this.windowedCheckBox.Name = "windowedCheckBox";
-            this.windowedCheckBox.Size = new System.Drawing.Size(103, 16);
-            this.windowedCheckBox.TabIndex = 4;
-            this.windowedCheckBox.Text = "強制ウィンドウ化";
-            this.mainToolTip.SetToolTip(this.windowedCheckBox, "強制的にウィンドウ化します。\r\nArsenal of Democracy、Darkest Hour、Iron Cross、For The Gloryではこの設定が" +
-        "無視されます。");
-            this.windowedCheckBox.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 

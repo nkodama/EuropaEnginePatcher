@@ -87,6 +87,13 @@ namespace EuropaEnginePatcher
             typeComboBox.SelectedIndex = 0;
             pathTextBox.Clear();
             logRichTextBox.Clear();
+
+            autoModeCheckBox.Checked = true;
+            renameOriginalCheckBox.Checked = true;
+            autoLineBreakCheckBox.Checked = true;
+            wordOrderCheckBox.Checked = false;
+            windowedCheckBox.Checked = false;
+
             saveButton.Enabled = false;
         }
 
@@ -176,9 +183,27 @@ namespace EuropaEnginePatcher
             PatchController.SetGameType(typeComboBox.SelectedIndex);
 
             autoLineBreakCheckBox.Enabled = PatchController.GetAutoLineBreakEffective();
-            autoLineBreakCheckBox.Checked = autoLineBreakCheckBox.Enabled && PatchController.GetAutoLineBreakDefault();
             wordOrderCheckBox.Enabled = PatchController.GetWordOrderEffective();
-            wordOrderCheckBox.Checked = wordOrderCheckBox.Enabled && PatchController.GetWordOrderDefault();
+            windowedCheckBox.Enabled = PatchController.GetWindowedEffective();
+
+            if (PatchController.GetWordOrderDefault())
+            {
+                if (!wordOrderCheckBox.Checked)
+                {
+                    wordOrderCheckBox.Checked = true;
+                }
+            }
+            else
+            {
+                if (!PatchController.GetWordOrderEffective() && wordOrderCheckBox.Checked)
+                {
+                    wordOrderCheckBox.Checked = false;
+                }
+            }
+            if (!PatchController.GetWindowedEffective() && windowedCheckBox.Checked)
+            {
+                windowedCheckBox.Checked = false;
+            }
         }
 
         /// <summary>
@@ -210,7 +235,6 @@ namespace EuropaEnginePatcher
         private void OnRenameOriginalCheckBoxCheckedChanged(object sender, EventArgs e)
         {
             PatchController.RenameOriginal = renameOriginalCheckBox.Checked;
-            saveButton.Enabled = false;
         }
 
         /// <summary>
@@ -232,6 +256,17 @@ namespace EuropaEnginePatcher
         private void OnWordOrderCheckBoxCheckedChanged(object sender, EventArgs e)
         {
             PatchController.WordOrder = wordOrderCheckBox.Checked;
+            saveButton.Enabled = false;
+        }
+
+        /// <summary>
+        ///     強制ウィンドウ化のチェック状態変更時の処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnWindowedCheckBoxCheckedChanged(object sender, EventArgs e)
+        {
+            PatchController.Windowed = windowedCheckBox.Checked;
             saveButton.Enabled = false;
         }
     }
