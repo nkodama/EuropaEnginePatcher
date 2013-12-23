@@ -101,6 +101,8 @@ namespace EuropaEnginePatcher
         private static uint _posChatBlockChar3; // チャットウィンドウの特殊文字ブロック処理の位置3
         private static uint _posWindowed1; // 強制ウィンドウ化処理の位置1
         private static uint _posWindowed2; // 強制ウィンドウ化処理の位置2
+        private static uint _posBinkPlay1; // binkplay.exeの定義位置1
+        private static uint _posBinkPlay2; // binkplay.exeの定義位置2
 
         #endregion
 
@@ -940,6 +942,25 @@ namespace EuropaEnginePatcher
                         break;
                     case PatchType.IronCrossHoI2:
                         // Iron Crossの場合は付属ツールでウィンドウ化できるのでパッチを当てない
+                        break;
+                }
+            }
+            // イントロスキップ
+            if (PatchController.IntroSkip)
+            {
+                switch (_patchType)
+                {
+                    case PatchType.CrusaderKings:
+                    case PatchType.EuropaUniversalis2:
+                    case PatchType.Victoria:
+                    case PatchType.HeartsOfIron:
+                    case PatchType.HeartsOfIron2:
+                    case PatchType.HeartsOfIron212:
+                    case PatchType.IronCrossHoI2:
+                        if (!ScanIntroSkip())
+                        {
+                            return false;
+                        }
                         break;
                 }
             }
@@ -2272,7 +2293,7 @@ namespace EuropaEnginePatcher
         #region パッチ位置探索 - ゲーム設定
 
         /// <summary>
-        /// 強制ウィンドウ化処理を埋め込む位置を探索する
+        ///     強制ウィンドウ化処理を埋め込む位置を探索する
         /// </summary>
         /// <returns>探索に成功すればtrueを返す</returns>
         private static bool ScanWindowed()
@@ -2286,7 +2307,7 @@ namespace EuropaEnginePatcher
             switch (_patchType)
             {
                 case PatchType.CrusaderKings:
-                     pattern = new byte[]
+                    pattern = new byte[]
                     {
                         0x00, 0x00, 0x00, 0x00, 0x83, 0x7D, 0x10, 0x00,
                         0x74, 0x1C
@@ -2301,7 +2322,7 @@ namespace EuropaEnginePatcher
 
                 case PatchType.EuropaUniversalis2:
                 case PatchType.HeartsOfIron:
-                     pattern = new byte[]
+                    pattern = new byte[]
                     {
                         0x00, 0x00, 0x00, 0x00, 0x8B, 0x4D, 0x08, 0x89,
                         0x0D
@@ -2315,7 +2336,7 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.Victoria:
-                     pattern = new byte[]
+                    pattern = new byte[]
                     {
                         0x00, 0x00, 0x00, 0x00, 0x8B, 0x55, 0x08, 0x89,
                         0x15
@@ -2358,6 +2379,53 @@ namespace EuropaEnginePatcher
 
                 case PatchType.IronCrossHoI2:
                     // Iron Crossの場合はゲーム付属のツールで設定変更できるのでパッチを当てない
+                    break;
+            }
+
+
+            AppendLog("ScanBinary passed\n\n");
+
+            return true;
+        }
+
+        /// <summary>
+        ///     binkplay.exeの位置を探索する
+        /// </summary>
+        /// <returns>探索に成功すればtrueを返す</returns>
+        private static bool ScanIntroSkip()
+        {
+            AppendLog("ScanBinary - 特定バイナリを探す\n");
+            AppendLog("  \"%XX binkplay.exe\"を探します\n");
+
+            var pattern = new byte[]
+            {
+                0x62, 0x69, 0x6E, 0x6B, 0x70, 0x6C, 0x61, 0x79,
+                0x2E, 0x65, 0x78, 0x65, 0x00
+            };
+            List<uint> l = BinaryScan(_data, pattern, _posDataSection, _sizeDataSection);
+
+            switch (_patchType)
+            {
+                case PatchType.CrusaderKings:
+                case PatchType.EuropaUniversalis2:
+                    if (l.Count < 2)
+                    {
+                        return false;
+                    }
+                    _posBinkPlay1 = l[0];
+                    _posBinkPlay2 = l[1];
+                    break;
+
+                case PatchType.HeartsOfIron:
+                case PatchType.Victoria:
+                case PatchType.HeartsOfIron2:
+                case PatchType.HeartsOfIron212:
+                case PatchType.IronCrossHoI2:
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posBinkPlay1 = l[0];
                     break;
             }
 
@@ -2597,6 +2665,22 @@ namespace EuropaEnginePatcher
                         break;
                     case PatchType.IronCrossHoI2:
                         // Iron Crossの場合は付属ツールでウィンドウ化できるのでパッチを当てない
+                        break;
+                }
+            }
+            // イントロスキップ
+            if (PatchController.IntroSkip)
+            {
+                switch (_patchType)
+                {
+                    case PatchType.CrusaderKings:
+                    case PatchType.EuropaUniversalis2:
+                    case PatchType.Victoria:
+                    case PatchType.HeartsOfIron:
+                    case PatchType.HeartsOfIron2:
+                    case PatchType.HeartsOfIron212:
+                    case PatchType.IronCrossHoI2:
+                        PatchBinkPlay();
                         break;
                 }
             }
@@ -6126,6 +6210,22 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, (byte) (_posWindowed2 - (offset + 1)));
                     break;
+            }
+            AppendLog("\n");
+        }
+
+        /// <summary>
+        ///     binkplay.exeを_inkplay.exeに書き換える
+        /// </summary>
+        private static void PatchBinkPlay()
+        {
+            AppendLog("  binkplay.exe書き換え\n");
+            AppendLog(string.Format("  ${0:X8}\n\n", _posBinkPlay1));
+            _data[_posBinkPlay1] = (byte)'_';
+            if (_patchType == PatchType.CrusaderKings || _patchType == PatchType.EuropaUniversalis2)
+            {
+                AppendLog(string.Format("  ${0:X8}\n\n", _posBinkPlay2));
+                _data[_posBinkPlay2] = (byte)'_';
             }
             AppendLog("\n");
         }

@@ -1,3 +1,5 @@
 *.suo
 EuropaEnginePatcher/bin
 EuropaEnginePatcher/obj
+
+/*.user

@@ -19,7 +19,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     ゲームの種類
         /// </summary>
-        public static GameType GameType { get; set; }
+        private static GameType GameType { get; set; }
 
         /// <summary>
         ///     自動処理モード
@@ -29,7 +29,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     元のファイルをリネーム
         /// </summary>
-        public static bool RenameOriginal { get; set; }
+        public static bool RenameOriginal { private get; set; }
 
         /// <summary>
         ///     テキスト自動折り返し
@@ -45,6 +45,11 @@ namespace EuropaEnginePatcher
         ///     強制ウィンドウ化
         /// </summary>
         public static bool Windowed { get; set; }
+
+        /// <summary>
+        ///     イントロスキップ
+        /// </summary>
+        public static bool IntroSkip { get; set; }
 
         #endregion
 
@@ -87,6 +92,7 @@ namespace EuropaEnginePatcher
             AutoLineBreak = true;
             WordOrder = false;
             Windowed = false;
+            IntroSkip = false;
         }
 
         #endregion
@@ -551,12 +557,28 @@ namespace EuropaEnginePatcher
         }
 
         /// <summary>
-        ///     テキスト自動折り返しのデフォルト値を取得する
+        ///     イントロスキップの設定が有効かを取得する
         /// </summary>
-        /// <returns>テキスト自動折り返しのデフォルト値</returns>
-        public static bool GetAutoLineBreakDefault()
+        /// <returns>イントロスキップの設定が有効ならばtrueを返す</returns>
+        public static bool GetIntroSkipEffective()
         {
-            return true;
+            switch (GameType)
+            {
+                case GameType.CrusaderKings:
+                case GameType.EuropaUniversalis2:
+                case GameType.Victoria:
+                case GameType.HeartsOfIron:
+                case GameType.HeartsOfIron2:
+                    return true;
+
+                case GameType.ForTheGlory:
+                case GameType.ArsenalOfDemocracy:
+                case GameType.DarkestHour:
+                    return false;
+
+                default:
+                    return true;
+            }
         }
 
         /// <summary>
@@ -579,15 +601,6 @@ namespace EuropaEnginePatcher
                 default:
                     return false;
             }
-        }
-
-        /// <summary>
-        ///     強制ウィンドウ化のデフォルト値を取得する
-        /// </summary>
-        /// <returns>強制ウィンドウ化のデフォルト値</returns>
-        public static bool GetWindowedDefault()
-        {
-            return false;
         }
 
         #endregion

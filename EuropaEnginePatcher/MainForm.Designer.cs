@@ -44,6 +44,7 @@
             this.autoLineBreakCheckBox = new System.Windows.Forms.CheckBox();
             this.wordOrderCheckBox = new System.Windows.Forms.CheckBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.introSkipCheckBox = new System.Windows.Forms.CheckBox();
             this.optionGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -159,6 +160,7 @@
             // 
             this.optionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionGroupBox.Controls.Add(this.introSkipCheckBox);
             this.optionGroupBox.Controls.Add(this.windowedCheckBox);
             this.optionGroupBox.Controls.Add(this.autoModeCheckBox);
             this.optionGroupBox.Controls.Add(this.renameOriginalCheckBox);
@@ -179,8 +181,8 @@
             this.windowedCheckBox.Size = new System.Drawing.Size(103, 16);
             this.windowedCheckBox.TabIndex = 4;
             this.windowedCheckBox.Text = "強制ウィンドウ化";
-            this.mainToolTip.SetToolTip(this.windowedCheckBox, "強制的にウィンドウ化します。\r\n一旦パッチを当てた後は、フルスクリーンに戻すことができません。\r\nArsenal of Democracy、Darkest Hou" +
-        "r、Iron Cross、For The Gloryではこの設定が無視されます。");
+            this.mainToolTip.SetToolTip(this.windowedCheckBox, "強制的にウィンドウ化します。\r\n一旦パッチを当てた後はフルスクリーンに戻すことができません。\r\nArsenal of Democracy、Darkest Hour" +
+        "、\r\nIron Cross、For the Gloryではこの設定が無視されます。");
             this.windowedCheckBox.UseVisualStyleBackColor = true;
             this.windowedCheckBox.CheckedChanged += new System.EventHandler(this.OnWindowedCheckBoxCheckedChanged);
             // 
@@ -240,6 +242,19 @@
             this.wordOrderCheckBox.UseVisualStyleBackColor = true;
             this.wordOrderCheckBox.CheckedChanged += new System.EventHandler(this.OnWordOrderCheckBoxCheckedChanged);
             // 
+            // introSkipCheckBox
+            // 
+            this.introSkipCheckBox.AutoSize = true;
+            this.introSkipCheckBox.Location = new System.Drawing.Point(146, 60);
+            this.introSkipCheckBox.Name = "introSkipCheckBox";
+            this.introSkipCheckBox.Size = new System.Drawing.Size(94, 16);
+            this.introSkipCheckBox.TabIndex = 5;
+            this.introSkipCheckBox.Text = "イントロスキップ";
+            this.mainToolTip.SetToolTip(this.introSkipCheckBox, "起動時に表示される動画を強制的にスキップします。\r\n一旦パッチを当てた後は戻すことができません。\r\nArsenal of Democracy、Darkest Ho" +
+        "ur、\r\nFor the Gloryではこの設定が無視されます。");
+            this.introSkipCheckBox.UseVisualStyleBackColor = true;
+            this.introSkipCheckBox.CheckedChanged += new System.EventHandler(this.OnIntroSkipCheckBoxCheckedChanged);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -284,5 +299,6 @@
         private System.Windows.Forms.CheckBox autoModeCheckBox;
         private System.Windows.Forms.ToolTip mainToolTip;
         private System.Windows.Forms.CheckBox windowedCheckBox;
+        private System.Windows.Forms.CheckBox introSkipCheckBox;
 	}
 }

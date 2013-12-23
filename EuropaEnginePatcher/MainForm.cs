@@ -93,6 +93,7 @@ namespace EuropaEnginePatcher
             autoLineBreakCheckBox.Checked = true;
             wordOrderCheckBox.Checked = false;
             windowedCheckBox.Checked = false;
+            introSkipCheckBox.Checked = false;
 
             saveButton.Enabled = false;
         }
@@ -185,6 +186,7 @@ namespace EuropaEnginePatcher
             autoLineBreakCheckBox.Enabled = PatchController.GetAutoLineBreakEffective();
             wordOrderCheckBox.Enabled = PatchController.GetWordOrderEffective();
             windowedCheckBox.Enabled = PatchController.GetWindowedEffective();
+            introSkipCheckBox.Enabled = PatchController.GetIntroSkipEffective();
 
             if (PatchController.GetWordOrderDefault())
             {
@@ -203,6 +205,10 @@ namespace EuropaEnginePatcher
             if (!PatchController.GetWindowedEffective() && windowedCheckBox.Checked)
             {
                 windowedCheckBox.Checked = false;
+            }
+            if (!PatchController.GetIntroSkipEffective() && introSkipCheckBox.Checked)
+            {
+                introSkipCheckBox.Checked = false;
             }
         }
 
@@ -267,6 +273,17 @@ namespace EuropaEnginePatcher
         private void OnWindowedCheckBoxCheckedChanged(object sender, EventArgs e)
         {
             PatchController.Windowed = windowedCheckBox.Checked;
+            saveButton.Enabled = false;
+        }
+
+        /// <summary>
+        ///     イントロスキップのチェック状態変更時の処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnIntroSkipCheckBoxCheckedChanged(object sender, EventArgs e)
+        {
+            PatchController.IntroSkip = introSkipCheckBox.Checked;
             saveButton.Enabled = false;
         }
     }
