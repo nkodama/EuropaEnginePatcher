@@ -41,6 +41,11 @@ namespace EuropaEnginePatcher
         /// </summary>
         public static bool WordOrder { get; set; }
 
+        /// <summary>
+        /// 強制ウィンドウ化
+        /// </summary>
+        public static bool Windowed { get; set; }
+
         #endregion
 
         #region 内部定数
@@ -81,6 +86,7 @@ namespace EuropaEnginePatcher
             RenameOriginal = true;
             AutoLineBreak = true;
             WordOrder = false;
+            Windowed = false;
         }
 
         #endregion
@@ -520,6 +526,31 @@ namespace EuropaEnginePatcher
         }
 
         /// <summary>
+        ///     強制ウィンドウ化の設定が有効かを取得する
+        /// </summary>
+        /// <returns>強制ウィンドウ化の設定が有効ならばtrueを返す</returns>
+        public static bool GetWindowedEffective()
+        {
+            switch (GameType)
+            {
+                case GameType.CrusaderKings:
+                case GameType.EuropaUniversalis2:
+                case GameType.Victoria:
+                case GameType.HeartsOfIron:
+                case GameType.HeartsOfIron2:
+                    return true;
+
+                case GameType.ForTheGlory:
+                case GameType.ArsenalOfDemocracy:
+                case GameType.DarkestHour:
+                    return false;
+
+                default:
+                    return true;
+            }
+        }
+
+        /// <summary>
         ///     テキスト自動折り返しのデフォルト値を取得する
         /// </summary>
         /// <returns>テキスト自動折り返しのデフォルト値</returns>
@@ -562,6 +593,15 @@ namespace EuropaEnginePatcher
                 default:
                     return false;
             }
+        }
+
+        /// <summary>
+        ///     強制ウィンドウ化のデフォルト値を取得する
+        /// </summary>
+        /// <returns>強制ウィンドウ化のデフォルト値</returns>
+        public static bool GetWindowedDefault()
+        {
+            return false;
         }
 
         #endregion

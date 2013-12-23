@@ -43,6 +43,7 @@
             this.autoLineBreakCheckBox = new System.Windows.Forms.CheckBox();
             this.wordOrderCheckBox = new System.Windows.Forms.CheckBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.windowedCheckBox = new System.Windows.Forms.CheckBox();
             this.optionGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -158,6 +159,7 @@
             // 
             this.optionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionGroupBox.Controls.Add(this.windowedCheckBox);
             this.optionGroupBox.Controls.Add(this.autoModeCheckBox);
             this.optionGroupBox.Controls.Add(this.renameOriginalCheckBox);
             this.optionGroupBox.Controls.Add(this.autoLineBreakCheckBox);
@@ -224,6 +226,18 @@
             this.wordOrderCheckBox.UseVisualStyleBackColor = true;
             this.wordOrderCheckBox.CheckedChanged += new System.EventHandler(this.OnWordOrderCheckBoxCheckedChanged);
             // 
+            // windowedCheckBox
+            // 
+            this.windowedCheckBox.AutoSize = true;
+            this.windowedCheckBox.Location = new System.Drawing.Point(15, 60);
+            this.windowedCheckBox.Name = "windowedCheckBox";
+            this.windowedCheckBox.Size = new System.Drawing.Size(103, 16);
+            this.windowedCheckBox.TabIndex = 4;
+            this.windowedCheckBox.Text = "強制ウィンドウ化";
+            this.mainToolTip.SetToolTip(this.windowedCheckBox, "強制的にウィンドウ化します。\r\nArsenal of Democracy、Darkest Hour、Iron Cross、For The Gloryではこの設定が" +
+        "無視されます。");
+            this.windowedCheckBox.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -267,5 +281,6 @@
         private System.Windows.Forms.CheckBox renameOriginalCheckBox;
         private System.Windows.Forms.CheckBox autoModeCheckBox;
         private System.Windows.Forms.ToolTip mainToolTip;
+        private System.Windows.Forms.CheckBox windowedCheckBox;
 	}
 }
