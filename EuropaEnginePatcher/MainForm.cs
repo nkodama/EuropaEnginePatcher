@@ -40,6 +40,7 @@ namespace EuropaEnginePatcher
         public static void AppendLog(string s)
         {
             _form.logRichTextBox.AppendText(s);
+            Application.DoEvents();
         }
 
         /// <summary>
