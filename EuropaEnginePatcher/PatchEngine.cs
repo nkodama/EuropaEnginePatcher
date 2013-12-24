@@ -103,6 +103,11 @@ namespace EuropaEnginePatcher
         private static uint _posWindowed2; // 強制ウィンドウ化処理の位置2
         private static uint _posBinkPlay1; // binkplay.exeの定義位置1
         private static uint _posBinkPlay2; // binkplay.exeの定義位置2
+        private static uint _posMinYear1; // 最小年次の定義位置1
+        private static uint _posMinYear2; // 最小年次の定義位置2
+        private static uint _posMaxYear1; // 最大年次の定義位置1
+        private static uint _posMaxYear2; // 最大年次の定義位置2
+        private static uint _posLimitYear; // 制限年次の定義位置
 
         #endregion
 
@@ -961,6 +966,27 @@ namespace EuropaEnginePatcher
                         {
                             return false;
                         }
+                        break;
+                }
+            }
+            // 時間制限解除
+            if (PatchController.Ntl)
+            {
+                switch (_patchType)
+                {
+                    case PatchType.CrusaderKings:
+                    case PatchType.EuropaUniversalis2:
+                    case PatchType.Victoria:
+                    case PatchType.HeartsOfIron:
+                    case PatchType.HeartsOfIron2:
+                    case PatchType.HeartsOfIron212:
+                        if (!ScanNtl())
+                        {
+                            return false;
+                        }
+                        break;
+                    case PatchType.IronCrossHoI2:
+                        // Iron Crossの場合は初期状態で制限解除されているのでパッチを当てない
                         break;
                 }
             }
@@ -2382,7 +2408,6 @@ namespace EuropaEnginePatcher
                     break;
             }
 
-
             AppendLog("ScanBinary passed\n\n");
 
             return true;
@@ -2429,6 +2454,286 @@ namespace EuropaEnginePatcher
                     break;
             }
 
+            AppendLog("ScanBinary passed\n\n");
+
+            return true;
+        }
+
+        /// <summary>
+        ///     時間制限解除処理を埋め込む位置を探索する
+        /// </summary>
+        /// <returns>探索に成功すればtrueを返す</returns>
+        private static bool ScanNtl()
+        {
+            AppendLog("ScanBinary - 特定バイナリを探す\n");
+            AppendLog("  \"%XX 時間制限解除処理を埋め込む位置を探します\n");
+
+            byte[] pattern;
+            List<uint> l;
+
+            switch (_patchType)
+            {
+                case PatchType.CrusaderKings:
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x44, 0x24, 0x1E, 0xAE, 0x05
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMaxYear1 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x46, 0x06, 0xAE, 0x05
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMaxYear2 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x44, 0x24, 0x1E, 0x2A, 0x04
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMinYear1 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x46, 0x06, 0x2A, 0x04
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMinYear2 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0xAD, 0x05, 0x00, 0x00
+                    };
+                    l = BinaryScan(_data, pattern, _posDataSection, _sizeDataSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posLimitYear = l[0];
+                    break;
+
+                case PatchType.EuropaUniversalis2:
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x44, 0x24, 0x32, 0x1C, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMaxYear1 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x44, 0x24, 0x2E, 0x1C, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMaxYear2 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x44, 0x24, 0x2E, 0x8B, 0x05
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count < 2)
+                    {
+                        return false;
+                    }
+                    _posMinYear1 = l[0] + (uint) pattern.Length - 2;
+                    _posMinYear2 = l[1] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x1B, 0x07, 0x00, 0x00
+                    };
+                    l = BinaryScan(_data, pattern, _posDataSection, _sizeDataSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posLimitYear = l[0];
+                    break;
+
+                case PatchType.Victoria:
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x44, 0x24, 0x1E, 0x91, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMaxYear1 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x46, 0x06, 0x91, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMaxYear2 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x44, 0x24, 0x1E, 0x2B, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMinYear1 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x46, 0x06, 0x2B, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMinYear2 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x90, 0x07, 0x00, 0x00
+                    };
+                    l = BinaryScan(_data, pattern, _posDataSection, _sizeDataSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posLimitYear = l[0];
+                    break;
+
+                case PatchType.HeartsOfIron:
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x44, 0x24, 0x24, 0x9D, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMaxYear1 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xB8, 0x9D, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMaxYear2 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x44, 0x24, 0x24, 0x8F, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMinYear1 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xB8, 0x8F, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMinYear2 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x9C, 0x07, 0x00, 0x00
+                    };
+                    l = BinaryScan(_data, pattern, _posDataSection, _sizeDataSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posLimitYear = l[0];
+                    break;
+
+                case PatchType.HeartsOfIron2:
+                case PatchType.HeartsOfIron212:
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x44, 0x24, 0x24, 0xAE, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMaxYear1 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xB8, 0xAE, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMaxYear2 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xC7, 0x44, 0x24, 0x24, 0x8F, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMinYear1 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0x66, 0xB8, 0x8F, 0x07
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posMinYear2 = l[0] + (uint) pattern.Length - 2;
+                    pattern = new byte[]
+                    {
+                        0xBA, 0xAC, 0x07, 0x00, 0x00
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posLimitYear = l[0] + (uint) pattern.Length - 4;
+                    break;
+
+                case PatchType.IronCrossHoI2:
+                    // Iron Crossの場合は初期状態で制限解除されているのでパッチを当てない
+                    break;
+            }
 
             AppendLog("ScanBinary passed\n\n");
 
@@ -2681,6 +2986,24 @@ namespace EuropaEnginePatcher
                     case PatchType.HeartsOfIron212:
                     case PatchType.IronCrossHoI2:
                         PatchBinkPlay();
+                        break;
+                }
+            }
+            // 時間制限解除
+            if (PatchController.Ntl)
+            {
+                switch (_patchType)
+                {
+                    case PatchType.CrusaderKings:
+                    case PatchType.EuropaUniversalis2:
+                    case PatchType.Victoria:
+                    case PatchType.HeartsOfIron:
+                    case PatchType.HeartsOfIron2:
+                    case PatchType.HeartsOfIron212:
+                        PatchNtl();
+                        break;
+                    case PatchType.IronCrossHoI2:
+                        // Iron Crossの場合は初期状態で制限解除されているのでパッチを当てない
                         break;
                 }
             }
@@ -6221,12 +6544,47 @@ namespace EuropaEnginePatcher
         {
             AppendLog("  binkplay.exe書き換え\n");
             AppendLog(string.Format("  ${0:X8}\n\n", _posBinkPlay1));
-            _data[_posBinkPlay1] = (byte)'_';
+            _data[_posBinkPlay1] = (byte) '_';
             if (_patchType == PatchType.CrusaderKings || _patchType == PatchType.EuropaUniversalis2)
             {
                 AppendLog(string.Format("  ${0:X8}\n\n", _posBinkPlay2));
-                _data[_posBinkPlay2] = (byte)'_';
+                _data[_posBinkPlay2] = (byte) '_';
             }
+            AppendLog("\n");
+        }
+
+        /// <summary>
+        ///     時間制限解除処理を埋め込む
+        /// </summary>
+        private static void PatchNtl()
+        {
+            AppendLog("  push 時間制限解除処理埋め込み\n");
+
+            PatchByte(_data, _posMaxYear1, 0x0F);
+            PatchByte(_data, _posMaxYear1 + 1, 0x27);
+            PatchByte(_data, _posMaxYear2, 0x0F);
+            PatchByte(_data, _posMaxYear2 + 1, 0x27);
+            PatchByte(_data, _posMinYear1, 0x01);
+            PatchByte(_data, _posMinYear1 + 1, 0x00);
+            PatchByte(_data, _posMinYear2, 0x01);
+            PatchByte(_data, _posMinYear2 + 1, 0x00);
+            switch (_patchType)
+            {
+                case PatchType.EuropaUniversalis2:
+                    PatchByte(_data, _posLimitYear, 0x0F);
+                    PatchByte(_data, _posLimitYear + 1, 0x27);
+                    break;
+
+                case PatchType.CrusaderKings:
+                case PatchType.Victoria:
+                case PatchType.HeartsOfIron:
+                case PatchType.HeartsOfIron2:
+                case PatchType.HeartsOfIron212:
+                    PatchByte(_data, _posLimitYear, 0x10);
+                    PatchByte(_data, _posLimitYear + 1, 0x27);
+                    break;
+            }
+
             AppendLog("\n");
         }
 

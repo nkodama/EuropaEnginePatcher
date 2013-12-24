@@ -38,20 +38,21 @@
             this.pathTextBox = new System.Windows.Forms.TextBox();
             this.typeComboBox = new System.Windows.Forms.ComboBox();
             this.optionGroupBox = new System.Windows.Forms.GroupBox();
+            this.ntlCheckBox = new System.Windows.Forms.CheckBox();
+            this.introSkipCheckBox = new System.Windows.Forms.CheckBox();
             this.windowedCheckBox = new System.Windows.Forms.CheckBox();
             this.autoModeCheckBox = new System.Windows.Forms.CheckBox();
             this.renameOriginalCheckBox = new System.Windows.Forms.CheckBox();
             this.autoLineBreakCheckBox = new System.Windows.Forms.CheckBox();
             this.wordOrderCheckBox = new System.Windows.Forms.CheckBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.introSkipCheckBox = new System.Windows.Forms.CheckBox();
             this.optionGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // clearButton
             // 
             this.clearButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.clearButton.Location = new System.Drawing.Point(377, 10);
+            this.clearButton.Location = new System.Drawing.Point(377, 12);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(75, 23);
             this.clearButton.TabIndex = 3;
@@ -66,17 +67,17 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.logRichTextBox.Font = new System.Drawing.Font("ＭＳ ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.logRichTextBox.Location = new System.Drawing.Point(12, 154);
+            this.logRichTextBox.Location = new System.Drawing.Point(12, 159);
             this.logRichTextBox.Name = "logRichTextBox";
             this.logRichTextBox.ReadOnly = true;
-            this.logRichTextBox.Size = new System.Drawing.Size(440, 156);
+            this.logRichTextBox.Size = new System.Drawing.Size(440, 151);
             this.logRichTextBox.TabIndex = 8;
             this.logRichTextBox.Text = "";
             // 
             // exitButton
             // 
             this.exitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.exitButton.Location = new System.Drawing.Point(377, 125);
+            this.exitButton.Location = new System.Drawing.Point(377, 130);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(75, 23);
             this.exitButton.TabIndex = 6;
@@ -89,7 +90,7 @@
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.Enabled = false;
-            this.saveButton.Location = new System.Drawing.Point(377, 96);
+            this.saveButton.Location = new System.Drawing.Point(377, 101);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 5;
@@ -101,7 +102,7 @@
             // startButton
             // 
             this.startButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.startButton.Location = new System.Drawing.Point(377, 67);
+            this.startButton.Location = new System.Drawing.Point(377, 72);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 23);
             this.startButton.TabIndex = 4;
@@ -113,12 +114,12 @@
             // browseButton
             // 
             this.browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.browseButton.Location = new System.Drawing.Point(377, 38);
+            this.browseButton.Location = new System.Drawing.Point(377, 41);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(75, 23);
             this.browseButton.TabIndex = 2;
             this.browseButton.Text = "参照";
-            this.mainToolTip.SetToolTip(this.browseButton, "パッチ対象の実行ファイルを選択するために、ダイアログボックスを開きます。");
+            this.mainToolTip.SetToolTip(this.browseButton, "パッチ対象の実行ファイルを参照します。");
             this.browseButton.UseVisualStyleBackColor = true;
             this.browseButton.Click += new System.EventHandler(this.OnBrowseButtonClick);
             // 
@@ -126,7 +127,7 @@
             // 
             this.pathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pathTextBox.Location = new System.Drawing.Point(12, 40);
+            this.pathTextBox.Location = new System.Drawing.Point(12, 43);
             this.pathTextBox.Name = "pathTextBox";
             this.pathTextBox.Size = new System.Drawing.Size(359, 19);
             this.pathTextBox.TabIndex = 1;
@@ -149,7 +150,7 @@
             "Hearts of Iron 2",
             "Arsenal of Democracy",
             "Darkest Hour"});
-            this.typeComboBox.Location = new System.Drawing.Point(12, 12);
+            this.typeComboBox.Location = new System.Drawing.Point(12, 14);
             this.typeComboBox.Name = "typeComboBox";
             this.typeComboBox.Size = new System.Drawing.Size(359, 20);
             this.typeComboBox.TabIndex = 7;
@@ -160,18 +161,45 @@
             // 
             this.optionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionGroupBox.Controls.Add(this.ntlCheckBox);
             this.optionGroupBox.Controls.Add(this.introSkipCheckBox);
             this.optionGroupBox.Controls.Add(this.windowedCheckBox);
             this.optionGroupBox.Controls.Add(this.autoModeCheckBox);
             this.optionGroupBox.Controls.Add(this.renameOriginalCheckBox);
             this.optionGroupBox.Controls.Add(this.autoLineBreakCheckBox);
             this.optionGroupBox.Controls.Add(this.wordOrderCheckBox);
-            this.optionGroupBox.Location = new System.Drawing.Point(12, 65);
+            this.optionGroupBox.Location = new System.Drawing.Point(12, 68);
             this.optionGroupBox.Name = "optionGroupBox";
-            this.optionGroupBox.Size = new System.Drawing.Size(359, 83);
+            this.optionGroupBox.Size = new System.Drawing.Size(359, 85);
             this.optionGroupBox.TabIndex = 9;
             this.optionGroupBox.TabStop = false;
             this.optionGroupBox.Text = "オプション";
+            // 
+            // ntlCheckBox
+            // 
+            this.ntlCheckBox.AutoSize = true;
+            this.ntlCheckBox.Location = new System.Drawing.Point(253, 60);
+            this.ntlCheckBox.Name = "ntlCheckBox";
+            this.ntlCheckBox.Size = new System.Drawing.Size(96, 16);
+            this.ntlCheckBox.TabIndex = 6;
+            this.ntlCheckBox.Text = "時間制限解除";
+            this.mainToolTip.SetToolTip(this.ntlCheckBox, "一般にNTLと呼ばれているものです。\r\n1年～9999年の間でプレイ可能にします。\r\nArsenal of Democracy、Darkest Hour、\r\nIr" +
+        "on Cross、For the Gloryではこの設定が無視されます。");
+            this.ntlCheckBox.UseVisualStyleBackColor = true;
+            this.ntlCheckBox.CheckedChanged += new System.EventHandler(this.OnNtlCheckBoxCheckedChanged);
+            // 
+            // introSkipCheckBox
+            // 
+            this.introSkipCheckBox.AutoSize = true;
+            this.introSkipCheckBox.Location = new System.Drawing.Point(146, 60);
+            this.introSkipCheckBox.Name = "introSkipCheckBox";
+            this.introSkipCheckBox.Size = new System.Drawing.Size(94, 16);
+            this.introSkipCheckBox.TabIndex = 5;
+            this.introSkipCheckBox.Text = "イントロスキップ";
+            this.mainToolTip.SetToolTip(this.introSkipCheckBox, "起動時に表示される動画を強制的にスキップします。\r\n一旦パッチを当てた後は戻すことができません。\r\nArsenal of Democracy、Darkest Ho" +
+        "ur、\r\nFor the Gloryではこの設定が無視されます。");
+            this.introSkipCheckBox.UseVisualStyleBackColor = true;
+            this.introSkipCheckBox.CheckedChanged += new System.EventHandler(this.OnIntroSkipCheckBoxCheckedChanged);
             // 
             // windowedCheckBox
             // 
@@ -242,19 +270,6 @@
             this.wordOrderCheckBox.UseVisualStyleBackColor = true;
             this.wordOrderCheckBox.CheckedChanged += new System.EventHandler(this.OnWordOrderCheckBoxCheckedChanged);
             // 
-            // introSkipCheckBox
-            // 
-            this.introSkipCheckBox.AutoSize = true;
-            this.introSkipCheckBox.Location = new System.Drawing.Point(146, 60);
-            this.introSkipCheckBox.Name = "introSkipCheckBox";
-            this.introSkipCheckBox.Size = new System.Drawing.Size(94, 16);
-            this.introSkipCheckBox.TabIndex = 5;
-            this.introSkipCheckBox.Text = "イントロスキップ";
-            this.mainToolTip.SetToolTip(this.introSkipCheckBox, "起動時に表示される動画を強制的にスキップします。\r\n一旦パッチを当てた後は戻すことができません。\r\nArsenal of Democracy、Darkest Ho" +
-        "ur、\r\nFor the Gloryではこの設定が無視されます。");
-            this.introSkipCheckBox.UseVisualStyleBackColor = true;
-            this.introSkipCheckBox.CheckedChanged += new System.EventHandler(this.OnIntroSkipCheckBoxCheckedChanged);
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -300,5 +315,6 @@
         private System.Windows.Forms.ToolTip mainToolTip;
         private System.Windows.Forms.CheckBox windowedCheckBox;
         private System.Windows.Forms.CheckBox introSkipCheckBox;
+        private System.Windows.Forms.CheckBox ntlCheckBox;
 	}
 }

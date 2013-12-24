@@ -94,6 +94,7 @@ namespace EuropaEnginePatcher
             wordOrderCheckBox.Checked = false;
             windowedCheckBox.Checked = false;
             introSkipCheckBox.Checked = false;
+            ntlCheckBox.Checked = false;
 
             saveButton.Enabled = false;
         }
@@ -187,6 +188,7 @@ namespace EuropaEnginePatcher
             wordOrderCheckBox.Enabled = PatchController.GetWordOrderEffective();
             windowedCheckBox.Enabled = PatchController.GetWindowedEffective();
             introSkipCheckBox.Enabled = PatchController.GetIntroSkipEffective();
+            ntlCheckBox.Enabled = PatchController.GetNtlEffective();
 
             if (PatchController.GetWordOrderDefault())
             {
@@ -209,6 +211,10 @@ namespace EuropaEnginePatcher
             if (!PatchController.GetIntroSkipEffective() && introSkipCheckBox.Checked)
             {
                 introSkipCheckBox.Checked = false;
+            }
+            if (!PatchController.GetNtlEffective() && ntlCheckBox.Checked)
+            {
+                ntlCheckBox.Checked = false;
             }
         }
 
@@ -284,6 +290,17 @@ namespace EuropaEnginePatcher
         private void OnIntroSkipCheckBoxCheckedChanged(object sender, EventArgs e)
         {
             PatchController.IntroSkip = introSkipCheckBox.Checked;
+            saveButton.Enabled = false;
+        }
+
+        /// <summary>
+        ///     時間制限解除のチェック状態変更時の処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnNtlCheckBoxCheckedChanged(object sender, EventArgs e)
+        {
+            PatchController.Ntl = ntlCheckBox.Checked;
             saveButton.Enabled = false;
         }
     }

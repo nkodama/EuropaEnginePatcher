@@ -51,6 +51,11 @@ namespace EuropaEnginePatcher
         /// </summary>
         public static bool IntroSkip { get; set; }
 
+        /// <summary>
+        ///     時間制限解除
+        /// </summary>
+        public static bool Ntl { get; set; }
+
         #endregion
 
         #region 内部定数
@@ -93,6 +98,7 @@ namespace EuropaEnginePatcher
             WordOrder = false;
             Windowed = false;
             IntroSkip = false;
+            Ntl = false;
         }
 
         #endregion
@@ -561,6 +567,31 @@ namespace EuropaEnginePatcher
         /// </summary>
         /// <returns>イントロスキップの設定が有効ならばtrueを返す</returns>
         public static bool GetIntroSkipEffective()
+        {
+            switch (GameType)
+            {
+                case GameType.CrusaderKings:
+                case GameType.EuropaUniversalis2:
+                case GameType.Victoria:
+                case GameType.HeartsOfIron:
+                case GameType.HeartsOfIron2:
+                    return true;
+
+                case GameType.ForTheGlory:
+                case GameType.ArsenalOfDemocracy:
+                case GameType.DarkestHour:
+                    return false;
+
+                default:
+                    return true;
+            }
+        }
+
+        /// <summary>
+        ///     時間制限解除の設定が有効かを取得する
+        /// </summary>
+        /// <returns>イントロスキップの設定が有効ならばtrueを返す</returns>
+        public static bool GetNtlEffective()
         {
             switch (GameType)
             {
