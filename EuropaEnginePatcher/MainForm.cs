@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -25,12 +26,6 @@ namespace EuropaEnginePatcher
 
             UpdateTitle();
             typeComboBox.SelectedIndex = 0;
-
-            string[] args = Environment.GetCommandLineArgs();
-            if (args.Length > 1)
-            {
-                pathTextBox.Text = args[1];
-            }
         }
 
         /// <summary>
@@ -39,6 +34,11 @@ namespace EuropaEnginePatcher
         /// <param name="s">出力する文字列</param>
         public static void AppendLog(string s)
         {
+            Debug.WriteLine(s);
+            if (_form == null)
+            {
+                return;
+            }
             _form.logRichTextBox.AppendText(s);
             Application.DoEvents();
         }

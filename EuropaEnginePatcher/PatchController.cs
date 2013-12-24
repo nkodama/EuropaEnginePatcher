@@ -116,6 +116,7 @@ namespace EuropaEnginePatcher
         {
             if (!Patch())
             {
+                MessageBox.Show("パッチの適用に失敗しました。", "Europa Engine Patcher", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             if (!Save())
@@ -127,7 +128,7 @@ namespace EuropaEnginePatcher
                 return true;
             }
 
-            MessageBox.Show("成功しました。", "Europa Engine Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("パッチの適用に成功しました。", "Europa Engine Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             return true;
         }
@@ -298,6 +299,46 @@ namespace EuropaEnginePatcher
             }
 
             return true;
+        }
+
+        /// <summary>
+        ///     コマンドライン引数を解釈する
+        /// </summary>
+        /// <returns>コマンドラインモードならばtrueを返す</returns>
+        public static bool ParseCommandLine()
+        {
+            string[] args = Environment.GetCommandLineArgs();
+
+            // 引数指定のない場合は通常起動する
+            if (args.Length <= 1)
+            {
+                return false;
+            }
+
+            string pathName = args[1];
+            if (File.Exists(pathName))
+            {
+                DetectGameType(pathName);
+                if (GameType == GameType.Unknown)
+                {
+                    return false;
+                }
+                TargetFileName = pathName;
+                return true;
+            }
+
+            if (Directory.Exists(pathName))
+            {
+                string fileName = DetectExeFileName(pathName);
+                if (fileName.Equals(pathName))
+                {
+                    return false;
+                }
+                TargetFileName = fileName;
+                return true;
+            }
+
+            return false;
         }
 
         #endregion

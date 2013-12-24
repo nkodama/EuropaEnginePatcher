@@ -6,7 +6,7 @@ namespace EuropaEnginePatcher
     /// <summary>
     ///     アプリケーションクラス
     /// </summary>
-    public class EuropaEnginePatcher
+    public static class EuropaEnginePatcher
     {
         /// <summary>
         ///     バージョン名
@@ -19,10 +19,17 @@ namespace EuropaEnginePatcher
         [STAThread]
         public static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            if (PatchController.ParseCommandLine())
+            {
+                PatchController.AutoProcess();
+            }
+            else
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.Run(new MainForm());
+                Application.Run(new MainForm());
+            }
         }
     }
 }
