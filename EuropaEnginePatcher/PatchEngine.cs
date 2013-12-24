@@ -6543,11 +6543,11 @@ namespace EuropaEnginePatcher
         private static void PatchBinkPlay()
         {
             AppendLog("  binkplay.exe書き換え\n");
-            AppendLog(string.Format("  ${0:X8}\n\n", _posBinkPlay1));
+            AppendLog(string.Format("  ${0:X8}\n", _posBinkPlay1));
             _data[_posBinkPlay1] = (byte) '_';
             if (_patchType == PatchType.CrusaderKings || _patchType == PatchType.EuropaUniversalis2)
             {
-                AppendLog(string.Format("  ${0:X8}\n\n", _posBinkPlay2));
+                AppendLog(string.Format("  ${0:X8}\n", _posBinkPlay2));
                 _data[_posBinkPlay2] = (byte) '_';
             }
             AppendLog("\n");
