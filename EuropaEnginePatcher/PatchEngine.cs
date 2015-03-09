@@ -83,6 +83,8 @@ namespace EuropaEnginePatcher
         private static uint _posTermModelNameStart6; // モデル名の終端文字設定位置6
         private static uint _posTermModelNameStart7; // モデル名の終端文字設定位置7
         private static uint _posTermModelNameStart8; // モデル名の終端文字設定位置8
+        private static uint _posTermModelNameStart9; // モデル名の終端文字設定位置9
+        private static uint _posTermModelNameStart10; // モデル名の終端文字設定位置10
         private static uint _posTextOutDc; // TextOutDC0/1/2のファイル上の埋め込み位置
         private static uint _posTextOutDcFree; // TextOutの埋め込み位置後の空き領域
         private static uint _posTextOutEnd; // TextOutの処理後のジャンプ位置
@@ -165,7 +167,7 @@ namespace EuropaEnginePatcher
         /// <param name="fileName">保存するファイルのパス名</param>
         public static void SavePatchedFile(string fileName)
         {
-            using (var s = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+            using (FileStream s = new FileStream(fileName, FileMode.Create, FileAccess.Write))
             {
                 s.Write(_data, 0, _data.Length);
                 s.Close();
@@ -180,7 +182,7 @@ namespace EuropaEnginePatcher
         {
             AppendLog("Phase 1 - ファイルの読み込み\n");
 
-            var info = new FileInfo(fileName);
+            FileInfo info = new FileInfo(fileName);
             _fileSize = info.Length;
 
             _data = new byte[_fileSize];
@@ -1032,7 +1034,7 @@ namespace EuropaEnginePatcher
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%06 WINMM.dll\"を探します\n");
-            var pattern = new byte[]
+            byte[] pattern =
             {
                 0x57, 0x49, 0x4E, 0x4D, 0x4D, 0x2E, 0x64, 0x6C,
                 0x6C
@@ -1060,7 +1062,7 @@ namespace EuropaEnginePatcher
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%07 TextOutの処理を埋め込む位置\"を探します\n");
 
-            var pattern = new byte[]
+            byte[] pattern =
             {
                 0x8B, 0x45, 0x18, 0x8B, 0x48, 0x0C, 0x89, 0x4D
             };
@@ -1192,7 +1194,7 @@ namespace EuropaEnginePatcher
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%10 文字列幅の処理が終了したらジャンプさせる位置(の3バイト前)\"を探します\n");
-            var pattern = new byte[]
+            byte[] pattern =
             {
                 0x8B, 0x45, 0xFC, 0x8B, 0xE5, 0x5D, 0xC2, 0x04,
                 0x00
@@ -2110,7 +2112,7 @@ namespace EuropaEnginePatcher
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%XX 師団名の書式文字列の定義位置\"を探します\n");
 
-            var pattern = new byte[]
+            byte[] pattern =
             {
                 0x25, 0x64, 0x25, 0x73, 0x20, 0x25, 0x73, 0x2E,
                 0x20, 0x25, 0x73, 0x00
@@ -2251,7 +2253,7 @@ namespace EuropaEnginePatcher
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%XX 軍団名の書式文字列の定義位置\"を探します\n");
 
-            var pattern = new byte[]
+            byte[] pattern =
             {
                 0x25, 0x64, 0x25, 0x73, 0x20, 0x25, 0x73, 0x00
             };
@@ -2286,7 +2288,7 @@ namespace EuropaEnginePatcher
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%XX 国家序列の取得処理を埋め込む位置\"を探します\n");
 
-            var pattern = new byte[]
+            byte[] pattern =
             {
                 0x8B, 0xC6, 0xB9, 0x64, 0x00, 0x00, 0x00, 0x99,
                 0xF7, 0xF9, 0xC7, 0x44, 0x24
@@ -2422,7 +2424,7 @@ namespace EuropaEnginePatcher
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%XX binkplay.exe\"を探します\n");
 
-            var pattern = new byte[]
+            byte[] pattern =
             {
                 0x62, 0x69, 0x6E, 0x6B, 0x70, 0x6C, 0x61, 0x79,
                 0x2E, 0x65, 0x78, 0x65, 0x00
@@ -2753,7 +2755,7 @@ namespace EuropaEnginePatcher
             AppendLog("ScanBinary - 特定バイナリを探す\n");
 
             AppendLog("  \"%XX EE_MAX_AMPHIB_MODの定義位置\"を探します\n");
-            var pattern = new byte[]
+            byte[] pattern =
             {
                 0x45, 0x45, 0x5F, 0x4D, 0x41, 0x58, 0x5F, 0x41,
                 0x4D, 0x50, 0x48, 0x49, 0x42, 0x5F, 0x4D, 0x4F,
@@ -2768,7 +2770,7 @@ namespace EuropaEnginePatcher
 
             AppendLog("\n  \"%XX EE_MAX_AMPHIB_MODの呼び出し位置\"を探します\n");
             uint addrEeMaxAmphibMod = GetDataAddress(posEeMaxAmphibMod);
-            var pattern2 = new byte[5];
+            byte[] pattern2 = new byte[5];
             pattern2[0] = 0x68;
             pattern2[1] = (byte) (addrEeMaxAmphibMod & 0x000000FF);
             pattern2[2] = (byte) ((addrEeMaxAmphibMod & 0x0000FF00) >> 8);
@@ -2871,6 +2873,21 @@ namespace EuropaEnginePatcher
                     _posTermModelNameStart1 = l[0] + 5;
                     _posTermModelNameStart2 = l[1] + 5;
                     break;
+            }
+            if (_patchType == PatchType.DarkestHour)
+            {
+                byte[] pattern2 =
+                {
+                    0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
+                    0x78, 0x00
+                };
+                List<uint> l2 = BinaryScan(_data, pattern2, _posTextSection, _sizeTextSection);
+                if (l2.Count < 2)
+                {
+                    return false;
+                }
+                _posTermModelNameStart9 = l2[0] + 5;
+                _posTermModelNameStart10 = l2[1] + 5;
             }
 
             AppendLog("ScanBinary passed\n\n");
@@ -6867,6 +6884,50 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xC3); // retn
             offset++;
 
+            uint posTermModelName2 = offset;
+            if (_patchType == PatchType.DarkestHour)
+            {
+                // TERM_MODEL_NAME2
+                PatchByte(_data, offset, 0xE8); // call GET_STRNLEN0_ADDR
+                offset++;
+                PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetStrNLenAddr),
+                    string.Format("%XX ${0:X8} GetStrNLenAddr", GetTextAddress(posGetStrNLenAddr)));
+                offset += 4;
+                PatchByte(_data, offset, 0x6A); // push 0000001Ch
+                offset++;
+                PatchByte(_data, offset, 0x1C);
+                offset++;
+                PatchByte(_data, offset, 0x8D); // lea eax, byte ptr [esp+60h]
+                offset++;
+                PatchByte(_data, offset, 0x44);
+                offset++;
+                PatchByte(_data, offset, 0x24);
+                offset++;
+                PatchByte(_data, offset, 0x60);
+                offset++;
+                PatchByte(_data, offset, 0x50); // push eax
+                offset++;
+                PatchByte(_data, offset, 0xFF); // call [varStrNLenAddress]
+                offset++;
+                PatchByte(_data, offset, 0x15);
+                offset++;
+                PatchLong(_data, offset, _addrVarStrNLenAddress,
+                    string.Format("%02 ${0:X8} varStrNLenAddress", _addrVarStrNLenAddress));
+                offset += 4;
+                PatchByte(_data, offset, 0xC6); // mov [esp+eax+5Ch],0
+                offset++;
+                PatchByte(_data, offset, 0x44);
+                offset++;
+                PatchByte(_data, offset, 0x04);
+                offset++;
+                PatchByte(_data, offset, 0x5C);
+                offset++;
+                PatchByte(_data, offset, 0x00);
+                offset++;
+                PatchByte(_data, offset, 0xC3); // retn
+                offset++;
+            }
+
             // TERM_MODEL_NAME_START1
             if (_patchType == PatchType.ArsenalOfDemocracy)
             {
@@ -6972,35 +7033,47 @@ namespace EuropaEnginePatcher
                         GetRelativeOffset(_posTermModelNameStart3 + 5, posTermModelName),
                         string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
 
-                    // TERM_MODEL_NAME_START2
+                    // TERM_MODEL_NAME_START4
                     PatchByte(_data, _posTermModelNameStart4, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart4 + 1,
                         GetRelativeOffset(_posTermModelNameStart4 + 5, posTermModelName),
                         string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
 
-                    // TERM_MODEL_NAME_START2
+                    // TERM_MODEL_NAME_START5
                     PatchByte(_data, _posTermModelNameStart5, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart5 + 1,
                         GetRelativeOffset(_posTermModelNameStart5 + 5, posTermModelName),
                         string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
 
-                    // TERM_MODEL_NAME_START2
+                    // TERM_MODEL_NAME_START6
                     PatchByte(_data, _posTermModelNameStart6, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart6 + 1,
                         GetRelativeOffset(_posTermModelNameStart6 + 5, posTermModelName),
                         string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
 
-                    // TERM_MODEL_NAME_START2
+                    // TERM_MODEL_NAME_START7
                     PatchByte(_data, _posTermModelNameStart7, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart7 + 1,
                         GetRelativeOffset(_posTermModelNameStart7 + 5, posTermModelName),
                         string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
 
-                    // TERM_MODEL_NAME_START2
+                    // TERM_MODEL_NAME_START8
                     PatchByte(_data, _posTermModelNameStart8, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart8 + 1,
                         GetRelativeOffset(_posTermModelNameStart8 + 5, posTermModelName),
                         string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+
+                    // TERM_MODEL_NAME_START9
+                    PatchByte(_data, _posTermModelNameStart9, 0xE8); // call TERM_MODEL_NAME2
+                    PatchLong(_data, _posTermModelNameStart9 + 1,
+                        GetRelativeOffset(_posTermModelNameStart9 + 5, posTermModelName2),
+                        string.Format("%XX ${0:X8} TermModelName2", GetTextAddress(posTermModelName2)));
+
+                    // TERM_MODEL_NAME_START10
+                    PatchByte(_data, _posTermModelNameStart10, 0xE8); // call TERM_MODEL_NAME2
+                    PatchLong(_data, _posTermModelNameStart10 + 1,
+                        GetRelativeOffset(_posTermModelNameStart10 + 5, posTermModelName2),
+                        string.Format("%XX ${0:X8} TermModelName2", GetTextAddress(posTermModelName2)));
                 }
             }
 
@@ -7023,7 +7096,7 @@ namespace EuropaEnginePatcher
         /// <returns>探索に成功すればtrueを返す</returns>
         private static List<uint> BinaryScan(byte[] target, byte[] pattern, uint start, uint size)
         {
-            var sb = new StringBuilder("  Binary:");
+            StringBuilder sb = new StringBuilder("  Binary:");
             foreach (byte b in pattern)
             {
                 sb.AppendFormat(" {0:X2}", b);
@@ -7034,7 +7107,7 @@ namespace EuropaEnginePatcher
             AppendLog(string.Format("  ファイル上の終了位置: ${0:X8}\n", start + size - 1));
 
             AppendLog(string.Format("  検索範囲 ${0:X8}～${1:X8} (のこり{2}Bytes)\n", start, start + size - 1, size));
-            var result = new List<uint>();
+            List<uint> result = new List<uint>();
             for (uint offset = start; offset <= start + size - pattern.Length; offset++)
             {
                 if (IsBinaryMatch(target, pattern, offset))
