@@ -175,7 +175,7 @@ namespace EuropaEnginePatcher
                     string enFileName = GetExeFileName(TargetFileName, "En");
                     if (!AutoMode)
                     {
-                        var dialog = new SaveFileDialog
+                        SaveFileDialog dialog = new SaveFileDialog
                         {
                             FileName = Path.GetFileNameWithoutExtension(enFileName),
                             DefaultExt = "exe",
@@ -208,7 +208,7 @@ namespace EuropaEnginePatcher
                     jpFileName = GetExeFileName(TargetFileName, "Jp");
                     if (!AutoMode)
                     {
-                        var dialog = new SaveFileDialog
+                        SaveFileDialog dialog = new SaveFileDialog
                         {
                             FileName = Path.GetFileNameWithoutExtension(jpFileName),
                             DefaultExt = "exe",
@@ -691,6 +691,6 @@ namespace EuropaEnginePatcher
         HeartsOfIron, // Hearts of Iron
         HeartsOfIron2, // Hearts of Iron 2 1.3-
         ArsenalOfDemocracy, // Arsenal of Democracy 1.08-
-        DarkestHour, // Darkest Hour 1.03-
+        DarkestHour // Darkest Hour 1.03-
     }
 }

@@ -58,7 +58,7 @@ namespace EuropaEnginePatcher
         /// <param name="e"></param>
         private void OnBrowseButtonClick(object sender, EventArgs e)
         {
-            var dialog = new OpenFileDialog();
+            OpenFileDialog dialog = new OpenFileDialog();
             if (dialog.ShowDialog() == DialogResult.Cancel)
             {
                 return;

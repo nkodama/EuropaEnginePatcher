@@ -313,13 +313,13 @@ namespace EuropaEnginePatcher
                             return false;
                         }
                         offset = l[0] + (uint) pattern.Length;
-                        _gameVersion = (_data[offset] - '0')*100 + (_data[offset + 2] - '0')*10 +
+                        _gameVersion = (_data[offset] - '0') * 100 + (_data[offset + 2] - '0') * 10 +
                                        (_data[offset + 3] - '0');
                     }
                     else
                     {
                         offset = l[0] + (uint) pattern.Length;
-                        _gameVersion = (_data[offset] - '0')*100 + (_data[offset + 2] - '0')*10;
+                        _gameVersion = (_data[offset] - '0') * 100 + (_data[offset + 2] - '0') * 10;
                     }
                     break;
 
@@ -348,7 +348,8 @@ namespace EuropaEnginePatcher
                         }
                     }
                     offset = l[0] + (uint) pattern.Length;
-                    _gameVersion = (_data[offset] - '0')*100 + (_data[offset + 2] - '0')*10 + (_data[offset + 3] - '0');
+                    _gameVersion = (_data[offset] - '0') * 100 + (_data[offset + 2] - '0') * 10 +
+                                   (_data[offset + 3] - '0');
                     break;
 
                 case PatchType.DarkestHour:
@@ -364,7 +365,8 @@ namespace EuropaEnginePatcher
                         return false;
                     }
                     offset = l[0] + (uint) pattern.Length;
-                    _gameVersion = (_data[offset] - '0')*100 + (_data[offset + 2] - '0')*10 + (_data[offset + 3] - '0');
+                    _gameVersion = (_data[offset] - '0') * 100 + (_data[offset + 2] - '0') * 10 +
+                                   (_data[offset + 3] - '0');
                     break;
 
                 default:
@@ -381,7 +383,7 @@ namespace EuropaEnginePatcher
                         return false;
                     }
                     offset = l[0] + (uint) pattern.Length;
-                    _gameVersion = (_data[offset] - '0')*100 + (_data[offset + 2] - '0')*10;
+                    _gameVersion = (_data[offset] - '0') * 100 + (_data[offset + 2] - '0') * 10;
                     break;
             }
 
@@ -587,7 +589,7 @@ namespace EuropaEnginePatcher
 
             uint rvaImportAddressTable = GetLong(offsetOptionHeader + 192);
             uint sizeImportAddressTable = GetLong(offsetOptionHeader + 196);
-            _countImportDir = sizeImportAddressTable/0x14;
+            _countImportDir = sizeImportAddressTable / 0x14;
             AppendLog(string.Format("  Import Address Table address/size: ${0:X8}/${1:X8}\n", rvaImportAddressTable,
                 sizeImportAddressTable));
 
@@ -784,15 +786,15 @@ namespace EuropaEnginePatcher
 
                         if (importName.Equals("GetModuleHandleA"))
                         {
-                            _addrGetModuleHandleA = _addrBase + rvaImportAddressTable + i*4;
+                            _addrGetModuleHandleA = _addrBase + rvaImportAddressTable + i * 4;
                         }
                         else if (importName.Equals("GetProcAddress"))
                         {
-                            _addrGetProcAddress = _addrBase + rvaImportAddressTable + i*4;
+                            _addrGetProcAddress = _addrBase + rvaImportAddressTable + i * 4;
                         }
                         else if (importName.Equals("IsDebuggerPresent"))
                         {
-                            _addrIsDebuggerPresent = _addrBase + rvaImportAddressTable + i*4;
+                            _addrIsDebuggerPresent = _addrBase + rvaImportAddressTable + i * 4;
                             _posIsDebuggerPresent = offsetHintNameTable + 2;
                         }
                     }
@@ -7174,7 +7176,7 @@ namespace EuropaEnginePatcher
         /// <returns>取得した値</returns>
         private static ushort GetWord(uint offset)
         {
-            return (ushort) (_data[offset] + _data[offset + 1]*0x0100);
+            return (ushort) (_data[offset] + _data[offset + 1] * 0x0100);
         }
 
         /// <summary>
@@ -7186,8 +7188,8 @@ namespace EuropaEnginePatcher
         {
             return
                 (uint)
-                    (_data[offset] + _data[offset + 1]*0x00000100 + _data[offset + 2]*0x00010000 +
-                     _data[offset + 3]*0x01000000);
+                    (_data[offset] + _data[offset + 1] * 0x00000100 + _data[offset + 2] * 0x00010000 +
+                     _data[offset + 3] * 0x01000000);
         }
 
         /// <summary>
@@ -7292,7 +7294,7 @@ namespace EuropaEnginePatcher
         /// <returns>切り上げた値</returns>
         private static uint Ceiling(uint val, uint unit)
         {
-            uint result = (val + unit - 1)/unit;
+            uint result = (val + unit - 1) / unit;
             result *= unit;
             return result;
         }
@@ -7327,6 +7329,6 @@ namespace EuropaEnginePatcher
         ArsenalOfDemocracy107, // Arsenal of Democracy 1.05-1.07
         DarkestHour102, // Darkest Hour 1.00-1.02
         HeartsOfIron212, // Hearts of Iron 2 1.2
-        IronCrossHoI2, // Iron Cross over Hearts of Iron 2
+        IronCrossHoI2 // Iron Cross over Hearts of Iron 2
     }
 }
