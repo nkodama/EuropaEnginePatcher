@@ -103,7 +103,7 @@ namespace EuropaEnginePatcher
 
         #endregion
 
-        #region パッチ処理
+        #region 自動処理
 
         /// <summary>
         ///     自動処理
@@ -133,6 +133,10 @@ namespace EuropaEnginePatcher
             return true;
         }
 
+        #endregion
+
+        #region パッチ処理
+
         /// <summary>
         ///     パッチ処理
         /// </summary>
@@ -156,6 +160,10 @@ namespace EuropaEnginePatcher
             return PatchEngine.Patch(TargetFileName, GameType);
         }
 
+        #endregion
+
+        #region ファイル保存
+
         /// <summary>
         ///     パッチ後のファイル保存処理
         /// </summary>
@@ -172,68 +180,159 @@ namespace EuropaEnginePatcher
                 string jpFileName;
                 if (RenameOriginal)
                 {
-                    string enFileName = GetExeFileName(TargetFileName, "En");
-                    if (!AutoMode)
-                    {
-                        SaveFileDialog dialog = new SaveFileDialog
-                        {
-                            FileName = Path.GetFileNameWithoutExtension(enFileName),
-                            DefaultExt = "exe",
-                            Filter = "実行ファイル (*.exe)|*.exe",
-                            InitialDirectory = Path.GetDirectoryName(enFileName),
-                            OverwritePrompt = true,
-                            Title = "元のファイルをリネームして保存"
-                        };
-                        if (dialog.ShowDialog() == DialogResult.Cancel)
-                        {
-                            return false;
-                        }
-                        enFileName = dialog.FileName;
-                    }
+                    string enFileName = AutoMode ? GetExeFileName(TargetFileName, "En") : QueryOriginalFileName();
+                    SaveOriginalFile(enFileName);
                     jpFileName = GetExeFileName(TargetFileName, "");
-                    if (!Path.GetFullPath(enFileName).Equals(Path.GetFullPath(TargetFileName)))
-                    {
-                        if (File.Exists(enFileName))
-                        {
-                            File.Delete(enFileName);
-                        }
-                        if (File.Exists(TargetFileName))
-                        {
-                            File.Move(TargetFileName, enFileName);
-                        }
-                    }
                 }
                 else
                 {
-                    jpFileName = GetExeFileName(TargetFileName, "Jp");
-                    if (!AutoMode)
-                    {
-                        SaveFileDialog dialog = new SaveFileDialog
-                        {
-                            FileName = Path.GetFileNameWithoutExtension(jpFileName),
-                            DefaultExt = "exe",
-                            Filter = "実行ファイル (*.exe)|*.exe",
-                            InitialDirectory = Path.GetDirectoryName(jpFileName),
-                            OverwritePrompt = true,
-                            Title = "パッチを当てたファイルを保存"
-                        };
-                        if (dialog.ShowDialog() == DialogResult.Cancel)
-                        {
-                            return false;
-                        }
-                        jpFileName = dialog.FileName;
-                    }
+                    jpFileName = AutoMode ? GetExeFileName(TargetFileName, "Jp") : QueryPatchedFileName();
                 }
 
-                PatchEngine.SavePatchedFile(jpFileName);
+                return SavePatchedFiIle(jpFileName);
             }
             catch (Exception)
             {
-                MessageBox.Show("パッチを当てたファイルの保存に失敗しました。", "ファイルの保存", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "パッチを当てたファイルの保存に失敗しました。\n" +
+                    "おそらくWindowsのユーザーアカウント制御(UAC)が原因です。\n" +
+                    "ゲームフォルダを「C:\\Program Files」「C:\\Program Files (x86)」以外の場所へ" +
+                    "丸ごとコピーしてから実行して下さい。",
+                    "ファイルの保存", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
+        }
 
+        /// <summary>
+        ///     元のファイルをリネームする先を問い合わせる
+        /// </summary>
+        /// <returns>リネーム先のファイル名</returns>
+        private static string QueryOriginalFileName()
+        {
+            string fileName = GetExeFileName(TargetFileName, "En");
+            SaveFileDialog dialog = new SaveFileDialog
+            {
+                FileName = Path.GetFileNameWithoutExtension(fileName),
+                DefaultExt = "exe",
+                Filter = "実行ファイル (*.exe)|*.exe",
+                InitialDirectory = Path.GetDirectoryName(fileName),
+                OverwritePrompt = true,
+                Title = "元のファイルの名前を変えて保存"
+            };
+            return dialog.ShowDialog() != DialogResult.Cancel ? dialog.FileName : null;
+        }
+
+        /// <summary>
+        ///     パッチを当てたファイルを保存する先を問い合わせる
+        /// </summary>
+        /// <returns>保存先のファイル名</returns>
+        private static string QueryPatchedFileName()
+        {
+            string fileName = GetExeFileName(TargetFileName, "Jp");
+            SaveFileDialog dialog = new SaveFileDialog
+            {
+                FileName = Path.GetFileNameWithoutExtension(fileName),
+                DefaultExt = "exe",
+                Filter = "実行ファイル (*.exe)|*.exe",
+                InitialDirectory = Path.GetDirectoryName(fileName),
+                OverwritePrompt = true,
+                Title = "パッチを当てたファイルを保存"
+            };
+            return dialog.ShowDialog() != DialogResult.Cancel ? dialog.FileName : null;
+        }
+
+        /// <summary>
+        ///     元のファイルをリネームして保存する
+        /// </summary>
+        /// <param name="fileName">リネーム先のファイル名</param>
+        private static void SaveOriginalFile(string fileName)
+        {
+            // ファイル名が空ならば何もしない
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return;
+            }
+            // リネーム先のファイル名と元のファイル名が同じならば何もしない
+            if (Path.GetFullPath(fileName).Equals(Path.GetFullPath(TargetFileName)))
+            {
+                return;
+            }
+            // リネーム先にファイルがあれば削除する
+            if (File.Exists(fileName))
+            {
+                // リネーム先のファイルのタイムスタンプと元のファイルのタイムスタンプが同じならば何もしない
+                if (File.GetLastWriteTimeUtc(fileName).Equals(File.GetLastWriteTimeUtc(TargetFileName)))
+                {
+                    return;
+                }
+                // 自動処理モードでなければ既に上書き確認しているので問い合わせない
+                if (AutoMode)
+                {
+                    if (MessageBox.Show(
+                        "元のファイルの退避先に他のファイルがあります。\n" +
+                        "上書きしてもよろしいですか？",
+                        "元のファイルの名前を変えて保存", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+                File.Delete(fileName);
+            }
+            // 元のファイルを移動する
+            if (File.Exists(TargetFileName))
+            {
+                File.Move(TargetFileName, fileName);
+            }
+        }
+
+        /// <summary>
+        ///     パッチを当てたファイルを保存する
+        /// </summary>
+        /// <param name="fileName">保存先のファイル名</param>
+        /// <returns>保存に成功すればtrueを返す</returns>
+        private static bool SavePatchedFiIle(string fileName)
+        {
+            // ファイル名が空ならば何もしない
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return false;
+            }
+            // 自動処理モードで保存先にファイルがあれば上書き確認する
+            if (File.Exists(fileName) && AutoMode)
+            {
+                if (MessageBox.Show(
+                    "パッチを当てたファイルの保存先に他のファイルがあります。\n" +
+                    "上書きしてもよろしいですか？",
+                    "パッチを当てたファイルを保存", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                {
+                    return false;
+                }
+            }
+            // パッチを当てたファイルを保存する
+            PatchEngine.SavePatchedFile(fileName);
+            return true;
+        }
+
+        #endregion
+
+        #region DLLのコピー
+
+        /// <summary>
+        ///     _inmm.dllが存在するかチェックする
+        /// </summary>
+        /// <returns>_inmm.dllが存在しなければfalseを返す</returns>
+        public static bool CheckDll()
+        {
+            string fileName = Path.Combine(Environment.CurrentDirectory, "_inmm.dll");
+            if (!File.Exists(fileName))
+            {
+                MessageBox.Show(
+                    "日本語化DLLが見つかりません。\n" +
+                    "おそらく圧縮ファイルを展開していないのが原因です。\n" +
+                    "先に圧縮ファイルを展開してから実行して下さい。",
+                    "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
             return true;
         }
 
@@ -256,7 +355,7 @@ namespace EuropaEnginePatcher
 
                 if (!File.Exists(srcName))
                 {
-                    MessageBox.Show("_inmm.dllが存在しません。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("日本語化DLLが見つかりません。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
 
@@ -266,7 +365,7 @@ namespace EuropaEnginePatcher
                     {
                         if (!AutoMode)
                         {
-                            if (MessageBox.Show("_inmm.dllのバージョンが一致しません。\n上書きコピーしてもよろしいですか？",
+                            if (MessageBox.Show("日本語化DLLを上書きコピーしてもよろしいですか？",
                                 "日本語化DLLのコピー",
                                 MessageBoxButtons.YesNo) == DialogResult.No)
                             {
@@ -280,7 +379,7 @@ namespace EuropaEnginePatcher
                 {
                     if (!AutoMode)
                     {
-                        if (MessageBox.Show("_inmm.dllがありません。\nコピーしてもよろしいですか？",
+                        if (MessageBox.Show("ゲームフォルダに日本語化DLLがありません。\nコピーしてもよろしいですか？",
                             "日本語化DLLのコピー",
                             MessageBoxButtons.YesNo,
                             MessageBoxIcon.Question) == DialogResult.No)
@@ -300,6 +399,10 @@ namespace EuropaEnginePatcher
 
             return true;
         }
+
+        #endregion
+
+        #region コマンドライン引数
 
         /// <summary>
         ///     コマンドライン引数を解釈する

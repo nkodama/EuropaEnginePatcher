@@ -19,6 +19,10 @@ namespace EuropaEnginePatcher
         [STAThread]
         public static void Main()
         {
+            if (!PatchController.CheckDll())
+            {
+                return;
+            }
             if (PatchController.ParseCommandLine())
             {
                 PatchController.AutoProcess();
