@@ -1,4 +1,4 @@
-Europa Engine Patcher Ver 0.50
+Europa Engine Patcher Ver 0.51
 
 ■はじめに
   Paradox社のEuropa Engineを使用したゲームを日本語化するためのツールです。
@@ -11,8 +11,8 @@ Europa Engine Patcher Ver 0.50
   - Victoria Revolutions 2.01 Hotfix 6
   - Hearts of Iron 1.06c
   - Hearts of Iron 2 Doomsday Armageddon 1.2/1.3beta2 Hotfix
-  - Arsenal of Democracy 1.04/1.07/1.08
-  - Darkest Hour 1.02/1.03
+  - Arsenal of Democracy 1.04/1.07/1.08/1.09b10
+  - Darkest Hour 1.02/1.03/1.04rc1
 
 ■使用方法
   1. 以下のランタイムライブラリをインストールして下さい。
@@ -114,6 +114,9 @@ RANKING_SUFFIX;位;;;;;;;;;;X
   2. チャットウィンドウで日本語変換中にCtrlキーを押すと文字化けします。
 
 ■更新履歴
+  2015/03/11 Ver 0.51   DH1.03以降のDH None/Lightで研究概要タブのモデル名打ち切り対応忘れを修正。
+                        自動処理モードで英語版のファイルをリネームする前に上書き確認するように変更。
+                        エラーメッセージを少し変更。
   2013/12/25 Ver 0.50   自動処理モードを実装。
                         英語版のファイルをリネームするモードを追加。
                         強制ウィンドウ化を実装。
