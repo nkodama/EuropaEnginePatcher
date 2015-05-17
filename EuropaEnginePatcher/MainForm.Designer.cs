@@ -38,6 +38,8 @@
             this.pathTextBox = new System.Windows.Forms.TextBox();
             this.typeComboBox = new System.Windows.Forms.ComboBox();
             this.optionGroupBox = new System.Windows.Forms.GroupBox();
+            this.color16BitCheckBox = new System.Windows.Forms.CheckBox();
+            this.memory4GbCheckBox = new System.Windows.Forms.CheckBox();
             this.ntlCheckBox = new System.Windows.Forms.CheckBox();
             this.introSkipCheckBox = new System.Windows.Forms.CheckBox();
             this.windowedCheckBox = new System.Windows.Forms.CheckBox();
@@ -67,17 +69,17 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.logRichTextBox.Font = new System.Drawing.Font("ＭＳ ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.logRichTextBox.Location = new System.Drawing.Point(12, 159);
+            this.logRichTextBox.Location = new System.Drawing.Point(12, 179);
             this.logRichTextBox.Name = "logRichTextBox";
             this.logRichTextBox.ReadOnly = true;
-            this.logRichTextBox.Size = new System.Drawing.Size(440, 151);
+            this.logRichTextBox.Size = new System.Drawing.Size(440, 130);
             this.logRichTextBox.TabIndex = 8;
             this.logRichTextBox.Text = "";
             // 
             // exitButton
             // 
             this.exitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.exitButton.Location = new System.Drawing.Point(377, 130);
+            this.exitButton.Location = new System.Drawing.Point(377, 150);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(75, 23);
             this.exitButton.TabIndex = 6;
@@ -90,7 +92,7 @@
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.Enabled = false;
-            this.saveButton.Location = new System.Drawing.Point(377, 101);
+            this.saveButton.Location = new System.Drawing.Point(377, 121);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 5;
@@ -102,7 +104,7 @@
             // startButton
             // 
             this.startButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.startButton.Location = new System.Drawing.Point(377, 72);
+            this.startButton.Location = new System.Drawing.Point(377, 92);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 23);
             this.startButton.TabIndex = 4;
@@ -161,6 +163,8 @@
             // 
             this.optionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionGroupBox.Controls.Add(this.color16BitCheckBox);
+            this.optionGroupBox.Controls.Add(this.memory4GbCheckBox);
             this.optionGroupBox.Controls.Add(this.ntlCheckBox);
             this.optionGroupBox.Controls.Add(this.introSkipCheckBox);
             this.optionGroupBox.Controls.Add(this.windowedCheckBox);
@@ -170,10 +174,32 @@
             this.optionGroupBox.Controls.Add(this.wordOrderCheckBox);
             this.optionGroupBox.Location = new System.Drawing.Point(12, 68);
             this.optionGroupBox.Name = "optionGroupBox";
-            this.optionGroupBox.Size = new System.Drawing.Size(359, 85);
+            this.optionGroupBox.Size = new System.Drawing.Size(359, 105);
             this.optionGroupBox.TabIndex = 9;
             this.optionGroupBox.TabStop = false;
             this.optionGroupBox.Text = "オプション";
+            // 
+            // color16BitCheckBox
+            // 
+            this.color16BitCheckBox.AutoSize = true;
+            this.color16BitCheckBox.Location = new System.Drawing.Point(146, 82);
+            this.color16BitCheckBox.Name = "color16BitCheckBox";
+            this.color16BitCheckBox.Size = new System.Drawing.Size(100, 16);
+            this.color16BitCheckBox.TabIndex = 8;
+            this.color16BitCheckBox.Text = "16bitカラー設定";
+            this.color16BitCheckBox.UseVisualStyleBackColor = true;
+            this.color16BitCheckBox.CheckedChanged += new System.EventHandler(this.OnColor16BitCheckBoxCheckedChanged);
+            // 
+            // memory4GbCheckBox
+            // 
+            this.memory4GbCheckBox.AutoSize = true;
+            this.memory4GbCheckBox.Location = new System.Drawing.Point(15, 82);
+            this.memory4GbCheckBox.Name = "memory4GbCheckBox";
+            this.memory4GbCheckBox.Size = new System.Drawing.Size(94, 16);
+            this.memory4GbCheckBox.TabIndex = 7;
+            this.memory4GbCheckBox.Text = "4GBメモリ使用";
+            this.memory4GbCheckBox.UseVisualStyleBackColor = true;
+            this.memory4GbCheckBox.CheckedChanged += new System.EventHandler(this.OnMemory4GbCheckBoxCheckedChanged);
             // 
             // ntlCheckBox
             // 
@@ -275,7 +301,7 @@
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(464, 322);
+            this.ClientSize = new System.Drawing.Size(464, 321);
             this.Controls.Add(this.optionGroupBox);
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.clearButton);
@@ -316,5 +342,7 @@
         private System.Windows.Forms.CheckBox windowedCheckBox;
         private System.Windows.Forms.CheckBox introSkipCheckBox;
         private System.Windows.Forms.CheckBox ntlCheckBox;
+        private System.Windows.Forms.CheckBox color16BitCheckBox;
+        private System.Windows.Forms.CheckBox memory4GbCheckBox;
 	}
 }

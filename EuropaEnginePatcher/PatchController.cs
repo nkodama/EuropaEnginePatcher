@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace EuropaEnginePatcher
 {
@@ -55,6 +56,16 @@ namespace EuropaEnginePatcher
         ///     時間制限解除
         /// </summary>
         public static bool Ntl { get; set; }
+
+        /// <summary>
+        ///     4GBメモリ使用
+        /// </summary>
+        public static bool Memory4Gb { get; set; }
+
+        /// <summary>
+        ///     16bitカラー設定
+        /// </summary>
+        public static bool Color16Bit { get; set; }
 
         #endregion
 
@@ -189,7 +200,7 @@ namespace EuropaEnginePatcher
                     jpFileName = AutoMode ? GetExeFileName(TargetFileName, "Jp") : QueryPatchedFileName();
                 }
 
-                return SavePatchedFiIle(jpFileName);
+                return SavePatchedFile(jpFileName);
             }
             catch (Exception)
             {
@@ -290,7 +301,7 @@ namespace EuropaEnginePatcher
         /// </summary>
         /// <param name="fileName">保存先のファイル名</param>
         /// <returns>保存に成功すればtrueを返す</returns>
-        private static bool SavePatchedFiIle(string fileName)
+        private static bool SavePatchedFile(string fileName)
         {
             // ファイル名が空ならば何もしない
             if (string.IsNullOrEmpty(fileName))
@@ -310,6 +321,49 @@ namespace EuropaEnginePatcher
             }
             // パッチを当てたファイルを保存する
             PatchEngine.SavePatchedFile(fileName);
+            // 16bitカラー設定を付加する
+            if (Color16Bit)
+            {
+                Set16BitColor(fileName);
+            }
+            return true;
+        }
+
+        /// <summary>
+        ///     16bitカラーで起動するように設定する
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        private static bool Set16BitColor(string fileName)
+        {
+            RegistryKey key =
+                Registry.CurrentUser.CreateSubKey(
+                    "Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers");
+            if (key == null)
+            {
+                return false;
+            }
+
+            string s = (string) key.GetValue(fileName);
+            if (!string.IsNullOrEmpty(s))
+            {
+                // 16bitカラーの記述が含まれていれば何もしない
+                if (s.Contains("16BITCOLOR"))
+                {
+                    return true;
+                }
+
+                // 既に設定されている項目があれば連結する
+                if (s.StartsWith("~ "))
+                {
+                    s += " 16BITCOLOR";
+                    key.SetValue(fileName, s);
+                    return true;
+                }
+            }
+
+            // 16bitカラーの設定を追加する
+            key.SetValue(fileName, "~ 16BITCOLOR");
             return true;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace EuropaEnginePatcher
@@ -26,6 +27,7 @@ namespace EuropaEnginePatcher
 
             UpdateTitle();
             typeComboBox.SelectedIndex = 0;
+            UpdateOsDependentOption();
         }
 
         /// <summary>
@@ -49,6 +51,80 @@ namespace EuropaEnginePatcher
         private void UpdateTitle()
         {
             Text = string.Format("Europe Engine Patcher Ver {0}", EuropaEnginePatcher.VersionName);
+        }
+
+        /// <summary>
+        ///     OS依存オプションを更新する
+        /// </summary>
+        private void UpdateOsDependentOption()
+        {
+            // OSバージョンを取得
+            Version version = Environment.OSVersion.Version;
+
+            // Windows8以降ならば16bitカラー設定を有効にする
+            if ((version.Major == 6 && version.Minor >= 2) || (version.Major > 6))
+            {
+                color16BitCheckBox.Checked = true;
+            }
+            else
+            {
+                color16BitCheckBox.Enabled = false;
+            }
+
+            // 64bitOSならば4GBメモリ使用を有効にする
+            if (Is64BitOs())
+            {
+                memory4GbCheckBox.Checked = true;
+            }
+            else
+            {
+                memory4GbCheckBox.Enabled = false;
+            }
+        }
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr GetModuleHandle(string lpModuleName);
+
+        [DllImport("kernel32", CharSet = CharSet.Ansi, ExactSpelling = true)]
+        private static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+
+        [DllImport("kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool IsWow64Process([In] IntPtr hProcess, [Out] out bool lpSystemInfo);
+
+        /// <summary>
+        ///     プロセスがWOW64上で動作しているかを調べる
+        /// </summary>
+        /// <returns></returns>
+        private bool IsWow64()
+        {
+            IntPtr wow64Proc = GetProcAddress(GetModuleHandle("Kernel32.dll"), "IsWow64Process");
+            if (wow64Proc != IntPtr.Zero)
+            {
+                bool ret;
+                if (IsWow64Process(Process.GetCurrentProcess().Handle, out ret))
+                {
+                    return ret;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        ///     64bitOSで動作しているかを調べる
+        /// </summary>
+        /// <returns></returns>
+        private bool Is64BitOs()
+        {
+            if (IntPtr.Size == 8)
+            {
+                return true;
+            }
+            if (IntPtr.Size == 4)
+            {
+                return IsWow64();
+            }
+            return false;
         }
 
         /// <summary>
@@ -302,6 +378,27 @@ namespace EuropaEnginePatcher
         {
             PatchController.Ntl = ntlCheckBox.Checked;
             saveButton.Enabled = false;
+        }
+
+        /// <summary>
+        ///     4GBメモリ使用のチェック状態変更時の処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnMemory4GbCheckBoxCheckedChanged(object sender, EventArgs e)
+        {
+            PatchController.Memory4Gb = memory4GbCheckBox.Checked;
+            saveButton.Enabled = false;
+        }
+
+        /// <summary>
+        ///     16bitカラー設定のチェック状態変更時の処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnColor16BitCheckBoxCheckedChanged(object sender, EventArgs e)
+        {
+            PatchController.Color16Bit = color16BitCheckBox.Checked;
         }
     }
 }

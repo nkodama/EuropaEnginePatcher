@@ -3026,6 +3026,11 @@ namespace EuropaEnginePatcher
                         break;
                 }
             }
+            // 4GBメモリ使用
+            if (PatchController.Memory4Gb)
+            {
+                Patch4Gb();
+            }
             // ゲーム固有
             switch (_patchType)
             {
@@ -6603,6 +6608,20 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, _posLimitYear + 1, 0x27);
                     break;
             }
+
+            AppendLog("\n");
+        }
+
+        /// <summary>
+        ///     4GBメモリ使用設定に変更する
+        /// </summary>
+        private static void Patch4Gb()
+        {
+            const uint offset = 0x00000116;
+
+            AppendLog("  4GBメモリ使用設定\n");
+
+            PatchByte(_data, offset, (byte) (_data[offset] | 0x20));
 
             AppendLog("\n");
         }
