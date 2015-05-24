@@ -334,14 +334,14 @@ namespace EuropaEnginePatcher
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        private static bool Set16BitColor(string fileName)
+        private static void Set16BitColor(string fileName)
         {
             RegistryKey key =
                 Registry.CurrentUser.CreateSubKey(
                     "Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers");
             if (key == null)
             {
-                return false;
+                return;
             }
 
             string s = (string) key.GetValue(fileName);
@@ -350,7 +350,7 @@ namespace EuropaEnginePatcher
                 // 16bitカラーの記述が含まれていれば何もしない
                 if (s.Contains("16BITCOLOR"))
                 {
-                    return true;
+                    return;
                 }
 
                 // 既に設定されている項目があれば連結する
@@ -358,13 +358,12 @@ namespace EuropaEnginePatcher
                 {
                     s += " 16BITCOLOR";
                     key.SetValue(fileName, s);
-                    return true;
+                    return;
                 }
             }
 
             // 16bitカラーの設定を追加する
             key.SetValue(fileName, "~ 16BITCOLOR");
-            return true;
         }
 
         #endregion
