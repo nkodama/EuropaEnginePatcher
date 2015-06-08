@@ -127,7 +127,6 @@ namespace EuropaEnginePatcher
         {
             if (!Patch())
             {
-                MessageBox.Show("パッチの適用に失敗しました。", "Europa Engine Patcher", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             if (!Save())
@@ -156,6 +155,7 @@ namespace EuropaEnginePatcher
         {
             if (!File.Exists(TargetFileName))
             {
+                MessageBox.Show("パッチ対象のファイルがありません。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -164,6 +164,8 @@ namespace EuropaEnginePatcher
                 DetectGameType(TargetFileName);
                 if (GameType == GameType.Unknown)
                 {
+                    MessageBox.Show("パッチの種類が判別できません。\nゲーム本体の実行ファイルを指定して下さい。", "エラー", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                     return false;
                 }
             }

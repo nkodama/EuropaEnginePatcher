@@ -128,7 +128,6 @@ namespace EuropaEnginePatcher
             SetPatchType(gameType);
             if (_patchType == PatchType.Unknown)
             {
-                MessageBox.Show("パッチの種類が判別できません。", "エラー");
                 return false;
             }
 
@@ -136,23 +135,33 @@ namespace EuropaEnginePatcher
             {
                 ReadGameFile(fileName);
 
+                if (IsPatchedFile())
+                {
+                    MessageBox.Show("既にパッチ済みのファイルです。\nパッチを当てる前のファイルを指定して下さい。", "エラー", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return false;
+                }
                 if (!IdentifyGameVersion())
                 {
+                    MessageBox.Show("ゲームのバージョンが判別できません。\nゲーム本体の実行ファイルを指定して下さい。", "エラー", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                     return false;
                 }
                 if (!ParseHeader())
                 {
+                    MessageBox.Show("パッチの適用に失敗しました。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
                 if (!ScanPatchLocation())
                 {
+                    MessageBox.Show("パッチの適用に失敗しました。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
                 PatchBinary();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                MessageBox.Show(e.Message, "エラー");
+                MessageBox.Show("パッチの適用に失敗しました。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -442,6 +451,30 @@ namespace EuropaEnginePatcher
             }
 
             return true;
+        }
+
+        /// <summary>
+        ///     既にパッチ済みのファイルかどうかを判定する
+        /// </summary>
+        /// <returns>パッチ済みのファイルならばtrueを返す</returns>
+        private static bool IsPatchedFile()
+        {
+            AppendLog("ScanBinary - パッチ済みファイルの判別\n");
+            AppendLog("  \"_INMM.dll\"を探します\n");
+            // _INMM.DLLが見つかればパッチ済みだとみなす
+            byte[] pattern =
+            {
+                0x5F, 0x49, 0x4E, 0x4D, 0x4D, 0x2E, 0x64, 0x6C,
+                0x6C
+            };
+            List<uint> l = BinaryScan(_data, pattern, 0, (uint) _fileSize);
+            if (l.Count > 0)
+            {
+                return true;
+            }
+
+            AppendLog("ScanBinary passed\n\n");
+            return false;
         }
 
         #endregion
