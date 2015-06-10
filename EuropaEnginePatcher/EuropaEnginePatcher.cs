@@ -11,7 +11,7 @@ namespace EuropaEnginePatcher
         /// <summary>
         ///     バージョン名
         /// </summary>
-        internal const string VersionName = "0.51";
+        internal const string VersionName = "0.52";
 
         /// <summary>
         ///     エントリーポイント
