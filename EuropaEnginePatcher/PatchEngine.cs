@@ -6650,7 +6650,7 @@ namespace EuropaEnginePatcher
         /// </summary>
         private static void Patch4Gb()
         {
-            const uint offset = 0x00000116;
+            const uint offset = 0x00000126;
 
             AppendLog("  4GBメモリ使用設定\n");
 
