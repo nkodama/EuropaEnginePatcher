@@ -1,4 +1,4 @@
-Europa Engine Patcher Ver 0.52
+Europa Engine Patcher Ver 0.53
 
 ■はじめに
   Paradox社のEuropa Engineを使用したゲームを日本語化するためのツールです。
@@ -122,6 +122,7 @@ RANKING_SUFFIX;位;;;;;;;;;;X
   2. チャットウィンドウで日本語変換中にCtrlキーを押すと文字化けします。
 
 ■更新履歴
+  2015/09/21 Ver 0.53   4GBパッチを当てる箇所を間違えていた不具合を修正。
   2015/06/10 Ver 0.52   16bitカラー設定の自動処理を実装。(Windows8以降のみ)
                         4GBパッチを実装。(64bitOSのみ)
                         エラーメッセージを少し変更。
