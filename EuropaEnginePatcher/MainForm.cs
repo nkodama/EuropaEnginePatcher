@@ -50,7 +50,7 @@ namespace EuropaEnginePatcher
         /// </summary>
         private void UpdateTitle()
         {
-            Text = string.Format("Europe Engine Patcher Ver {0}", EuropaEnginePatcher.VersionName);
+            Text = $"Europe Engine Patcher Ver {EuropaEnginePatcher.VersionName}";
         }
 
         /// <summary>

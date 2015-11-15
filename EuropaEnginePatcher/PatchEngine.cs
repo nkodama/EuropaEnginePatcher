@@ -123,7 +123,7 @@ namespace EuropaEnginePatcher
         /// <returns>パッチ当てに成功すればtrueを返す</returns>
         public static bool Patch(string fileName, GameType gameType)
         {
-            AppendLog(string.Format("Europe Engine Patcher Ver {0}\n", EuropaEnginePatcher.VersionName));
+            AppendLog($"Europe Engine Patcher Ver {EuropaEnginePatcher.VersionName}\n");
 
             SetPatchType(gameType);
             if (_patchType == PatchType.Unknown)
@@ -202,8 +202,8 @@ namespace EuropaEnginePatcher
                 s.Close();
             }
 
-            AppendLog(string.Format("  TargetFile: {0}\n", fileName));
-            AppendLog(string.Format("  FileSize: {0}Bytes\n", _fileSize));
+            AppendLog($"  TargetFile: {fileName}\n");
+            AppendLog($"  FileSize: {_fileSize}Bytes\n");
 
             AppendLog("Phase 1 passed\n\n");
         }
@@ -523,7 +523,7 @@ namespace EuropaEnginePatcher
             AppendLog("  exe識別子: $5A4D\n");
 
             _posPeHeader = GetLong(60);
-            AppendLog(string.Format("  PEの位置: {0:X8}\n", _posPeHeader));
+            AppendLog($"  PEの位置: {_posPeHeader:X8}\n");
 
             AppendLog("Phase 2 passed\n\n");
 
@@ -545,14 +545,14 @@ namespace EuropaEnginePatcher
             AppendLog("  PE識別子: $4550\n");
 
             _countSections = GetWord(_posPeHeader + 6);
-            AppendLog(string.Format("  セクション数: {0}\n", _countSections));
+            AppendLog($"  セクション数: {_countSections}\n");
 
             uint posSymbolTable = GetLong(_posPeHeader + 12);
             uint countSymbols = GetLong(_posPeHeader + 16);
-            AppendLog(string.Format("  シンボルテーブルの位置/数: ${0:X8}/${1:X8}\n", posSymbolTable, countSymbols));
+            AppendLog($"  シンボルテーブルの位置/数: ${posSymbolTable:X8}/${countSymbols:X8}\n");
 
             uint sizeOptionHeader = GetWord(_posPeHeader + 20);
-            AppendLog(string.Format("  オプションヘッダのサイズ: ${0:X4}\n", sizeOptionHeader));
+            AppendLog($"  オプションヘッダのサイズ: ${sizeOptionHeader:X4}\n");
 
             AppendLog("Phase 3 passed\n\n");
 
@@ -584,16 +584,16 @@ namespace EuropaEnginePatcher
             AppendLog(string.Format("  未初期化データセクションのサイズ: ${0:X8} ({0}Bytes)\n", sizeUninitializedData));
 
             uint addressEntryPoint = GetLong(offsetOptionHeader + 16);
-            AppendLog(string.Format("  エントリーポイント: ${0:X8}\n", addressEntryPoint));
+            AppendLog($"  エントリーポイント: ${addressEntryPoint:X8}\n");
 
             uint posCodeSection = GetLong(offsetOptionHeader + 20);
-            AppendLog(string.Format("  コードセクションの位置: ${0:X8}\n", posCodeSection));
+            AppendLog($"  コードセクションの位置: ${posCodeSection:X8}\n");
 
             uint posDataSectionHeader = GetLong(offsetOptionHeader + 24);
-            AppendLog(string.Format("  データセクションの位置: ${0:X8}\n", posDataSectionHeader));
+            AppendLog($"  データセクションの位置: ${posDataSectionHeader:X8}\n");
 
             _addrBase = GetLong(offsetOptionHeader + 28);
-            AppendLog(string.Format("  ベースアドレス: ${0:X8}\n", _addrBase));
+            AppendLog($"  ベースアドレス: ${_addrBase:X8}\n");
 
             _alignSection = GetLong(offsetOptionHeader + 32);
             AppendLog(string.Format("  セクション境界: ${0:X8} ({0}Bytes)\n", _alignSection));
@@ -602,34 +602,31 @@ namespace EuropaEnginePatcher
             AppendLog(string.Format("  ファイル境界: ${0:X8} ({0}Bytes)\n", alignmentFile));
 
             uint sizeImage = GetLong(offsetOptionHeader + 56);
-            AppendLog(string.Format("  イメージサイズ: ${0:X8}\n", sizeImage));
+            AppendLog($"  イメージサイズ: ${sizeImage:X8}\n");
 
             uint sizeHeader = GetLong(offsetOptionHeader + 60);
-            AppendLog(string.Format("  ヘッダサイズ: ${0:X8}\n", sizeHeader));
+            AppendLog($"  ヘッダサイズ: ${sizeHeader:X8}\n");
 
             uint rvaExportTable = GetLong(offsetOptionHeader + 96);
             uint sizeExportTable = GetLong(offsetOptionHeader + 100);
-            AppendLog(string.Format("  Export Table address/size: ${0:X8}/${1:X8}\n", rvaExportTable, sizeExportTable));
+            AppendLog($"  Export Table address/size: ${rvaExportTable:X8}/${sizeExportTable:X8}\n");
 
             _rvaImportTable = GetLong(offsetOptionHeader + 104);
             uint sizeImportTable = GetLong(offsetOptionHeader + 108);
-            AppendLog(string.Format("  Import Table address/size: ${0:X8}/${1:X8}\n", _rvaImportTable, sizeImportTable));
+            AppendLog($"  Import Table address/size: ${_rvaImportTable:X8}/${sizeImportTable:X8}\n");
 
             uint rvaResourceTable = GetLong(offsetOptionHeader + 112);
             uint sizeResourceTable = GetLong(offsetOptionHeader + 116);
-            AppendLog(string.Format("  Resource Table address/size: ${0:X8}/${1:X8}\n", rvaResourceTable,
-                sizeResourceTable));
+            AppendLog($"  Resource Table address/size: ${rvaResourceTable:X8}/${sizeResourceTable:X8}\n");
 
             uint rvaImportAddressTable = GetLong(offsetOptionHeader + 192);
             uint sizeImportAddressTable = GetLong(offsetOptionHeader + 196);
             _countImportDir = sizeImportAddressTable / 0x14;
-            AppendLog(string.Format("  Import Address Table address/size: ${0:X8}/${1:X8}\n", rvaImportAddressTable,
-                sizeImportAddressTable));
+            AppendLog($"  Import Address Table address/size: ${rvaImportAddressTable:X8}/${sizeImportAddressTable:X8}\n");
 
-            AppendLog(string.Format("  * コード領域: ${0:X8}～${1:X8} (ファイル上: ${2:X8}～${3:X8})\n", _addrBase + posCodeSection,
-                _addrBase + posCodeSection + sizeCodeSection - 1, posCodeSection,
-                posCodeSection + sizeCodeSection - 1));
-            AppendLog(string.Format("  * プログラムが開始されるアドレス: ${0:X8}\n", _addrBase + addressEntryPoint));
+            AppendLog(
+                $"  * コード領域: ${_addrBase + posCodeSection:X8}～${_addrBase + posCodeSection + sizeCodeSection - 1:X8} (ファイル上: ${posCodeSection:X8}～${posCodeSection + sizeCodeSection - 1:X8})\n");
+            AppendLog($"  * プログラムが開始されるアドレス: ${_addrBase + addressEntryPoint:X8}\n");
 
             AppendLog("Phase 4 passed\n\n");
 
@@ -648,27 +645,27 @@ namespace EuropaEnginePatcher
 
             for (int i = 0; i < _countSections; i++, offsetSection += 40)
             {
-                AppendLog(string.Format("\n  セクション[{0}]\n", i));
+                AppendLog($"\n  セクション[{i}]\n");
 
                 string nameSection = GetString(offsetSection, 8);
-                AppendLog(string.Format("  セクション名: {0}\n", nameSection));
+                AppendLog($"  セクション名: {nameSection}\n");
 
                 uint virtualSize = GetLong(offsetSection + 8);
                 AppendLog(string.Format("  セクション仮想サイズ: ${0:X8} ({0}Bytes)\n", virtualSize));
 
                 uint virtualAddress = GetLong(offsetSection + 12);
-                AppendLog(string.Format("  セクション仮想アドレス: ${0:X8}\n", virtualAddress));
+                AppendLog($"  セクション仮想アドレス: ${virtualAddress:X8}\n");
 
                 uint sizeRawData = GetLong(offsetSection + 16);
                 AppendLog(string.Format("  セクション実サイズ: ${0:X8} ({0}Bytes)\n", sizeRawData));
 
                 uint posRawData = GetLong(offsetSection + 20);
-                AppendLog(string.Format("  セクション実位置: ${0:X8}\n", posRawData));
+                AppendLog($"  セクション実位置: ${posRawData:X8}\n");
 
                 if (nameSection.Equals(".text"))
                 {
-                    AppendLog(string.Format("  * 未使用領域: ${0:X8}～${1:X8}\n", _addrBase + virtualAddress + virtualSize + 1,
-                        _addrBase + virtualAddress + sizeRawData - 1));
+                    AppendLog(
+                        $"  * 未使用領域: ${_addrBase + virtualAddress + virtualSize + 1:X8}～${_addrBase + virtualAddress + sizeRawData - 1:X8}\n");
                     _sizeTextSection = sizeRawData;
                     _sizeTextFree = sizeRawData - virtualSize;
                     _posTextSection = posRawData;
@@ -676,8 +673,8 @@ namespace EuropaEnginePatcher
                 }
                 else if (nameSection.Equals(".rdata"))
                 {
-                    AppendLog(string.Format("  * 未使用領域: ${0:X8}～${1:X8}\n", _addrBase + virtualAddress + virtualSize + 1,
-                        _addrBase + virtualAddress + sizeRawData - 1));
+                    AppendLog(
+                        $"  * 未使用領域: ${_addrBase + virtualAddress + virtualSize + 1:X8}～${_addrBase + virtualAddress + sizeRawData - 1:X8}\n");
                     _sizeRdataSection = sizeRawData;
                     _sizeRdataFree = sizeRawData - virtualSize;
                     _sizeDataSection = sizeRawData;
@@ -687,8 +684,8 @@ namespace EuropaEnginePatcher
                 else if (nameSection.Equals(".data"))
                 {
                     uint addrDataSectionEnd = Ceiling(_addrBase + virtualAddress + virtualSize, _alignSection) - 1;
-                    AppendLog(string.Format("  * 未使用領域: ${0:X8}～${1:X8}\n", _addrBase + virtualAddress + virtualSize + 1,
-                        addrDataSectionEnd));
+                    AppendLog(
+                        $"  * 未使用領域: ${_addrBase + virtualAddress + virtualSize + 1:X8}～${addrDataSectionEnd:X8}\n");
                     _addrVarTextOutDcAddress = addrDataSectionEnd - 0x0000000F;
                     _addrVarGetTextWidthAddress = addrDataSectionEnd - 0x0000000B;
                     _addrVarCalcLineBreakAddress = addrDataSectionEnd - 0x00000007;
@@ -776,26 +773,26 @@ namespace EuropaEnginePatcher
         private static void ParseImportTable()
         {
             AppendLog("Phase 6 - インポートディレクトリテーブルの表示\n");
-            AppendLog(string.Format("  インポートディレクトリテーブル数: {0}\n", _countImportDir));
+            AppendLog($"  インポートディレクトリテーブル数: {_countImportDir}\n");
 
             uint offsetImportDir = _posImportTable;
             uint rvaImportLookupTable = GetLong(offsetImportDir);
             while (rvaImportLookupTable != 0)
             {
-                AppendLog(string.Format("\n  ImportLookupTableRVA: ${0:X8}\n", rvaImportLookupTable));
+                AppendLog($"\n  ImportLookupTableRVA: ${rvaImportLookupTable:X8}\n");
 
                 uint timeStamp = GetLong(offsetImportDir + 4);
-                AppendLog(string.Format("  TimeStamp: ${0:X8}\n", timeStamp));
+                AppendLog($"  TimeStamp: ${timeStamp:X8}\n");
 
                 uint forwarderChain = GetLong(offsetImportDir + 8);
-                AppendLog(string.Format("  FowarderChain: ${0:X8}\n", forwarderChain));
+                AppendLog($"  FowarderChain: ${forwarderChain:X8}\n");
 
                 uint rvaName = GetLong(offsetImportDir + 12);
                 string name = GetString(_posImportSection + rvaName - _rvaImportSection, 0);
-                AppendLog(string.Format("  NameRVA: ${0:X8} ({1})\n", rvaName, name));
+                AppendLog($"  NameRVA: ${rvaName:X8} ({name})\n");
 
                 uint rvaImportAddressTable = GetLong(offsetImportDir + 16);
-                AppendLog(string.Format("  ImportAddressTableRVA: ${0:X8}\n", rvaImportAddressTable));
+                AppendLog($"  ImportAddressTableRVA: ${rvaImportAddressTable:X8}\n");
 
                 uint offsetImportLookupTable = _posImportSection + rvaImportLookupTable - _rvaImportSection;
                 uint i = 0;
@@ -831,7 +828,7 @@ namespace EuropaEnginePatcher
                             _posIsDebuggerPresent = offsetHintNameTable + 2;
                         }
                     }
-                    AppendLog(string.Format("    {0:D4} {1}\n", hint, importName));
+                    AppendLog($"    {hint:D4} {importName}\n");
 
                     offsetImportLookupTable += 4;
 
@@ -3105,7 +3102,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x3D);
             offset++;
             PatchLong(_data, offset, _addrVarTextOutDcAddress,
-                string.Format("%02 ${0:X8} varTextOutDC2Address", _addrVarTextOutDcAddress));
+                $"%02 ${_addrVarTextOutDcAddress:X8} varTextOutDC2Address");
             offset += 4;
             PatchByte(_data, offset, 0x00);
             offset++;
@@ -3124,7 +3121,7 @@ namespace EuropaEnginePatcher
             offset++;
             PatchByte(_data, offset, 0x68);
             offset++;
-            PatchLong(_data, offset, _addrWinMmDll, string.Format("%06 ${0:X8} WINMM.dll", _addrWinMmDll));
+            PatchLong(_data, offset, _addrWinMmDll, $"%06 ${_addrWinMmDll:X8} WINMM.dll");
             offset += 4;
             PatchByte(_data, offset, 0xFF);
             offset++;
@@ -3135,12 +3132,12 @@ namespace EuropaEnginePatcher
                 case PatchType.ForTheGlory:
                 case PatchType.ArsenalOfDemocracy:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
-                        string.Format("%04 ${0:X8} IsDebuggerPresent", _addrIsDebuggerPresent));
+                        $"%04 ${_addrIsDebuggerPresent:X8} IsDebuggerPresent");
                     break;
 
                 default:
                     PatchLong(_data, offset, _addrGetModuleHandleA,
-                        string.Format("%04 ${0:X8} GetModuleHandleA", _addrGetModuleHandleA));
+                        $"%04 ${_addrGetModuleHandleA:X8} GetModuleHandleA");
                     break;
             }
             offset += 4;
@@ -3156,7 +3153,7 @@ namespace EuropaEnginePatcher
             offset++;
             PatchByte(_data, offset, 0x68);
             offset++;
-            PatchLong(_data, offset, _addrTextOutDc, string.Format("%00 ${0:X8} TextOutDC2", _addrTextOutDc));
+            PatchLong(_data, offset, _addrTextOutDc, $"%00 ${_addrTextOutDc:X8} TextOutDC2");
             offset += 4;
             PatchByte(_data, offset, 0x50);
             offset++;
@@ -3165,7 +3162,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrGetProcAddress,
-                string.Format("%05 ${0:X8} GetProcAddress", _addrGetProcAddress));
+                $"%05 ${_addrGetProcAddress:X8} GetProcAddress");
             offset += 4;
             PatchByte(_data, offset, 0x85);
             offset++;
@@ -3180,7 +3177,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xA3);
             offset++;
             PatchLong(_data, offset, _addrVarTextOutDcAddress,
-                string.Format("%02 ${0:X8} varTextOutDC2Address", _addrVarTextOutDcAddress));
+                $"%02 ${_addrVarTextOutDcAddress:X8} varTextOutDC2Address");
             offset += 4;
             PatchByte(_data, offset, 0x8B);
             offset++;
@@ -3485,12 +3482,12 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarTextOutDcAddress,
-                string.Format("%02 ${0:X8} varTextOutDC2Address", _addrVarTextOutDcAddress));
+                $"%02 ${_addrVarTextOutDcAddress:X8} varTextOutDC2Address");
             offset += 4;
             PatchByte(_data, offset, 0xE9); // jmp TEXT_OUT_END
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posTextOutEnd),
-                string.Format("%08 ${0:X8} TextOutEnd", GetTextAddress(_posTextOutEnd)));
+                $"%08 ${GetTextAddress(_posTextOutEnd):X8} TextOutEnd");
             offset += 4;
 
             _posTextOutDcFree = offset;
@@ -3510,7 +3507,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x3D);
             offset++;
             PatchLong(_data, offset, _addrVarGetTextWidthAddress,
-                string.Format("%03 ${0:X8} varGetTextWidthAddress", _addrVarGetTextWidthAddress));
+                $"%03 ${_addrVarGetTextWidthAddress:X8} varGetTextWidthAddress");
             offset += 4;
             PatchByte(_data, offset, 0x00);
             offset++;
@@ -3520,7 +3517,7 @@ namespace EuropaEnginePatcher
             offset++;
             PatchByte(_data, offset, 0x68);
             offset++;
-            PatchLong(_data, offset, _addrWinMmDll, string.Format("%06 ${0:X8} WINMM.dll", _addrWinMmDll));
+            PatchLong(_data, offset, _addrWinMmDll, $"%06 ${_addrWinMmDll:X8} WINMM.dll");
             offset += 4;
             PatchByte(_data, offset, 0xFF);
             offset++;
@@ -3531,12 +3528,12 @@ namespace EuropaEnginePatcher
                 case PatchType.ForTheGlory:
                 case PatchType.ArsenalOfDemocracy:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
-                        string.Format("%04 ${0:X8} IsDebuggerPresent", _addrIsDebuggerPresent));
+                        $"%04 ${_addrIsDebuggerPresent:X8} IsDebuggerPresent");
                     break;
 
                 default:
                     PatchLong(_data, offset, _addrGetModuleHandleA,
-                        string.Format("%04 ${0:X8} GetModuleHandleA", _addrGetModuleHandleA));
+                        $"%04 ${_addrGetModuleHandleA:X8} GetModuleHandleA");
                     break;
             }
             offset += 4;
@@ -3552,7 +3549,7 @@ namespace EuropaEnginePatcher
             offset++;
             PatchByte(_data, offset, 0x68);
             offset++;
-            PatchLong(_data, offset, _addrGetTextWidth, string.Format("%01 ${0:X8} GetTextWidth", _addrGetTextWidth));
+            PatchLong(_data, offset, _addrGetTextWidth, $"%01 ${_addrGetTextWidth:X8} GetTextWidth");
             offset += 4;
             PatchByte(_data, offset, 0x50);
             offset++;
@@ -3561,7 +3558,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrGetProcAddress,
-                string.Format("%05 ${0:X8} GetProcAddress", _addrGetProcAddress));
+                $"%05 ${_addrGetProcAddress:X8} GetProcAddress");
             offset += 4;
             PatchByte(_data, offset, 0x85);
             offset++;
@@ -3576,7 +3573,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xA3);
             offset++;
             PatchLong(_data, offset, _addrVarGetTextWidthAddress,
-                string.Format("%03 ${0:X8} varGetTextWidthAddress", _addrVarGetTextWidthAddress));
+                $"%03 ${_addrVarGetTextWidthAddress:X8} varGetTextWidthAddress");
             offset += 4;
             PatchByte(_data, offset, 0x8B);
             offset++;
@@ -3783,12 +3780,12 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarGetTextWidthAddress,
-                string.Format("%03 ${0:X8} varGetTextWidthAddress", _addrVarGetTextWidthAddress));
+                $"%03 ${_addrVarGetTextWidthAddress:X8} varGetTextWidthAddress");
             offset += 4;
             PatchByte(_data, offset, 0xE9);
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posGetTextWidthEnd),
-                string.Format("%10 ${0:X8} GetTextWidthEnd", GetTextAddress(_posGetTextWidthEnd)));
+                $"%10 ${GetTextAddress(_posGetTextWidthEnd):X8} GetTextWidthEnd");
             offset += 4;
             PatchByte(_data, offset, 0x90);
             offset++;
@@ -3890,7 +3887,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x3D);
             offset++;
             PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                $"%XX ${_addrVarCalcLineBreakAddress:X8} varCalcLineBreakAddress");
             offset += 4;
             PatchByte(_data, offset, 0x00);
             offset++;
@@ -3900,7 +3897,7 @@ namespace EuropaEnginePatcher
             offset++;
             PatchByte(_data, offset, 0x68); // push addrWinMmDll
             offset++;
-            PatchLong(_data, offset, _addrWinMmDll, string.Format("%06 ${0:X8} WINMM.dll", _addrWinMmDll));
+            PatchLong(_data, offset, _addrWinMmDll, $"%06 ${_addrWinMmDll:X8} WINMM.dll");
             offset += 4;
             PatchByte(_data, offset, 0xFF); // call GetModuleHandleA
             offset++;
@@ -3911,12 +3908,12 @@ namespace EuropaEnginePatcher
                 case PatchType.ForTheGlory:
                 case PatchType.ArsenalOfDemocracy:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
-                        string.Format("%04 ${0:X8} IsDebuggerPresent", _addrIsDebuggerPresent));
+                        $"%04 ${_addrIsDebuggerPresent:X8} IsDebuggerPresent");
                     break;
 
                 default:
                     PatchLong(_data, offset, _addrGetModuleHandleA,
-                        string.Format("%04 ${0:X8} GetModuleHandleA", _addrGetModuleHandleA));
+                        $"%04 ${_addrGetModuleHandleA:X8} GetModuleHandleA");
                     break;
             }
             offset += 4;
@@ -3933,7 +3930,7 @@ namespace EuropaEnginePatcher
             // GET_CALC_LINE_BREAK_ADDR_1
             PatchByte(_data, offset, 0x68); // push addrCalcLineBreak
             offset++;
-            PatchLong(_data, offset, _addrCalcLineBreak, string.Format("%00 ${0:X8} CalcLineBreak", _addrCalcLineBreak));
+            PatchLong(_data, offset, _addrCalcLineBreak, $"%00 ${_addrCalcLineBreak:X8} CalcLineBreak");
             offset += 4;
             PatchByte(_data, offset, 0x50); // push eax
             offset++;
@@ -3942,7 +3939,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrGetProcAddress,
-                string.Format("%05 ${0:X8} GetProcAddress", _addrGetProcAddress));
+                $"%05 ${_addrGetProcAddress:X8} GetProcAddress");
             offset += 4;
             PatchByte(_data, offset, 0x85); // test eax,eax
             offset++;
@@ -3958,7 +3955,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xA3); // mov [varCalcLineBreakAddress],eax
             offset++;
             PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                $"%XX ${_addrVarCalcLineBreakAddress:X8} varCalcLineBreakAddress");
             offset += 4;
             // GET_CALC_LINE_BREAK_ADDR_3
             PatchByte(_data, offset, 0xC3); // retn
@@ -3971,13 +3968,13 @@ namespace EuropaEnginePatcher
             // CALC_LINE_BREAK_START1
             PatchByte(_data, _posCalcLineBreakStart1, 0xE9); // jmp CALC_LINE_BREAK1
             PatchLong(_data, _posCalcLineBreakStart1 + 1, GetRelativeOffset(_posCalcLineBreakStart1 + 5, offset),
-                string.Format("%XX ${0:X8} CalcLineBreak1", GetTextAddress(offset)));
+                $"%XX ${GetTextAddress(offset):X8} CalcLineBreak1");
 
             // CALC_LINE_BREAK1
             PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
-                string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
+                $"%XX ${GetTextAddress(posGetCalcLineBreakAddr):X8} GetCalcLineBreakAddr");
             offset += 4;
             switch (_patchType)
             {
@@ -4079,7 +4076,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                $"%XX ${_addrVarCalcLineBreakAddress:X8} varCalcLineBreakAddress");
             offset += 4;
             switch (_patchType)
             {
@@ -4385,7 +4382,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END1
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd1),
-                string.Format("%XX ${0:X8} CalcLineBreakEnd1", GetTextAddress(_posCalcLineBreakEnd1)));
+                $"%XX ${GetTextAddress(_posCalcLineBreakEnd1):X8} CalcLineBreakEnd1");
             offset += 4;
 
             #endregion
@@ -4395,13 +4392,13 @@ namespace EuropaEnginePatcher
             // CALC_LINE_BREAK_START2
             PatchByte(_data, _posCalcLineBreakStart2, 0xE9); // jmp CALC_LINE_BREAK2
             PatchLong(_data, _posCalcLineBreakStart2 + 1, GetRelativeOffset(_posCalcLineBreakStart2 + 5, offset),
-                string.Format("%XX ${0:X8} CalcLineBreak2", GetTextAddress(offset)));
+                $"%XX ${GetTextAddress(offset):X8} CalcLineBreak2");
 
             // CALC_LINE_BREAK2
             PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
-                string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
+                $"%XX ${GetTextAddress(posGetCalcLineBreakAddr):X8} GetCalcLineBreakAddr");
             offset += 4;
             switch (_patchType)
             {
@@ -4511,7 +4508,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                $"%XX ${_addrVarCalcLineBreakAddress:X8} varCalcLineBreakAddress");
             offset += 4;
             switch (_patchType)
             {
@@ -4823,7 +4820,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END2
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd2),
-                string.Format("%XX ${0:X8} CalcLineBreakEnd2", GetTextAddress(_posCalcLineBreakEnd2)));
+                $"%XX ${GetTextAddress(_posCalcLineBreakEnd2):X8} CalcLineBreakEnd2");
             offset += 4;
 
             #endregion
@@ -4835,13 +4832,13 @@ namespace EuropaEnginePatcher
                 // CALC_LINE_BREAK_START3
                 PatchByte(_data, _posCalcLineBreakStart3, 0xE9); // jmp CALC_LINE_BREAK3
                 PatchLong(_data, _posCalcLineBreakStart3 + 1, GetRelativeOffset(_posCalcLineBreakStart3 + 5, offset),
-                    string.Format("%XX ${0:X8} CalcLineBreak3", GetTextAddress(offset)));
+                    $"%XX ${GetTextAddress(offset):X8} CalcLineBreak3");
 
                 // CALC_LINE_BREAK3
                 PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
-                    string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
+                    $"%XX ${GetTextAddress(posGetCalcLineBreakAddr):X8} GetCalcLineBreakAddr");
                 offset += 4;
                 switch (_patchType)
                 {
@@ -4956,7 +4953,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0x15);
                 offset++;
                 PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                    string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                    $"%XX ${_addrVarCalcLineBreakAddress:X8} varCalcLineBreakAddress");
                 offset += 4;
                 switch (_patchType)
                 {
@@ -5155,7 +5152,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END3
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd3),
-                    string.Format("%XX ${0:X8} CalcLineBreakEnd3", GetTextAddress(_posCalcLineBreakEnd3)));
+                    $"%XX ${GetTextAddress(_posCalcLineBreakEnd3):X8} CalcLineBreakEnd3");
                 offset += 4;
             }
 
@@ -5168,13 +5165,13 @@ namespace EuropaEnginePatcher
                 // CALC_LINE_BREAK_START4
                 PatchByte(_data, _posCalcLineBreakStart4, 0xE9); // jmp CALC_LINE_BREAK4
                 PatchLong(_data, _posCalcLineBreakStart4 + 1, GetRelativeOffset(_posCalcLineBreakStart4 + 5, offset),
-                    string.Format("%XX ${0:X8} CalcLineBreak4", GetTextAddress(offset)));
+                    $"%XX ${GetTextAddress(offset):X8} CalcLineBreak4");
 
                 // CALC_LINE_BREAK4
                 PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
-                    string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
+                    $"%XX ${GetTextAddress(posGetCalcLineBreakAddr):X8} GetCalcLineBreakAddr");
                 offset += 4;
                 PatchByte(_data, offset, 0x8B); // mov ecx,[esp+20h]
                 offset++;
@@ -5209,7 +5206,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0x15);
                 offset++;
                 PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                    string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                    $"%XX ${_addrVarCalcLineBreakAddress:X8} varCalcLineBreakAddress");
                 offset += 4;
                 PatchByte(_data, offset, 0x8B); // mov ecx,[esp+20h]
                 offset++;
@@ -5242,7 +5239,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END4
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd4),
-                    string.Format("%XX ${0:X8} CalcLineBreakEnd4", GetTextAddress(_posCalcLineBreakEnd4)));
+                    $"%XX ${GetTextAddress(_posCalcLineBreakEnd4):X8} CalcLineBreakEnd4");
                 offset += 4;
             }
 
@@ -5253,13 +5250,13 @@ namespace EuropaEnginePatcher
             // CALC_LINE_BREAK_START5
             PatchByte(_data, _posCalcLineBreakStart5, 0xE9); // jmp CALC_LINE_BREAK5
             PatchLong(_data, _posCalcLineBreakStart5 + 1, GetRelativeOffset(_posCalcLineBreakStart5 + 5, offset),
-                string.Format("%XX ${0:X8} CalcLineBreak5", GetTextAddress(offset)));
+                $"%XX ${GetTextAddress(offset):X8} CalcLineBreak5");
 
             // CALC_LINE_BREAK5
             PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
-                string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
+                $"%XX ${GetTextAddress(posGetCalcLineBreakAddr):X8} GetCalcLineBreakAddr");
             offset += 4;
             switch (_patchType)
             {
@@ -5409,7 +5406,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                $"%XX ${_addrVarCalcLineBreakAddress:X8} varCalcLineBreakAddress");
             offset += 4;
             switch (_patchType)
             {
@@ -5659,7 +5656,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END5
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd5),
-                string.Format("%XX ${0:X8} CalcLineBreakEnd5", GetTextAddress(_posCalcLineBreakEnd5)));
+                $"%XX ${GetTextAddress(_posCalcLineBreakEnd5):X8} CalcLineBreakEnd5");
             offset += 4;
 
             #endregion
@@ -5669,13 +5666,13 @@ namespace EuropaEnginePatcher
             // CALC_LINE_BREAK_START6
             PatchByte(_data, _posCalcLineBreakStart6, 0xE9); // jmp CALC_LINE_BREAK6
             PatchLong(_data, _posCalcLineBreakStart6 + 1, GetRelativeOffset(_posCalcLineBreakStart6 + 5, offset),
-                string.Format("%XX ${0:X8} CalcLineBreak6", GetTextAddress(offset)));
+                $"%XX ${GetTextAddress(offset):X8} CalcLineBreak6");
 
             // CALC_LINE_BREAK6
             PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
-                string.Format("%XX ${0:X8} GetCalcLineBreakAddr", GetTextAddress(posGetCalcLineBreakAddr)));
+                $"%XX ${GetTextAddress(posGetCalcLineBreakAddr):X8} GetCalcLineBreakAddr");
             offset += 4;
             switch (_patchType)
             {
@@ -5805,7 +5802,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarCalcLineBreakAddress,
-                string.Format("%XX ${0:X8} varCalcLineBreakAddress", _addrVarCalcLineBreakAddress));
+                $"%XX ${_addrVarCalcLineBreakAddress:X8} varCalcLineBreakAddress");
             offset += 4;
             switch (_patchType)
             {
@@ -6067,7 +6064,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END6
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd6),
-                string.Format("%XX ${0:X8} CalcLineBreakEnd6", GetTextAddress(_posCalcLineBreakEnd6)));
+                $"%XX ${GetTextAddress(_posCalcLineBreakEnd6):X8} CalcLineBreakEnd6");
             offset += 4;
 
             #endregion
@@ -6087,7 +6084,7 @@ namespace EuropaEnginePatcher
         private static void PatchWinMmDll()
         {
             AppendLog("  WINMM.dll書き換え\n");
-            AppendLog(string.Format("  ${0:X8}\n\n", _posWinMmDll));
+            AppendLog($"  ${_posWinMmDll:X8}\n\n");
             _data[_posWinMmDll] = (byte) '_';
         }
 
@@ -6098,7 +6095,7 @@ namespace EuropaEnginePatcher
         {
             uint offset = _posIsDebuggerPresent;
             AppendLog("  IsDebuggerPresent書き換え\n");
-            AppendLog(string.Format("  ${0:X8}\n\n", offset));
+            AppendLog($"  ${offset:X8}\n\n");
             _data[offset++] = (byte) 'G';
             _data[offset++] = (byte) 'e';
             _data[offset++] = (byte) 't';
@@ -6125,7 +6122,7 @@ namespace EuropaEnginePatcher
         {
             uint offset = _posTextOutDc;
             AppendLog("  TextOutDC2埋め込み\n");
-            AppendLog(string.Format("  ${0:X8}\n\n", offset));
+            AppendLog($"  ${offset:X8}\n\n");
             _data[offset++] = (byte) 'T';
             _data[offset++] = (byte) 'e';
             _data[offset++] = (byte) 'x';
@@ -6146,7 +6143,7 @@ namespace EuropaEnginePatcher
         {
             uint offset = _posGetTextWidth;
             AppendLog("  GetTextWidth埋め込み\n");
-            AppendLog(string.Format("  ${0:X8}\n\n", offset));
+            AppendLog($"  ${offset:X8}\n\n");
             _data[offset++] = (byte) 'G';
             _data[offset++] = (byte) 'e';
             _data[offset++] = (byte) 't';
@@ -6169,7 +6166,7 @@ namespace EuropaEnginePatcher
         {
             uint offset = _posCalcLineBreak;
             AppendLog("  CalcLineBreak埋め込み\n");
-            AppendLog(string.Format("  ${0:X8}\n\n", offset));
+            AppendLog($"  ${offset:X8}\n\n");
             _data[offset++] = (byte) 'C';
             _data[offset++] = (byte) 'a';
             _data[offset++] = (byte) 'l';
@@ -6193,7 +6190,7 @@ namespace EuropaEnginePatcher
         {
             uint offset = _posStrNLen;
             AppendLog("  strnlen0埋め込み\n");
-            AppendLog(string.Format("  ${0:X8}\n\n", offset));
+            AppendLog($"  ${offset:X8}\n\n");
             _data[offset++] = (byte) 's';
             _data[offset++] = (byte) 't';
             _data[offset++] = (byte) 'r';
@@ -6240,8 +6237,7 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0xE9); // jmp GetDivisionNameOtherCase
                     offset++;
                     PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posGetDivisionName2 - 20),
-                        string.Format("%XX ${0:X8} GetDivisionNameOtherCase",
-                            GetTextAddress(_posGetDivisionName2 - 20)));
+                        $"%XX ${GetTextAddress(_posGetDivisionName2 - 20):X8} GetDivisionNameOtherCase");
                     offset += 4;
                     PatchByte(_data, offset, 0x90); // nop
                     offset++;
@@ -6291,13 +6287,12 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0xB9); // mov ecx,DivisionNameFormat
                     offset++;
                     PatchLong(_data, offset, addrDivisionNameFormat,
-                        string.Format("%XX ${0:X8} DivisionNameFormat", addrDivisionNameFormat));
+                        $"%XX ${addrDivisionNameFormat:X8} DivisionNameFormat");
                     offset += 4;
                     PatchByte(_data, offset, 0xE8); // call GetDivisionOrderName
                     offset++;
                     PatchLong(_data, offset, offsetGetDivisionOrderName,
-                        string.Format("%XX ${0:X8} GetDivisionOrderName",
-                            GetRelativeAddress(GetTextAddress(offset + 4), offsetGetDivisionOrderName)));
+                        $"%XX ${GetRelativeAddress(GetTextAddress(offset + 4), offsetGetDivisionOrderName):X8} GetDivisionOrderName");
                     break;
             }
 
@@ -6322,7 +6317,7 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0xE9); // jmp GetArmyNameOtherCase
                     offset++;
                     PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posGetArmyName2),
-                        string.Format("%XX ${0:X8} GetArmyNameOtherCase", GetTextAddress(_posGetArmyName2)));
+                        $"%XX ${GetTextAddress(_posGetArmyName2):X8} GetArmyNameOtherCase");
 
                     offset = _posGetArmyName2 + 25;
                     PatchByte(_data, offset, 0x56); // push esi
@@ -6337,7 +6332,7 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0xE9); // jmp GetArmyNameOtherCase
                     offset++;
                     PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posGetArmyName2),
-                        string.Format("%XX ${0:X8} GetArmyNameOtherCase", GetTextAddress(_posGetArmyName2)));
+                        $"%XX ${GetTextAddress(_posGetArmyName2):X8} GetArmyNameOtherCase");
 
                     offset = _posGetArmyName2 + 25;
                     PatchByte(_data, offset, 0x56); // push esi
@@ -6357,7 +6352,7 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0xE9); // jmp GetArmyNameOtherCase
                     offset++;
                     PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posGetArmyName2 - 13),
-                        string.Format("%XX ${0:X8} GetArmyNameOtherCase", GetTextAddress(_posGetArmyName2 - 13)));
+                        $"%XX ${GetTextAddress(_posGetArmyName2 - 13):X8} GetArmyNameOtherCase");
                     offset += 4;
                     PatchByte(_data, offset, 0x90); // nop
 
@@ -6455,13 +6450,12 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0xB9); // mov ecx,ArmyNameFormat
                     offset++;
                     PatchLong(_data, offset, addrArmyNameFormat,
-                        string.Format("%XX ${0:X8} ArmyNameFormat", addrArmyNameFormat));
+                        $"%XX ${addrArmyNameFormat:X8} ArmyNameFormat");
                     offset += 4;
                     PatchByte(_data, offset, 0xE8); // call GetArmyOrderName
                     offset++;
                     PatchLong(_data, offset, offsetGetArmyOrderName,
-                        string.Format("%XX ${0:X8} GetArmyOrderName",
-                            GetRelativeAddress(GetTextAddress(offset + 4), offsetGetArmyOrderName)));
+                        $"%XX ${GetRelativeAddress(GetTextAddress(offset + 4), offsetGetArmyOrderName):X8} GetArmyOrderName");
                     break;
             }
 
@@ -6480,13 +6474,13 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xE9); // jmp GetRankingNameOtherCase
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posGetRankingName2),
-                string.Format("%XX ${0:X8} GetRankingNameOtherCase", GetTextAddress(_posGetRankingName2)));
+                $"%XX ${GetTextAddress(_posGetRankingName2):X8} GetRankingNameOtherCase");
 
             offset = _posGetRankingName2;
             PatchByte(_data, offset, 0x68); // push NATION_RANKING
             offset++;
             PatchLong(_data, offset, _addrRankingSuffix,
-                string.Format("%XX ${0:X8} push RANKING_SUFFIX", _addrRankingSuffix));
+                $"%XX ${_addrRankingSuffix:X8} push RANKING_SUFFIX");
 
             AppendLog("\n");
         }
@@ -6498,7 +6492,7 @@ namespace EuropaEnginePatcher
         {
             uint offset = _posDivisionNameFormat;
             AppendLog("  師団名の書式文字列埋め込み\n");
-            AppendLog(string.Format("  ${0:X8}\n\n", offset));
+            AppendLog($"  ${offset:X8}\n\n");
             _data[offset++] = (byte) '%';
             _data[offset++] = (byte) 's';
             _data[offset++] = (byte) '%';
@@ -6519,7 +6513,7 @@ namespace EuropaEnginePatcher
         {
             uint offset = _posArmyNameFormat;
             AppendLog("  軍団名の書式文字列埋め込み\n");
-            AppendLog(string.Format("  ${0:X8}\n\n", offset));
+            AppendLog($"  ${offset:X8}\n\n");
             _data[offset++] = (byte) '%';
             _data[offset++] = (byte) 's';
             _data[offset++] = (byte) '%';
@@ -6538,7 +6532,7 @@ namespace EuropaEnginePatcher
         {
             uint offset = _posRankingSuffix;
             AppendLog("  RANKING_SUFFIX埋め込み\n");
-            AppendLog(string.Format("  ${0:X8}\n\n", offset));
+            AppendLog($"  ${offset:X8}\n\n");
             _data[offset++] = (byte) 'R';
             _data[offset++] = (byte) 'A';
             _data[offset++] = (byte) 'N';
@@ -6580,7 +6574,7 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0xE9); // jmp SetWindowed
                     offset++;
                     PatchLong(_data, offset, _posWindowed2 - (offset + 4),
-                        string.Format("%XX ${0:X8} SetWindowed", GetTextAddress(_posWindowed2)));
+                        $"%XX ${GetTextAddress(_posWindowed2):X8} SetWindowed");
                     offset += 4;
                     PatchByte(_data, offset, 0x90); // nop
                     break;
@@ -6600,11 +6594,11 @@ namespace EuropaEnginePatcher
         private static void PatchBinkPlay()
         {
             AppendLog("  binkplay.exe書き換え\n");
-            AppendLog(string.Format("  ${0:X8}\n", _posBinkPlay1));
+            AppendLog($"  ${_posBinkPlay1:X8}\n");
             _data[_posBinkPlay1] = (byte) '_';
             if (_patchType == PatchType.CrusaderKings || _patchType == PatchType.EuropaUniversalis2)
             {
-                AppendLog(string.Format("  ${0:X8}\n", _posBinkPlay2));
+                AppendLog($"  ${_posBinkPlay2:X8}\n");
                 _data[_posBinkPlay2] = (byte) '_';
             }
             AppendLog("\n");
@@ -6671,7 +6665,7 @@ namespace EuropaEnginePatcher
             AppendLog("  push EE_MAX_AMPHIB_MOD書き換え\n");
             uint offset = _posPushEeMaxAmphibModTitle;
             PatchLong(_data, offset, _addrEeMaxAmphibModTitle,
-                string.Format("%XX ${0:X8} push EE_MAX_AMPHIB_MOD", _addrEeMaxAmphibModTitle));
+                $"%XX ${_addrEeMaxAmphibModTitle:X8} push EE_MAX_AMPHIB_MOD");
             AppendLog("\n");
         }
 
@@ -6682,7 +6676,7 @@ namespace EuropaEnginePatcher
         {
             uint offset = _posEeMaxAmphibModTitle;
             AppendLog("  EE_MAX_AMPHIB_MOD_TITLE埋め込み\n");
-            AppendLog(string.Format("  ${0:X8}\n\n", offset));
+            AppendLog($"  ${offset:X8}\n\n");
             _data[offset++] = (byte) 'E';
             _data[offset++] = (byte) 'E';
             _data[offset++] = (byte) '_';
@@ -6724,7 +6718,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x3D);
             offset++;
             PatchLong(_data, offset, _addrVarStrNLenAddress,
-                string.Format("%XX ${0:X8} varStrNLenAddress", _addrVarStrNLenAddress));
+                $"%XX ${_addrVarStrNLenAddress:X8} varStrNLenAddress");
             offset += 4;
             PatchByte(_data, offset, 0x00);
             offset++;
@@ -6734,7 +6728,7 @@ namespace EuropaEnginePatcher
             offset++;
             PatchByte(_data, offset, 0x68); // push addrWinMmDll
             offset++;
-            PatchLong(_data, offset, _addrWinMmDll, string.Format("%06 ${0:X8} WINMM.dll", _addrWinMmDll));
+            PatchLong(_data, offset, _addrWinMmDll, $"%06 ${_addrWinMmDll:X8} WINMM.dll");
             offset += 4;
             PatchByte(_data, offset, 0xFF); // call GetModuleHandleA
             offset++;
@@ -6744,12 +6738,12 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.ArsenalOfDemocracy:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
-                        string.Format("%04 ${0:X8} IsDebuggerPresent", _addrIsDebuggerPresent));
+                        $"%04 ${_addrIsDebuggerPresent:X8} IsDebuggerPresent");
                     break;
 
                 default:
                     PatchLong(_data, offset, _addrGetModuleHandleA,
-                        string.Format("%04 ${0:X8} GetModuleHandleA", _addrGetModuleHandleA));
+                        $"%04 ${_addrGetModuleHandleA:X8} GetModuleHandleA");
                     break;
             }
             offset += 4;
@@ -6766,7 +6760,7 @@ namespace EuropaEnginePatcher
             // GET_STRNLEN0_ADDR_1
             PatchByte(_data, offset, 0x68); // push addrStrNLen
             offset++;
-            PatchLong(_data, offset, _addrStrNLen, string.Format("%00 ${0:X8} strnlen0", _addrCalcLineBreak));
+            PatchLong(_data, offset, _addrStrNLen, $"%00 ${_addrCalcLineBreak:X8} strnlen0");
             offset += 4;
             PatchByte(_data, offset, 0x50); // push eax
             offset++;
@@ -6775,7 +6769,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrGetProcAddress,
-                string.Format("%05 ${0:X8} GetProcAddress", _addrGetProcAddress));
+                $"%05 ${_addrGetProcAddress:X8} GetProcAddress");
             offset += 4;
             PatchByte(_data, offset, 0x85); // test eax,eax
             offset++;
@@ -6791,7 +6785,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xA3); // mov [varStrNLenAddress],eax
             offset++;
             PatchLong(_data, offset, _addrVarStrNLenAddress,
-                string.Format("%XX ${0:X8} varStrNLenAddress", _addrVarStrNLenAddress));
+                $"%XX ${_addrVarStrNLenAddress:X8} varStrNLenAddress");
             offset += 4;
             // GET_STRNLEN0_ADDR_3
             PatchByte(_data, offset, 0xC3); // retn
@@ -6802,7 +6796,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0xE8); // call GET_STRNLEN0_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetStrNLenAddr),
-                string.Format("%XX ${0:X8} GetStrNLenAddr", GetTextAddress(posGetStrNLenAddr)));
+                $"%XX ${GetTextAddress(posGetStrNLenAddr):X8} GetStrNLenAddr");
             offset += 4;
             PatchByte(_data, offset, 0x6A); // push 0000001Ch
             offset++;
@@ -6869,7 +6863,7 @@ namespace EuropaEnginePatcher
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarStrNLenAddress,
-                string.Format("%02 ${0:X8} varStrNLenAddress", _addrVarStrNLenAddress));
+                $"%02 ${_addrVarStrNLenAddress:X8} varStrNLenAddress");
             offset += 4;
             switch (_patchType)
             {
@@ -6945,7 +6939,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0xE8); // call GET_STRNLEN0_ADDR
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetStrNLenAddr),
-                    string.Format("%XX ${0:X8} GetStrNLenAddr", GetTextAddress(posGetStrNLenAddr)));
+                    $"%XX ${GetTextAddress(posGetStrNLenAddr):X8} GetStrNLenAddr");
                 offset += 4;
                 PatchByte(_data, offset, 0x6A); // push 0000001Ch
                 offset++;
@@ -6966,7 +6960,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0x15);
                 offset++;
                 PatchLong(_data, offset, _addrVarStrNLenAddress,
-                    string.Format("%02 ${0:X8} varStrNLenAddress", _addrVarStrNLenAddress));
+                    $"%02 ${_addrVarStrNLenAddress:X8} varStrNLenAddress");
                 offset += 4;
                 PatchByte(_data, offset, 0xC6); // mov [esp+eax+5Ch],0
                 offset++;
@@ -6988,7 +6982,7 @@ namespace EuropaEnginePatcher
                 // TERM_MODEL_NAME_START1
                 PatchByte(_data, _posTermModelNameStart1, 0xE9); // jmp TERM_MODEL_NAME
                 PatchLong(_data, _posTermModelNameStart1 + 1, GetRelativeOffset(_posTermModelNameStart1 + 5, offset),
-                    string.Format("%XX ${0:X8} TermBrigModelName", GetTextAddress(offset)));
+                    $"%XX ${GetTextAddress(offset):X8} TermBrigModelName");
                 PatchByte(_data, _posTermModelNameStart1 + 5, 0x90); // nop
                 PatchByte(_data, _posTermModelNameStart1 + 6, 0x90); // nop
                 PatchByte(_data, _posTermModelNameStart1 + 7, 0x90); // nop
@@ -6998,7 +6992,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0xE8); // call TERM_MODEL_NAME
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, posTermModelName),
-                    string.Format("%08 ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                    $"%08 ${GetTextAddress(posTermModelName):X8} TermModelName");
                 offset += 4;
                 PatchByte(_data, offset, 0x68); // push 000000FFh
                 offset++;
@@ -7013,7 +7007,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0xE9); // jmp TermBrigModelNameEnd
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posTermModelNameStart1 + 9),
-                    string.Format("%08 ${0:X8} TermBrigModelNameEnd", GetTextAddress(_posTermModelNameStart1 + 9)));
+                    $"%08 ${GetTextAddress(_posTermModelNameStart1 + 9):X8} TermBrigModelNameEnd");
                 offset += 4;
 
                 // TERM_MODEL_NAME_START2
@@ -7026,7 +7020,7 @@ namespace EuropaEnginePatcher
                 _posTermModelNameStart2 += 6;
                 PatchByte(_data, _posTermModelNameStart2, 0xE9); // jmp TERM_DIV_MODEL_NAME
                 PatchLong(_data, _posTermModelNameStart2 + 1, GetRelativeOffset(_posTermModelNameStart2 + 5, offset),
-                    string.Format("%XX ${0:X8} TermDivModelName", GetTextAddress(offset)));
+                    $"%XX ${GetTextAddress(offset):X8} TermDivModelName");
                 PatchByte(_data, _posTermModelNameStart2 + 5, 0x90); // nop
                 PatchByte(_data, _posTermModelNameStart2 + 6, 0x90); // nop
                 PatchByte(_data, _posTermModelNameStart2 + 7, 0x90); // nop
@@ -7036,7 +7030,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0xE8); // call TERM_MODEL_NAME
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, posTermModelName),
-                    string.Format("%08 ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                    $"%08 ${GetTextAddress(posTermModelName):X8} TermModelName");
                 offset += 4;
                 PatchByte(_data, offset, 0x68); // push 000000FFh
                 offset++;
@@ -7051,7 +7045,7 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, offset, 0xE9); // jmp TermDivModelNameEnd
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posTermModelNameStart2 + 9),
-                    string.Format("%08 ${0:X8} TermDivModelNameEnd", GetTextAddress(_posTermModelNameStart2 + 9)));
+                    $"%08 ${GetTextAddress(_posTermModelNameStart2 + 9):X8} TermDivModelNameEnd");
                 offset += 4;
             }
             else
@@ -7071,13 +7065,13 @@ namespace EuropaEnginePatcher
                 PatchByte(_data, _posTermModelNameStart1, 0xE8); // call TERM_MODEL_NAME
                 PatchLong(_data, _posTermModelNameStart1 + 1,
                     GetRelativeOffset(_posTermModelNameStart1 + 5, posTermModelName),
-                    string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                    $"%XX ${GetTextAddress(posTermModelName):X8} TermModelName");
 
                 // TERM_MODEL_NAME_START2
                 PatchByte(_data, _posTermModelNameStart2, 0xE8); // call TERM_MODEL_NAME
                 PatchLong(_data, _posTermModelNameStart2 + 1,
                     GetRelativeOffset(_posTermModelNameStart2 + 5, posTermModelName),
-                    string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                    $"%XX ${GetTextAddress(posTermModelName):X8} TermModelName");
 
                 if (_patchType == PatchType.DarkestHour)
                 {
@@ -7085,49 +7079,49 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, _posTermModelNameStart3, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart3 + 1,
                         GetRelativeOffset(_posTermModelNameStart3 + 5, posTermModelName),
-                        string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                        $"%XX ${GetTextAddress(posTermModelName):X8} TermModelName");
 
                     // TERM_MODEL_NAME_START4
                     PatchByte(_data, _posTermModelNameStart4, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart4 + 1,
                         GetRelativeOffset(_posTermModelNameStart4 + 5, posTermModelName),
-                        string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                        $"%XX ${GetTextAddress(posTermModelName):X8} TermModelName");
 
                     // TERM_MODEL_NAME_START5
                     PatchByte(_data, _posTermModelNameStart5, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart5 + 1,
                         GetRelativeOffset(_posTermModelNameStart5 + 5, posTermModelName),
-                        string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                        $"%XX ${GetTextAddress(posTermModelName):X8} TermModelName");
 
                     // TERM_MODEL_NAME_START6
                     PatchByte(_data, _posTermModelNameStart6, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart6 + 1,
                         GetRelativeOffset(_posTermModelNameStart6 + 5, posTermModelName),
-                        string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                        $"%XX ${GetTextAddress(posTermModelName):X8} TermModelName");
 
                     // TERM_MODEL_NAME_START7
                     PatchByte(_data, _posTermModelNameStart7, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart7 + 1,
                         GetRelativeOffset(_posTermModelNameStart7 + 5, posTermModelName),
-                        string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                        $"%XX ${GetTextAddress(posTermModelName):X8} TermModelName");
 
                     // TERM_MODEL_NAME_START8
                     PatchByte(_data, _posTermModelNameStart8, 0xE8); // call TERM_MODEL_NAME
                     PatchLong(_data, _posTermModelNameStart8 + 1,
                         GetRelativeOffset(_posTermModelNameStart8 + 5, posTermModelName),
-                        string.Format("%XX ${0:X8} TermModelName", GetTextAddress(posTermModelName)));
+                        $"%XX ${GetTextAddress(posTermModelName):X8} TermModelName");
 
                     // TERM_MODEL_NAME_START9
                     PatchByte(_data, _posTermModelNameStart9, 0xE8); // call TERM_MODEL_NAME2
                     PatchLong(_data, _posTermModelNameStart9 + 1,
                         GetRelativeOffset(_posTermModelNameStart9 + 5, posTermModelName2),
-                        string.Format("%XX ${0:X8} TermModelName2", GetTextAddress(posTermModelName2)));
+                        $"%XX ${GetTextAddress(posTermModelName2):X8} TermModelName2");
 
                     // TERM_MODEL_NAME_START10
                     PatchByte(_data, _posTermModelNameStart10, 0xE8); // call TERM_MODEL_NAME2
                     PatchLong(_data, _posTermModelNameStart10 + 1,
                         GetRelativeOffset(_posTermModelNameStart10 + 5, posTermModelName2),
-                        string.Format("%XX ${0:X8} TermModelName2", GetTextAddress(posTermModelName2)));
+                        $"%XX ${GetTextAddress(posTermModelName2):X8} TermModelName2");
                 }
             }
 
@@ -7157,19 +7151,18 @@ namespace EuropaEnginePatcher
             }
             sb.AppendLine();
             AppendLog(sb.ToString());
-            AppendLog(string.Format("  ファイル上の開始位置: ${0:X8}\n", start));
-            AppendLog(string.Format("  ファイル上の終了位置: ${0:X8}\n", start + size - 1));
+            AppendLog($"  ファイル上の開始位置: ${start:X8}\n");
+            AppendLog($"  ファイル上の終了位置: ${start + size - 1:X8}\n");
 
-            AppendLog(string.Format("  検索範囲 ${0:X8}～${1:X8} (のこり{2}Bytes)\n", start, start + size - 1, size));
+            AppendLog($"  検索範囲 ${start:X8}～${start + size - 1:X8} (のこり{size}Bytes)\n");
             List<uint> result = new List<uint>();
             for (uint offset = start; offset <= start + size - pattern.Length; offset++)
             {
                 if (IsBinaryMatch(target, pattern, offset))
                 {
                     result.Add(offset);
-                    AppendLog(string.Format("  *** Find ${0:X8}\n", offset));
-                    AppendLog(string.Format("  検索範囲 ${0:X8}～${1:X8} (のこり{2}Bytes)\n", offset + 1, start + size - 1,
-                        start + size - offset - 1));
+                    AppendLog($"  *** Find ${offset:X8}\n");
+                    AppendLog($"  検索範囲 ${offset + 1:X8}～${start + size - 1:X8} (のこり{start + size - offset - 1}Bytes)\n");
                 }
             }
             return result;
@@ -7201,7 +7194,7 @@ namespace EuropaEnginePatcher
         /// <param name="val">書き換える値</param>
         private static void PatchByte(byte[] target, uint offset, byte val)
         {
-            AppendLog(string.Format("  ${0:X8} {1:X2}->{2:X2}\n", offset, target[offset], val));
+            AppendLog($"  ${offset:X8} {target[offset]:X2}->{val:X2}\n");
             target[offset] = val;
         }
 
@@ -7214,7 +7207,7 @@ namespace EuropaEnginePatcher
         /// <param name="message">ログ出力するメッセージ</param>
         private static void PatchLong(byte[] target, uint offset, uint val, string message)
         {
-            AppendLog(string.Format("  ${0:X8} {1:X8}->{2:X8} ({3})\n", offset, GetLong(offset), val, message));
+            AppendLog($"  ${offset:X8} {GetLong(offset):X8}->{val:X8} ({message})\n");
             target[offset] = (byte) (val & 0x000000FF);
             target[offset + 1] = (byte) ((val & 0x0000FF00) >> 8);
             target[offset + 2] = (byte) ((val & 0x00FF0000) >> 16);
