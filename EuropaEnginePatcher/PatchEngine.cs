@@ -4719,7 +4719,7 @@ namespace EuropaEnginePatcher
 
             #endregion
 
-            #region 改行位置計算処理2 - 用途不明
+            #region 改行位置計算処理2 - 生産画面
 
             // CALC_LINE_BREAK_START_2
             PatchByte(_data, _posCalcLineBreakStart2, 0xE9); // jmp CALC_LINE_BREAK_2
@@ -4792,13 +4792,13 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.ArsenalOfDemocracy:
-                    PatchByte(_data, offset, 0x8D); // lea esi,[esi-01h]
+                    PatchByte(_data, offset, 0x8D); // lea edi,[edi-01h]
                     offset++;
-                    PatchByte(_data, offset, 0x76);
+                    PatchByte(_data, offset, 0x7F);
                     offset++;
                     PatchByte(_data, offset, 0xFF);
                     offset++;
-                    PatchByte(_data, offset, 0x88); // lea eax,[esp+10h]
+                    PatchByte(_data, offset, 0x8D); // lea eax,[esp+10h]
                     offset++;
                     PatchByte(_data, offset, 0x44);
                     offset++;
@@ -4806,7 +4806,7 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x10);
                     offset++;
-                    PatchByte(_data, offset, 0x56); // push esi
+                    PatchByte(_data, offset, 0x57); // push edi
                     offset++;
                     PatchByte(_data, offset, 0x50); // push eax
                     offset++;
@@ -5105,9 +5105,9 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.ArsenalOfDemocracy:
-                    PatchByte(_data, offset, 0x01); // add esi,eax
+                    PatchByte(_data, offset, 0x01); // add edi,eax
                     offset++;
-                    PatchByte(_data, offset, 0xC6);
+                    PatchByte(_data, offset, 0xC7);
                     offset++;
                     PatchByte(_data, offset, 0x8D); // lea ecx,[esp+00000210h]
                     offset++;
