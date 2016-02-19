@@ -820,12 +820,12 @@ namespace EuropaEnginePatcher
             switch (GameType)
             {
                 case GameType.DarkestHour:
+                case GameType.ArsenalOfDemocracy:
                     return true;
 
                 case GameType.Victoria:
                 case GameType.HeartsOfIron:
                 case GameType.HeartsOfIron2:
-                case GameType.ArsenalOfDemocracy:
                     return false;
 
                 default:
