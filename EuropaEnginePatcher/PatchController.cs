@@ -847,8 +847,8 @@ namespace EuropaEnginePatcher
         ForTheGlory, // For The Glory
         Victoria, // Victoria
         HeartsOfIron, // Hearts of Iron
-        HeartsOfIron2, // Hearts of Iron 2 1.3-
-        ArsenalOfDemocracy, // Arsenal of Democracy 1.08-
-        DarkestHour // Darkest Hour 1.03-
+        HeartsOfIron2, // Hearts of Iron 2
+        ArsenalOfDemocracy, // Arsenal of Democracy
+        DarkestHour // Darkest Hour
     }
 }

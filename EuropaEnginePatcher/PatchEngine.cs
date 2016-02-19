@@ -429,6 +429,11 @@ namespace EuropaEnginePatcher
                         _patchType = PatchType.ArsenalOfDemocracy107;
                         AppendLog("PatchType: Arsenal of Democracy 1.07\n\n");
                     }
+                    else if (_gameVersion <= 109)
+                    {
+                        _patchType = PatchType.ArsenalOfDemocracy109;
+                        AppendLog("PatchType: Arsenal of Democracy 1.09\n\n");
+                    }
                     else
                     {
                         _patchType = PatchType.ArsenalOfDemocracy;
@@ -883,6 +888,7 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     if (!ScanLatinToUpper())
@@ -939,9 +945,9 @@ namespace EuropaEnginePatcher
                     case PatchType.HeartsOfIron2:
                     case PatchType.HeartsOfIron212:
                     case PatchType.IronCrossHoI2:
-                    case PatchType.ArsenalOfDemocracy:
                     case PatchType.ArsenalOfDemocracy104:
                     case PatchType.ArsenalOfDemocracy107:
+                    case PatchType.ArsenalOfDemocracy109:
                     case PatchType.DarkestHour:
                     case PatchType.DarkestHour102:
                         if (!ScanGetDivisionName())
@@ -957,6 +963,17 @@ namespace EuropaEnginePatcher
                             return false;
                         }
                         if (!ScanArmyNameFormat())
+                        {
+                            return false;
+                        }
+                        break;
+
+                    case PatchType.ArsenalOfDemocracy:
+                        if (!ScanGetDivisionName())
+                        {
+                            return false;
+                        }
+                        if (!ScanGetArmyName())
                         {
                             return false;
                         }
@@ -1043,6 +1060,7 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     if (!ScanTermModelName())
@@ -1094,10 +1112,23 @@ namespace EuropaEnginePatcher
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%07 TextOutの処理を埋め込む位置\"を探します\n");
 
-            byte[] pattern =
+            byte[] pattern;
+            switch (_patchType)
             {
-                0x8B, 0x45, 0x18, 0x8B, 0x48, 0x0C, 0x89, 0x4D
-            };
+                case PatchType.ArsenalOfDemocracy:
+                    pattern = new byte[]
+                    {
+                        0x8B, 0x45, 0x78, 0x8B, 0x48, 0x0C, 0x89, 0x4D
+                    };
+                    break;
+
+                default:
+                    pattern = new byte[]
+                    {
+                        0x8B, 0x45, 0x18, 0x8B, 0x48, 0x0C, 0x89, 0x4D
+                    };
+                    break;
+            }
             List<uint> l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
             if (l.Count == 0)
             {
@@ -1144,13 +1175,23 @@ namespace EuropaEnginePatcher
                     };
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                     pattern = new byte[]
                     {
                         0x8B, 0x55, 0x18, 0x8B, 0x02, 0x8B, 0x4D, 0x18,
                         0x8B, 0x50, 0x0C, 0xFF, 0xD2, 0x8B, 0x45, 0x0C,
                         0x8B, 0xE5, 0x5D, 0xC2, 0x18, 0x00
+                    };
+                    break;
+
+                case PatchType.ArsenalOfDemocracy:
+                    pattern = new byte[]
+                    {
+                        0x8B, 0x55, 0x78, 0x8B, 0x02, 0x8B, 0x4D, 0x78,
+                        0x8B, 0x50, 0x0C, 0xFF, 0xD2, 0x8B, 0x45, 0x6C,
+                        0x83, 0xC5, 0x60, 0x8B, 0xE5, 0x5D, 0xC2, 0x18,
+                        0x00
                     };
                     break;
 
@@ -1198,6 +1239,14 @@ namespace EuropaEnginePatcher
                     };
                     break;
 
+                case PatchType.ArsenalOfDemocracy:
+                    pattern = new byte[]
+                    {
+                        0xC7, 0x45, 0xF4, 0x00, 0x00, 0x00, 0x00, 0x8B,
+                        0x45, 0x08, 0x8A, 0x08, 0x88, 0x4D
+                    };
+                    break;
+
                 default:
                     pattern = new byte[]
                     {
@@ -1226,11 +1275,26 @@ namespace EuropaEnginePatcher
         {
             AppendLog("ScanBinary - 特定バイナリを探す\n");
             AppendLog("  \"%10 文字列幅の処理が終了したらジャンプさせる位置(の3バイト前)\"を探します\n");
-            byte[] pattern =
+
+            byte[] pattern;
+            switch (_patchType)
             {
-                0x8B, 0x45, 0xFC, 0x8B, 0xE5, 0x5D, 0xC2, 0x04,
-                0x00
-            };
+                case PatchType.ArsenalOfDemocracy:
+                    pattern = new byte[]
+                    {
+                        0x8B, 0x45, 0xF4, 0x8B, 0xE5, 0x5D, 0xC2, 0x04,
+                        0x00
+                    };
+                    break;
+
+                default:
+                    pattern = new byte[]
+                    {
+                        0x8B, 0x45, 0xFC, 0x8B, 0xE5, 0x5D, 0xC2, 0x04,
+                        0x00
+                    };
+                    break;
+            }
             List<uint> l = BinaryScan(_data, pattern, _posGetTextWidthStart,
                 _sizeTextSection - (_posGetTextWidthStart - _posTextSection));
             if (l.Count == 0)
@@ -1256,7 +1320,14 @@ namespace EuropaEnginePatcher
             switch (_patchType)
             {
                 case PatchType.ArsenalOfDemocracy:
+                    pattern = new byte[]
+                    {
+                        0x75, 0x1A, 0x8B, 0xCB, 0x8D, 0x51, 0x01
+                    };
+                    break;
+
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                     pattern = new byte[]
                     {
                         0x75, 0x1A, 0x8B, 0xC7, 0x8D, 0x50, 0x01
@@ -1296,6 +1367,7 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                     pattern = new byte[]
                     {
                         0x3D, 0xA7, 0x00, 0x00, 0x00, 0x0F, 0x8F
@@ -1631,7 +1703,7 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart6 = l[1];
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy109:
                     pattern = new byte[]
                     {
                         0x88, 0x9C, 0x05, 0xFC, 0xFB, 0xFF, 0xFF, 0x40
@@ -1666,6 +1738,63 @@ namespace EuropaEnginePatcher
                         return false;
                     }
                     _posCalcLineBreakStart5 = l[0];
+                    break;
+
+                case PatchType.ArsenalOfDemocracy:
+                    pattern = new byte[]
+                    {
+                        0x88, 0x5C, 0x14, 0x0C, 0x42
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakStart1 = l[0];
+
+                    pattern = new byte[]
+                    {
+                        0x88, 0x5C, 0x14, 0x10, 0x42
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakStart2 = l[0];
+
+                    pattern = new byte[]
+                    {
+                        0x88, 0x94, 0x0D, 0xE8, 0xFD, 0xFF, 0xFF, 0x41
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakStart3 = l[0];
+
+                    pattern = new byte[]
+                    {
+                        0x88, 0x9C, 0x0D, 0xE8, 0xFD, 0xFF, 0xFF, 0x41
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakStart5 = l[0];
+
+                    pattern = new byte[]
+                    {
+                        0x88, 0x9C, 0x0D, 0xEC, 0xFD, 0xFF, 0xFF, 0x41
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakStart6 = l[0];
                     break;
             }
 
@@ -2003,7 +2132,7 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd6 = l[1] + (uint) pattern.Length;
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy109:
                     pattern = new byte[]
                     {
                         0xC6, 0x84, 0x05, 0xFC, 0xFB, 0xFF, 0xFF, 0x20,
@@ -2056,6 +2185,68 @@ namespace EuropaEnginePatcher
                     }
                     _posCalcLineBreakEnd6 = l[0] + (uint) pattern.Length;
                     break;
+
+                case PatchType.ArsenalOfDemocracy:
+                    pattern = new byte[]
+                    {
+                        0x8D, 0x84, 0x24, 0x0C, 0x02, 0x00, 0x00, 0x66,
+                        0xC7, 0x44, 0x14, 0x0C, 0x20, 0x00
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakEnd1 = l[0] + (uint) pattern.Length;
+
+                    pattern = new byte[]
+                    {
+                        0x8D, 0x84, 0x24, 0x10, 0x02, 0x00, 0x00, 0x66,
+                        0xC7, 0x44, 0x14, 0x10, 0x20, 0x00
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakEnd2 = l[0] + (uint) pattern.Length;
+
+                    pattern = new byte[]
+                    {
+                        0x8D, 0x85, 0xE8, 0xFB, 0xFF, 0xFF, 0x66, 0xC7,
+                        0x84, 0x0D, 0xE8, 0xFD, 0xFF, 0xFF, 0x20, 0x00
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
+
+                    pattern = new byte[]
+                    {
+                        0x8D, 0x85, 0xE8, 0xF9, 0xFF, 0xFF, 0x66, 0xC7,
+                        0x84, 0x0D, 0xE8, 0xFD, 0xFF, 0xFF, 0x20, 0x00
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
+
+                    pattern = new byte[]
+                    {
+                        0x8D, 0x85, 0xEC, 0xFB, 0xFF, 0xFF, 0x66, 0xC7,
+                        0x84, 0x0D, 0xEC, 0xFD, 0xFF, 0xFF, 0x20, 0x00
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakEnd6 = l[0] + (uint) pattern.Length;
+                    break;
             }
 
             AppendLog("ScanBinary passed\n\n");
@@ -2099,9 +2290,9 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
@@ -2127,6 +2318,30 @@ namespace EuropaEnginePatcher
                         return false;
                     }
                     _posGetDivisionName2 = l[0];
+                    break;
+
+                case PatchType.ArsenalOfDemocracy:
+                    pattern = new byte[]
+                    {
+                        0x2E, 0x20, 0x00, 0x00
+                    };
+                    l = BinaryScan(_data, pattern, _posRdataSection, _sizeRdataSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    uint addrDivisionAbbrev = GetRdataAddress(l[0]);
+                    pattern = new byte[]
+                    {
+                        0x68, (byte) (addrDivisionAbbrev & 0xFF), (byte) ((addrDivisionAbbrev >> 8) & 0xFF),
+                        (byte) ((addrDivisionAbbrev >> 16) & 0xFF), (byte) (addrDivisionAbbrev >> 24)
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posGetDivisionName1 = l[0] + 1;
                     break;
             }
 
@@ -2154,6 +2369,7 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                     l = BinaryScan(_data, pattern, _posRdataSection, _sizeRdataSection);
                     break;
 
@@ -2240,9 +2456,9 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
@@ -2269,6 +2485,31 @@ namespace EuropaEnginePatcher
                     }
                     _posGetArmyName2 = l[0];
                     break;
+
+                case PatchType.ArsenalOfDemocracy:
+                    pattern = new byte[]
+                    {
+                        0xC7, 0x45, 0xFC, 0xFF, 0xFF, 0xFF, 0xFF, 0x8B,
+                        0x4D, 0x08, 0x51
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posGetArmyName1 = l[0] + 7;
+
+                    pattern = new byte[]
+                    {
+                        0x83, 0xC4, 0x08, 0x6A, 0x20
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posGetArmyName2 = l[0] + 3;
+                    break;
             }
 
             AppendLog("ScanBinary passed\n\n");
@@ -2294,6 +2535,7 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                     l = BinaryScan(_data, pattern, _posRdataSection, _sizeRdataSection);
                     break;
 
@@ -2835,6 +3077,14 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy:
                     pattern = new byte[]
                     {
+                        0xC6, 0x85, 0x50, 0xFF, 0xFF, 0xFF, 0x00, 0x6A,
+                        0x00
+                    };
+                    break;
+
+                case PatchType.ArsenalOfDemocracy109:
+                    pattern = new byte[]
+                    {
                         0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x45, 0x90,
                         0x00
                     };
@@ -2886,6 +3136,7 @@ namespace EuropaEnginePatcher
             switch (_patchType)
             {
                 case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy109:
                     _posTermModelNameStart1 = l[0];
                     _posTermModelNameStart2 = l[1];
                     break;
@@ -2949,6 +3200,7 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     PatchLatinToUpper();
@@ -2960,6 +3212,7 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.ForTheGlory:
                 case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy109:
                     PatchIsDebuggerPresent();
                     break;
             }
@@ -2992,15 +3245,20 @@ namespace EuropaEnginePatcher
                     case PatchType.HeartsOfIron2:
                     case PatchType.HeartsOfIron212:
                     case PatchType.IronCrossHoI2:
-                    case PatchType.ArsenalOfDemocracy:
                     case PatchType.ArsenalOfDemocracy104:
                     case PatchType.ArsenalOfDemocracy107:
+                    case PatchType.ArsenalOfDemocracy109:
                     case PatchType.DarkestHour:
                     case PatchType.DarkestHour102:
                         PatchGetDivisionName();
                         EmbedDivisionNameFormat();
                         PatchGetArmyName();
                         EmbedArmyNameFormat();
+                        break;
+
+                    case PatchType.ArsenalOfDemocracy:
+                        PatchGetDivisionName();
+                        PatchGetArmyName();
                         break;
                 }
             }
@@ -3078,6 +3336,7 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     PatchTermModelName();
@@ -3097,7 +3356,7 @@ namespace EuropaEnginePatcher
         {
             AppendLog("  proc TextOut書き換え\n");
             uint offset = _posTextOutStart;
-            PatchByte(_data, offset, 0x83);
+            PatchByte(_data, offset, 0x83); // cmp [varTextOutDc2Address],0
             offset++;
             PatchByte(_data, offset, 0x3D);
             offset++;
@@ -3106,7 +3365,7 @@ namespace EuropaEnginePatcher
             offset += 4;
             PatchByte(_data, offset, 0x00);
             offset++;
-            PatchByte(_data, offset, 0x75);
+            PatchByte(_data, offset, 0x75); // jne TEXT_OUT_3
             offset++;
             switch (_patchType)
             {
@@ -3119,11 +3378,11 @@ namespace EuropaEnginePatcher
                     break;
             }
             offset++;
-            PatchByte(_data, offset, 0x68);
+            PatchByte(_data, offset, 0x68); // push addrWinMmDll
             offset++;
             PatchLong(_data, offset, _addrWinMmDll, $"%06 ${_addrWinMmDll:X8} WINMM.dll");
             offset += 4;
-            PatchByte(_data, offset, 0xFF);
+            PatchByte(_data, offset, 0xFF); // call GetModuleHandleA/IsDebuggerPresent
             offset++;
             PatchByte(_data, offset, 0x15);
             offset++;
@@ -3131,6 +3390,7 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.ForTheGlory:
                 case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy109:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
                         $"%04 ${_addrIsDebuggerPresent:X8} IsDebuggerPresent");
                     break;
@@ -3141,45 +3401,47 @@ namespace EuropaEnginePatcher
                     break;
             }
             offset += 4;
-            PatchByte(_data, offset, 0x85);
+            PatchByte(_data, offset, 0x85); // test eax,eax
             offset++;
             PatchByte(_data, offset, 0xC0);
             offset++;
-            PatchByte(_data, offset, 0x75);
+            PatchByte(_data, offset, 0x75); // jne TEXT_OUT_1
             offset++;
             PatchByte(_data, offset, 0x01);
             offset++;
-            PatchByte(_data, offset, 0xF4);
+            PatchByte(_data, offset, 0xF4); // hlt
             offset++;
-            PatchByte(_data, offset, 0x68);
+            // TEXT_OUT_1
+            PatchByte(_data, offset, 0x68); // push addrTextOutDc2
             offset++;
             PatchLong(_data, offset, _addrTextOutDc, $"%00 ${_addrTextOutDc:X8} TextOutDC2");
             offset += 4;
-            PatchByte(_data, offset, 0x50);
+            PatchByte(_data, offset, 0x50); // push eax
             offset++;
-            PatchByte(_data, offset, 0xFF);
+            PatchByte(_data, offset, 0xFF); // call GetProcAddress
             offset++;
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrGetProcAddress,
                 $"%05 ${_addrGetProcAddress:X8} GetProcAddress");
             offset += 4;
-            PatchByte(_data, offset, 0x85);
+            PatchByte(_data, offset, 0x85); // test eax,eax
             offset++;
             PatchByte(_data, offset, 0xC0);
             offset++;
-            PatchByte(_data, offset, 0x75);
+            PatchByte(_data, offset, 0x75); // jne TEXT_OUT_2
             offset++;
             PatchByte(_data, offset, 0x01);
             offset++;
-            PatchByte(_data, offset, 0xF4);
+            PatchByte(_data, offset, 0xF4); // hlt
             offset++;
-            PatchByte(_data, offset, 0xA3);
+            // TEXT_OUT_2
+            PatchByte(_data, offset, 0xA3); // mov [varTextOutDc2Address],eax
             offset++;
             PatchLong(_data, offset, _addrVarTextOutDcAddress,
                 $"%02 ${_addrVarTextOutDcAddress:X8} varTextOutDC2Address");
             offset += 4;
-            PatchByte(_data, offset, 0x8B);
+            PatchByte(_data, offset, 0x8B); // mov ecx,[ebp-64h/6Ch/9Ch/+58h]
             offset++;
             if (_patchType == PatchType.CrusaderKings)
             {
@@ -3202,12 +3464,15 @@ namespace EuropaEnginePatcher
                     case PatchType.HeartsOfIron2:
                     case PatchType.HeartsOfIron212:
                     case PatchType.IronCrossHoI2:
-                    case PatchType.ArsenalOfDemocracy:
                     case PatchType.ArsenalOfDemocracy104:
                     case PatchType.ArsenalOfDemocracy107:
+                    case PatchType.ArsenalOfDemocracy109:
                     case PatchType.DarkestHour:
                     case PatchType.DarkestHour102:
                         PatchByte(_data, offset, 0x94);
+                        break;
+                    case PatchType.ArsenalOfDemocracy:
+                        PatchByte(_data, offset, 0x58);
                         break;
                     default:
                         PatchByte(_data, offset, 0x98);
@@ -3215,7 +3480,8 @@ namespace EuropaEnginePatcher
                 }
             }
             offset++;
-            PatchByte(_data, offset, 0x8B);
+            // TEXT_OUT_3
+            PatchByte(_data, offset, 0x8B); // mov edx,[ecx+0Ch]
             offset++;
             PatchByte(_data, offset, 0x51);
             offset++;
@@ -3223,7 +3489,7 @@ namespace EuropaEnginePatcher
             offset++;
             if (_patchType == PatchType.ForTheGlory)
             {
-                PatchByte(_data, offset, 0x33);
+                PatchByte(_data, offset, 0x33); // TODO: アセンブリコード記載
                 offset++;
                 PatchByte(_data, offset, 0xC0);
                 offset++;
@@ -3289,7 +3555,7 @@ namespace EuropaEnginePatcher
             }
             else
             {
-                PatchByte(_data, offset, 0x81);
+                PatchByte(_data, offset, 0x81); // cmp [edx+14h/19h],646C6F62h/62616D72h
                 offset++;
                 PatchByte(_data, offset, 0x7A);
                 offset++;
@@ -3306,6 +3572,7 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy:
                     case PatchType.ArsenalOfDemocracy104:
                     case PatchType.ArsenalOfDemocracy107:
+                    case PatchType.ArsenalOfDemocracy109:
                     case PatchType.DarkestHour:
                     case PatchType.DarkestHour102:
                         PatchByte(_data, offset, 0x19);
@@ -3338,7 +3605,7 @@ namespace EuropaEnginePatcher
                         break;
                 }
                 offset++;
-                PatchByte(_data, offset, 0xB8);
+                PatchByte(_data, offset, 0xB8); // mov eax,00000001h
                 offset++;
                 PatchByte(_data, offset, 0x01);
                 offset++;
@@ -3348,19 +3615,20 @@ namespace EuropaEnginePatcher
                 offset++;
                 PatchByte(_data, offset, 0x00);
                 offset++;
-                PatchByte(_data, offset, 0x74);
+                PatchByte(_data, offset, 0x74); // je TEXT_OUT_4
                 offset++;
                 PatchByte(_data, offset, 0x02);
                 offset++;
-                PatchByte(_data, offset, 0x33);
+                PatchByte(_data, offset, 0x33); // xor eax,eax
                 offset++;
                 PatchByte(_data, offset, 0xC0);
                 offset++;
-                PatchByte(_data, offset, 0x8B);
+                // TEXT_OUT_4
+                PatchByte(_data, offset, 0x8B); // mov edx,eax
                 offset++;
                 PatchByte(_data, offset, 0xD0);
                 offset++;
-                PatchByte(_data, offset, 0x80);
+                PatchByte(_data, offset, 0x80); // cmp [ecx+00000414h],0
                 offset++;
                 PatchByte(_data, offset, 0xB9);
                 offset++;
@@ -3374,47 +3642,48 @@ namespace EuropaEnginePatcher
                 offset++;
                 PatchByte(_data, offset, 0x00);
                 offset++;
-                PatchByte(_data, offset, 0x74);
+                PatchByte(_data, offset, 0x74); // je TEXT_OUT_5
                 offset++;
                 PatchByte(_data, offset, 0x03);
                 offset++;
-                PatchByte(_data, offset, 0x83);
+                PatchByte(_data, offset, 0x83); // or eax,00000002h
                 offset++;
                 PatchByte(_data, offset, 0xC8);
                 offset++;
                 PatchByte(_data, offset, 0x02);
                 offset++;
-                PatchByte(_data, offset, 0x50);
+                // TEXT_OUT_5
+                PatchByte(_data, offset, 0x50); // push eax
                 offset++;
-                PatchByte(_data, offset, 0xFF);
+                PatchByte(_data, offset, 0xFF); // push [ebp+1Ch/7Ch]
                 offset++;
                 PatchByte(_data, offset, 0x75);
                 offset++;
-                PatchByte(_data, offset, 0x1C);
+                PatchByte(_data, offset, (byte) (_patchType == PatchType.ArsenalOfDemocracy ? 0x7C : 0x1C));
                 offset++;
-                PatchByte(_data, offset, 0x8B);
+                PatchByte(_data, offset, 0x8B); // mov eax,[ecx+10h]
                 offset++;
                 PatchByte(_data, offset, 0x41);
                 offset++;
                 PatchByte(_data, offset, 0x10);
                 offset++;
-                PatchByte(_data, offset, 0x48);
+                PatchByte(_data, offset, 0x48); // dec eax
                 offset++;
-                PatchByte(_data, offset, 0x48);
+                PatchByte(_data, offset, 0x48); // dec eax
                 offset++;
-                PatchByte(_data, offset, 0x48);
+                PatchByte(_data, offset, 0x48); // dec eax
                 offset++;
-                PatchByte(_data, offset, 0x2B);
+                PatchByte(_data, offset, 0x2B); // sub eax,edx
                 offset++;
                 PatchByte(_data, offset, 0xC2);
                 offset++;
-                PatchByte(_data, offset, 0x8B);
+                PatchByte(_data, offset, 0x8B); // mov edx,[ecx+0Ch]
                 offset++;
                 PatchByte(_data, offset, 0x51);
                 offset++;
                 PatchByte(_data, offset, 0x0C);
                 offset++;
-                PatchByte(_data, offset, 0x81);
+                PatchByte(_data, offset, 0x81); // cmp [edx+0Ah],61697261h
                 offset++;
                 PatchByte(_data, offset, 0x7A);
                 offset++;
@@ -3428,54 +3697,55 @@ namespace EuropaEnginePatcher
                 offset++;
                 PatchByte(_data, offset, 0x61);
                 offset++;
-                PatchByte(_data, offset, 0x75);
+                PatchByte(_data, offset, 0x75); // jne TEXT_OUT_6
                 offset++;
                 PatchByte(_data, offset, 0x01);
                 offset++;
-                PatchByte(_data, offset, 0x48);
+                PatchByte(_data, offset, 0x48); // dec eax
             }
             offset++;
-            PatchByte(_data, offset, 0x50);
+            // TEXT_OUT_6
+            PatchByte(_data, offset, 0x50); // push eax
             offset++;
-            PatchByte(_data, offset, 0x8B);
+            PatchByte(_data, offset, 0x8B); // mov edx,[ebp+18h/78h]
             offset++;
             PatchByte(_data, offset, 0x55);
             offset++;
-            PatchByte(_data, offset, 0x18);
+            PatchByte(_data, offset, (byte) (_patchType == PatchType.ArsenalOfDemocracy ? 0x78 : 0x18));
             offset++;
-            PatchByte(_data, offset, 0xFF);
+            PatchByte(_data, offset, 0xFF); // push [edx+2Ch]
             offset++;
             PatchByte(_data, offset, 0x72);
             offset++;
             PatchByte(_data, offset, 0x2C);
             offset++;
-            PatchByte(_data, offset, 0xFF);
+            PatchByte(_data, offset, 0xFF); // push [ebp+08h/68h]
             offset++;
             PatchByte(_data, offset, 0x75);
             offset++;
-            PatchByte(_data, offset, 0x08);
+            PatchByte(_data, offset, (byte) (_patchType == PatchType.ArsenalOfDemocracy ? 0x68 : 0x08));
             offset++;
-            PatchByte(_data, offset, 0x8D); // lea eax,[ebp+10h]
-            offset++;
-            PatchByte(_data, offset, 0x45);
-            offset++;
-            PatchByte(_data, offset, 0x10);
-            offset++;
-            PatchByte(_data, offset, 0x50); // push eax
-            offset++;
-            PatchByte(_data, offset, 0x8D); // lea eax,[ebp+0Ch]
+            PatchByte(_data, offset, 0x8D); // lea eax,[ebp+10h/70h]
             offset++;
             PatchByte(_data, offset, 0x45);
             offset++;
-            PatchByte(_data, offset, 0x0C);
+            PatchByte(_data, offset, (byte) (_patchType == PatchType.ArsenalOfDemocracy ? 0x70 : 0x10));
             offset++;
             PatchByte(_data, offset, 0x50); // push eax
             offset++;
-            PatchByte(_data, offset, 0xFF); // push [ebp+14h]
+            PatchByte(_data, offset, 0x8D); // lea eax,[ebp+0Ch/6Ch]
+            offset++;
+            PatchByte(_data, offset, 0x45);
+            offset++;
+            PatchByte(_data, offset, (byte) (_patchType == PatchType.ArsenalOfDemocracy ? 0x6C : 0x0C));
+            offset++;
+            PatchByte(_data, offset, 0x50); // push eax
+            offset++;
+            PatchByte(_data, offset, 0xFF); // push [ebp+14h/74h]
             offset++;
             PatchByte(_data, offset, 0x75);
             offset++;
-            PatchByte(_data, offset, 0x14);
+            PatchByte(_data, offset, (byte) (_patchType == PatchType.ArsenalOfDemocracy ? 0x74 : 0x14));
             offset++;
             PatchByte(_data, offset, 0xFF); // call [varTextOutDC2Address]
             offset++;
@@ -3502,7 +3772,7 @@ namespace EuropaEnginePatcher
         {
             AppendLog("  proc GetTextWidth書き換え\n");
             uint offset = _posGetTextWidthStart;
-            PatchByte(_data, offset, 0x83);
+            PatchByte(_data, offset, 0x83); // cmp [varGetTextWidthAddress],0
             offset++;
             PatchByte(_data, offset, 0x3D);
             offset++;
@@ -3511,15 +3781,15 @@ namespace EuropaEnginePatcher
             offset += 4;
             PatchByte(_data, offset, 0x00);
             offset++;
-            PatchByte(_data, offset, 0x75);
+            PatchByte(_data, offset, 0x75); // jne GET_TEXT_WIDTH_3
             offset++;
             PatchByte(_data, offset, 0x29);
             offset++;
-            PatchByte(_data, offset, 0x68);
+            PatchByte(_data, offset, 0x68); // push addrWinMmDll
             offset++;
             PatchLong(_data, offset, _addrWinMmDll, $"%06 ${_addrWinMmDll:X8} WINMM.dll");
             offset += 4;
-            PatchByte(_data, offset, 0xFF);
+            PatchByte(_data, offset, 0xFF); // call GetModuleHandleA/IsDebuggerPresent
             offset++;
             PatchByte(_data, offset, 0x15);
             offset++;
@@ -3527,6 +3797,7 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.ForTheGlory:
                 case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy109:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
                         $"%04 ${_addrIsDebuggerPresent:X8} IsDebuggerPresent");
                     break;
@@ -3537,53 +3808,58 @@ namespace EuropaEnginePatcher
                     break;
             }
             offset += 4;
-            PatchByte(_data, offset, 0x85);
+            PatchByte(_data, offset, 0x85); // test eax,eax
             offset++;
             PatchByte(_data, offset, 0xC0);
             offset++;
-            PatchByte(_data, offset, 0x75);
+            PatchByte(_data, offset, 0x75); // jne GET_TEXT_WIDTH_1
             offset++;
             PatchByte(_data, offset, 0x01);
             offset++;
-            PatchByte(_data, offset, 0xF4);
+            PatchByte(_data, offset, 0xF4); // hlt
             offset++;
-            PatchByte(_data, offset, 0x68);
+            // GET_TEXT_WIDTH_1
+            PatchByte(_data, offset, 0x68); // push addrGetTextWidth
             offset++;
             PatchLong(_data, offset, _addrGetTextWidth, $"%01 ${_addrGetTextWidth:X8} GetTextWidth");
             offset += 4;
-            PatchByte(_data, offset, 0x50);
+            PatchByte(_data, offset, 0x50); // push eax
             offset++;
-            PatchByte(_data, offset, 0xFF);
+            PatchByte(_data, offset, 0xFF); // call GetProcAddress
             offset++;
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrGetProcAddress,
                 $"%05 ${_addrGetProcAddress:X8} GetProcAddress");
             offset += 4;
-            PatchByte(_data, offset, 0x85);
+            PatchByte(_data, offset, 0x85); // test eax,eax
             offset++;
             PatchByte(_data, offset, 0xC0);
             offset++;
-            PatchByte(_data, offset, 0x75);
+            PatchByte(_data, offset, 0x75); // jne GET_TEXT_WIDTH_2
             offset++;
             PatchByte(_data, offset, 0x01);
             offset++;
-            PatchByte(_data, offset, 0xF4);
+            PatchByte(_data, offset, 0xF4); // hlt
             offset++;
-            PatchByte(_data, offset, 0xA3);
+            // GET_TEXT_WIDTH_2
+            PatchByte(_data, offset, 0xA3); // mov [varGetTextWidthAddress],eax
             offset++;
             PatchLong(_data, offset, _addrVarGetTextWidthAddress,
                 $"%03 ${_addrVarGetTextWidthAddress:X8} varGetTextWidthAddress");
             offset += 4;
-            PatchByte(_data, offset, 0x8B);
+            PatchByte(_data, offset, 0x8B); // mov ecx,[ebp-08h/14h/18h]
             offset++;
             PatchByte(_data, offset, 0x4D);
             offset++;
             switch (_patchType)
             {
                 case PatchType.ArsenalOfDemocracy:
+                    PatchByte(_data, offset, 0xF8);
+                    break;
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     PatchByte(_data, offset, 0xE8);
@@ -3593,7 +3869,8 @@ namespace EuropaEnginePatcher
                     break;
             }
             offset++;
-            PatchByte(_data, offset, 0x8B);
+            // GET_TEXT_WIDTH_3
+            PatchByte(_data, offset, 0x8B); // mov edx,[ecx+0Ch]
             offset++;
             PatchByte(_data, offset, 0x51);
             offset++;
@@ -3601,7 +3878,7 @@ namespace EuropaEnginePatcher
             offset++;
             if (_patchType == PatchType.ForTheGlory)
             {
-                PatchByte(_data, offset, 0x33);
+                PatchByte(_data, offset, 0x33); // TODO: アセンブリコード記載
                 offset++;
                 PatchByte(_data, offset, 0xC0);
                 offset++;
@@ -3621,7 +3898,7 @@ namespace EuropaEnginePatcher
             }
             else
             {
-                PatchByte(_data, offset, 0x81);
+                PatchByte(_data, offset, 0x81); // cmp [edx+0Fh/14h/19h],646C6F62h/62616D72h
                 offset++;
                 PatchByte(_data, offset, 0x7A);
                 offset++;
@@ -3638,6 +3915,7 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy:
                     case PatchType.ArsenalOfDemocracy104:
                     case PatchType.ArsenalOfDemocracy107:
+                    case PatchType.ArsenalOfDemocracy109:
                     case PatchType.DarkestHour:
                     case PatchType.DarkestHour102:
                         PatchByte(_data, offset, 0x19);
@@ -3670,7 +3948,7 @@ namespace EuropaEnginePatcher
                         break;
                 }
                 offset++;
-                PatchByte(_data, offset, 0xB8);
+                PatchByte(_data, offset, 0xB8); // mov eax,00000001h
                 offset++;
                 PatchByte(_data, offset, 0x01);
                 offset++;
@@ -3680,20 +3958,21 @@ namespace EuropaEnginePatcher
                 offset++;
                 PatchByte(_data, offset, 0x00);
                 offset++;
-                PatchByte(_data, offset, 0x74);
+                PatchByte(_data, offset, 0x74); // je GET_TEXT_WIDTH_4
                 offset++;
                 PatchByte(_data, offset, 0x02);
                 offset++;
-                PatchByte(_data, offset, 0x33);
+                PatchByte(_data, offset, 0x33); // xor eax,eax
                 offset++;
                 PatchByte(_data, offset, 0xC0);
             }
             offset++;
-            PatchByte(_data, offset, 0x8B);
+            // GET_TEXT_WIDTH_4
+            PatchByte(_data, offset, 0x8B); // mov edx,eax
             offset++;
             PatchByte(_data, offset, 0xD0);
             offset++;
-            PatchByte(_data, offset, 0x80);
+            PatchByte(_data, offset, 0x80); // cmp [ecx+00000414h],0
             offset++;
             PatchByte(_data, offset, 0xB9);
             offset++;
@@ -3707,19 +3986,20 @@ namespace EuropaEnginePatcher
             offset++;
             PatchByte(_data, offset, 0x00);
             offset++;
-            PatchByte(_data, offset, 0x74);
+            PatchByte(_data, offset, 0x74); // je GET_TEXT_WIDTH_5
             offset++;
             PatchByte(_data, offset, 0x03);
             offset++;
-            PatchByte(_data, offset, 0x83);
+            PatchByte(_data, offset, 0x83); // or eax,00000002h
             offset++;
             PatchByte(_data, offset, 0xC8);
             offset++;
             PatchByte(_data, offset, 0x02);
             offset++;
-            PatchByte(_data, offset, 0x50);
+            // GET_TEXT_WIDTH_5
+            PatchByte(_data, offset, 0x50); // push eax
             offset++;
-            PatchByte(_data, offset, 0x8B);
+            PatchByte(_data, offset, 0x8B); // mov eax,[ecx+10h]
             offset++;
             PatchByte(_data, offset, 0x41);
             offset++;
@@ -3727,26 +4007,26 @@ namespace EuropaEnginePatcher
             offset++;
             if (_patchType != PatchType.ForTheGlory)
             {
-                PatchByte(_data, offset, 0x48);
+                PatchByte(_data, offset, 0x48); // dec eax,eax
                 offset++;
-                PatchByte(_data, offset, 0x48);
+                PatchByte(_data, offset, 0x48); // dec eax,eax
                 offset++;
-                PatchByte(_data, offset, 0x48);
+                PatchByte(_data, offset, 0x48); // dec eax,eax
                 offset++;
             }
-            PatchByte(_data, offset, 0x2B);
+            PatchByte(_data, offset, 0x2B); // sub eax,edx
             offset++;
             PatchByte(_data, offset, 0xC2);
             offset++;
             if (_patchType != PatchType.ForTheGlory)
             {
-                PatchByte(_data, offset, 0x8B);
+                PatchByte(_data, offset, 0x8B); // mov edx,[ecx+0Ch]
                 offset++;
                 PatchByte(_data, offset, 0x51);
                 offset++;
                 PatchByte(_data, offset, 0x0C);
                 offset++;
-                PatchByte(_data, offset, 0x81);
+                PatchByte(_data, offset, 0x81); // cmp [edx+0Ah],61697261h
                 offset++;
                 PatchByte(_data, offset, 0x7A);
                 offset++;
@@ -3760,29 +4040,30 @@ namespace EuropaEnginePatcher
                 offset++;
                 PatchByte(_data, offset, 0x61);
                 offset++;
-                PatchByte(_data, offset, 0x75);
+                PatchByte(_data, offset, 0x75); // jne GET_TEXT_WIDTH_6
                 offset++;
                 PatchByte(_data, offset, 0x01);
                 offset++;
-                PatchByte(_data, offset, 0x48);
+                PatchByte(_data, offset, 0x48); // dec eax,eax
                 offset++;
             }
-            PatchByte(_data, offset, 0x50);
+            // GET_TEXT_WIDTH_6
+            PatchByte(_data, offset, 0x50); // push eax
             offset++;
-            PatchByte(_data, offset, 0xFF);
+            PatchByte(_data, offset, 0xFF); // push [ebp+08h]
             offset++;
             PatchByte(_data, offset, 0x75);
             offset++;
             PatchByte(_data, offset, 0x08);
             offset++;
-            PatchByte(_data, offset, 0xFF);
+            PatchByte(_data, offset, 0xFF); // call [varGetTextWidthAddress]
             offset++;
             PatchByte(_data, offset, 0x15);
             offset++;
             PatchLong(_data, offset, _addrVarGetTextWidthAddress,
                 $"%03 ${_addrVarGetTextWidthAddress:X8} varGetTextWidthAddress");
             offset += 4;
-            PatchByte(_data, offset, 0xE9);
+            PatchByte(_data, offset, 0xE9); // jmp GET_TEXT_WIDTH_END
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posGetTextWidthEnd),
                 $"%10 ${GetTextAddress(_posGetTextWidthEnd):X8} GetTextWidthEnd");
@@ -3800,7 +4081,7 @@ namespace EuropaEnginePatcher
         {
             AppendLog("  proc LatinToUpper書き換え\n");
             uint offset = _posLatinToUpper;
-            PatchByte(_data, offset, 0xEB);
+            PatchByte(_data, offset, 0xEB); // jmp 14h/16h/17h
             offset++;
             switch (_patchType)
             {
@@ -3809,6 +4090,7 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy109:
                     PatchByte(_data, offset, 0x16);
                     break;
 
@@ -3827,8 +4109,9 @@ namespace EuropaEnginePatcher
             AppendLog("  proc ChatBlockChar書き換え\n");
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                     // 0x5C
                     PatchByte(_data, _posChatBlockChar1 + 0x5C + 0x59, 0x08);
                     PatchByte(_data, _posChatBlockChar2 + 0x5C - 0x2C, 0x01);
@@ -3899,7 +4182,7 @@ namespace EuropaEnginePatcher
             offset++;
             PatchLong(_data, offset, _addrWinMmDll, $"%06 ${_addrWinMmDll:X8} WINMM.dll");
             offset += 4;
-            PatchByte(_data, offset, 0xFF); // call GetModuleHandleA
+            PatchByte(_data, offset, 0xFF); // call GetModuleHandleA/IsDebuggerPresent
             offset++;
             PatchByte(_data, offset, 0x15);
             offset++;
@@ -3907,6 +4190,7 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.ForTheGlory:
                 case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy109:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
                         $"%04 ${_addrIsDebuggerPresent:X8} IsDebuggerPresent");
                     break;
@@ -3965,12 +4249,12 @@ namespace EuropaEnginePatcher
 
             #region 改行位置計算処理1 - イベント文/シナリオ解説文/閣僚名/ポップアップ表示
 
-            // CALC_LINE_BREAK_START1
-            PatchByte(_data, _posCalcLineBreakStart1, 0xE9); // jmp CALC_LINE_BREAK1
+            // CALC_LINE_BREAK_START_1
+            PatchByte(_data, _posCalcLineBreakStart1, 0xE9); // jmp CALC_LINE_BREAK_1
             PatchLong(_data, _posCalcLineBreakStart1 + 1, GetRelativeOffset(_posCalcLineBreakStart1 + 5, offset),
                 $"%XX ${GetTextAddress(offset):X8} CalcLineBreak1");
 
-            // CALC_LINE_BREAK1
+            // CALC_LINE_BREAK_1
             PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
@@ -4006,6 +4290,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x00);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
 
                 case PatchType.ForTheGlory:
@@ -4021,9 +4307,32 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x18);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
 
                 case PatchType.ArsenalOfDemocracy:
+                    PatchByte(_data, offset, 0x8D); // lea esi,[esi-1]
+                    offset++;
+                    PatchByte(_data, offset, 0x76);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0x8D); // lea eax,[esp+0Ch]
+                    offset++;
+                    PatchByte(_data, offset, 0x44);
+                    offset++;
+                    PatchByte(_data, offset, 0xE4);
+                    offset++;
+                    PatchByte(_data, offset, 0x0C);
+                    offset++;
+                    PatchByte(_data, offset, 0x56); // push esi
+                    offset++;
+                    PatchByte(_data, offset, 0x50); // push eax
+                    offset++;
+                    break;
+
+                case PatchType.ArsenalOfDemocracy109:
                     PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+08h]
                     offset++;
                     PatchByte(_data, offset, 0x4D);
@@ -4052,6 +4361,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0xFF);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
 
                 case PatchType.ArsenalOfDemocracy107:
@@ -4067,10 +4378,10 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x10);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
             }
-            PatchByte(_data, offset, 0x51); // push ecx
-            offset++;
             PatchByte(_data, offset, 0xFF); // call [varCalcLineBreakAddress]
             offset++;
             PatchByte(_data, offset, 0x15);
@@ -4308,6 +4619,27 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.ArsenalOfDemocracy:
+                    PatchByte(_data, offset, 0x01); // add esi,eax
+                    offset++;
+                    PatchByte(_data, offset, 0xC6);
+                    offset++;
+                    PatchByte(_data, offset, 0x8D); // lea eax,[esp+0000020Ch]
+                    offset++;
+                    PatchByte(_data, offset, 0x84);
+                    offset++;
+                    PatchByte(_data, offset, 0x24);
+                    offset++;
+                    PatchByte(_data, offset, 0x0C);
+                    offset++;
+                    PatchByte(_data, offset, 0x02);
+                    offset++;
+                    PatchByte(_data, offset, 0x00);
+                    offset++;
+                    PatchByte(_data, offset, 0x00);
+                    offset++;
+                    break;
+
+                case PatchType.ArsenalOfDemocracy109:
                     PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+08h]
                     offset++;
                     PatchByte(_data, offset, 0x4D);
@@ -4379,7 +4711,7 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
             }
-            PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END1
+            PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END_1
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd1),
                 $"%XX ${GetTextAddress(_posCalcLineBreakEnd1):X8} CalcLineBreakEnd1");
@@ -4389,12 +4721,12 @@ namespace EuropaEnginePatcher
 
             #region 改行位置計算処理2 - 用途不明
 
-            // CALC_LINE_BREAK_START2
-            PatchByte(_data, _posCalcLineBreakStart2, 0xE9); // jmp CALC_LINE_BREAK2
+            // CALC_LINE_BREAK_START_2
+            PatchByte(_data, _posCalcLineBreakStart2, 0xE9); // jmp CALC_LINE_BREAK_2
             PatchLong(_data, _posCalcLineBreakStart2 + 1, GetRelativeOffset(_posCalcLineBreakStart2 + 5, offset),
                 $"%XX ${GetTextAddress(offset):X8} CalcLineBreak2");
 
-            // CALC_LINE_BREAK2
+            // CALC_LINE_BREAK_2
             PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
@@ -4430,6 +4762,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x00);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
 
                 case PatchType.ForTheGlory:
@@ -4453,9 +4787,32 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x24);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
 
                 case PatchType.ArsenalOfDemocracy:
+                    PatchByte(_data, offset, 0x8D); // lea esi,[esi-01h]
+                    offset++;
+                    PatchByte(_data, offset, 0x76);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0x88); // lea eax,[esp+10h]
+                    offset++;
+                    PatchByte(_data, offset, 0x44);
+                    offset++;
+                    PatchByte(_data, offset, 0xE4);
+                    offset++;
+                    PatchByte(_data, offset, 0x10);
+                    offset++;
+                    PatchByte(_data, offset, 0x56); // push esi
+                    offset++;
+                    PatchByte(_data, offset, 0x50); // push eax
+                    offset++;
+                    break;
+
+                case PatchType.ArsenalOfDemocracy109:
                     PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+08h]
                     offset++;
                     PatchByte(_data, offset, 0x4D);
@@ -4484,6 +4841,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0xFF);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
 
                 case PatchType.ArsenalOfDemocracy107:
@@ -4499,10 +4858,10 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x10);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
             }
-            PatchByte(_data, offset, 0x51); // push ecx
-            offset++;
             PatchByte(_data, offset, 0xFF); // call [varCalcLineBreakAddress]
             offset++;
             PatchByte(_data, offset, 0x15);
@@ -4746,6 +5105,27 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.ArsenalOfDemocracy:
+                    PatchByte(_data, offset, 0x01); // add esi,eax
+                    offset++;
+                    PatchByte(_data, offset, 0xC6);
+                    offset++;
+                    PatchByte(_data, offset, 0x8D); // lea ecx,[esp+00000210h]
+                    offset++;
+                    PatchByte(_data, offset, 0x84);
+                    offset++;
+                    PatchByte(_data, offset, 0x24);
+                    offset++;
+                    PatchByte(_data, offset, 0x10);
+                    offset++;
+                    PatchByte(_data, offset, 0x02);
+                    offset++;
+                    PatchByte(_data, offset, 0x00);
+                    offset++;
+                    PatchByte(_data, offset, 0x00);
+                    offset++;
+                    break;
+
+                case PatchType.ArsenalOfDemocracy109:
                     PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+08h]
                     offset++;
                     PatchByte(_data, offset, 0x4D);
@@ -4817,7 +5197,7 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
             }
-            PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END2
+            PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END_2
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd2),
                 $"%XX ${GetTextAddress(_posCalcLineBreakEnd2):X8} CalcLineBreakEnd2");
@@ -4829,12 +5209,12 @@ namespace EuropaEnginePatcher
 
             if (_patchType != PatchType.CrusaderKings)
             {
-                // CALC_LINE_BREAK_START3
-                PatchByte(_data, _posCalcLineBreakStart3, 0xE9); // jmp CALC_LINE_BREAK3
+                // CALC_LINE_BREAK_START_3
+                PatchByte(_data, _posCalcLineBreakStart3, 0xE9); // jmp CALC_LINE_BREAK_3
                 PatchLong(_data, _posCalcLineBreakStart3 + 1, GetRelativeOffset(_posCalcLineBreakStart3 + 5, offset),
                     $"%XX ${GetTextAddress(offset):X8} CalcLineBreak3");
 
-                // CALC_LINE_BREAK3
+                // CALC_LINE_BREAK_3
                 PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
@@ -4883,6 +5263,8 @@ namespace EuropaEnginePatcher
                         offset++;
                         PatchByte(_data, offset, 0x00);
                         offset++;
+                        PatchByte(_data, offset, 0x51); // push ecx
+                        offset++;
                         break;
 
                     case PatchType.ForTheGlory:
@@ -4898,9 +5280,36 @@ namespace EuropaEnginePatcher
                         offset++;
                         PatchByte(_data, offset, 0x34);
                         offset++;
+                        PatchByte(_data, offset, 0x51); // push ecx
+                        offset++;
                         break;
 
                     case PatchType.ArsenalOfDemocracy:
+                        PatchByte(_data, offset, 0x8D); // lea esi,[esi-01h]
+                        offset++;
+                        PatchByte(_data, offset, 0x76);
+                        offset++;
+                        PatchByte(_data, offset, 0xFF);
+                        offset++;
+                        PatchByte(_data, offset, 0x8D); // lea eax,[ebp-00000218h]
+                        offset++;
+                        PatchByte(_data, offset, 0x85);
+                        offset++;
+                        PatchByte(_data, offset, 0xE8);
+                        offset++;
+                        PatchByte(_data, offset, 0xFD);
+                        offset++;
+                        PatchByte(_data, offset, 0xFF);
+                        offset++;
+                        PatchByte(_data, offset, 0xFF);
+                        offset++;
+                        PatchByte(_data, offset, 0x56); // push esi
+                        offset++;
+                        PatchByte(_data, offset, 0x50); // push eax
+                        offset++;
+                        break;
+
+                    case PatchType.ArsenalOfDemocracy109:
                         PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+0Ch]
                         offset++;
                         PatchByte(_data, offset, 0x4D);
@@ -4929,6 +5338,8 @@ namespace EuropaEnginePatcher
                         offset++;
                         PatchByte(_data, offset, 0xFF);
                         offset++;
+                        PatchByte(_data, offset, 0x51); // push ecx
+                        offset++;
                         break;
 
                     case PatchType.ArsenalOfDemocracy107:
@@ -4944,10 +5355,10 @@ namespace EuropaEnginePatcher
                         offset++;
                         PatchByte(_data, offset, 0x30);
                         offset++;
+                        PatchByte(_data, offset, 0x51); // push ecx
+                        offset++;
                         break;
                 }
-                PatchByte(_data, offset, 0x51); // push ecx
-                offset++;
                 PatchByte(_data, offset, 0xFF); // call [varCalcLineBreakAddress]
                 offset++;
                 PatchByte(_data, offset, 0x15);
@@ -5104,6 +5515,25 @@ namespace EuropaEnginePatcher
                         break;
 
                     case PatchType.ArsenalOfDemocracy:
+                        PatchByte(_data, offset, 0x01); // add esi,eax
+                        offset++;
+                        PatchByte(_data, offset, 0xC6);
+                        offset++;
+                        PatchByte(_data, offset, 0x8D); // lea eax,[ebp-00000418h]
+                        offset++;
+                        PatchByte(_data, offset, 0x85);
+                        offset++;
+                        PatchByte(_data, offset, 0xE8);
+                        offset++;
+                        PatchByte(_data, offset, 0xFB);
+                        offset++;
+                        PatchByte(_data, offset, 0xFF);
+                        offset++;
+                        PatchByte(_data, offset, 0xFF);
+                        offset++;
+                        break;
+
+                    case PatchType.ArsenalOfDemocracy109:
                         PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+0Ch]
                         offset++;
                         PatchByte(_data, offset, 0x4D);
@@ -5149,7 +5579,7 @@ namespace EuropaEnginePatcher
                         offset++;
                         break;
                 }
-                PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END3
+                PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END_3
                 offset++;
                 PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd3),
                     $"%XX ${GetTextAddress(_posCalcLineBreakEnd3):X8} CalcLineBreakEnd3");
@@ -5247,12 +5677,12 @@ namespace EuropaEnginePatcher
 
             #region 改行位置計算処理5 - メッセージログ
 
-            // CALC_LINE_BREAK_START5
-            PatchByte(_data, _posCalcLineBreakStart5, 0xE9); // jmp CALC_LINE_BREAK5
+            // CALC_LINE_BREAK_START_5
+            PatchByte(_data, _posCalcLineBreakStart5, 0xE9); // jmp CALC_LINE_BREAK_5
             PatchLong(_data, _posCalcLineBreakStart5 + 1, GetRelativeOffset(_posCalcLineBreakStart5 + 5, offset),
                 $"%XX ${GetTextAddress(offset):X8} CalcLineBreak5");
 
-            // CALC_LINE_BREAK5
+            // CALC_LINE_BREAK_5
             PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
@@ -5296,6 +5726,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x00);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
 
                 case PatchType.ForTheGlory:
@@ -5310,6 +5742,8 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0x24);
                     offset++;
                     PatchByte(_data, offset, 0x20);
+                    offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
                     offset++;
                     break;
 
@@ -5351,9 +5785,36 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x00);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
 
                 case PatchType.ArsenalOfDemocracy:
+                    PatchByte(_data, offset, 0x8D); // lea esi,[esi-01h]
+                    offset++;
+                    PatchByte(_data, offset, 0x76);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0x8D); // lea eax,[ebp-00000218h]
+                    offset++;
+                    PatchByte(_data, offset, 0x85);
+                    offset++;
+                    PatchByte(_data, offset, 0xE8);
+                    offset++;
+                    PatchByte(_data, offset, 0xFD);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0x56); // push esi
+                    offset++;
+                    PatchByte(_data, offset, 0x50); // push eax
+                    offset++;
+                    break;
+
+                case PatchType.ArsenalOfDemocracy109:
                     PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+0Ch]
                     offset++;
                     PatchByte(_data, offset, 0x4D);
@@ -5382,6 +5843,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0xFF);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
 
                 case PatchType.ArsenalOfDemocracy107:
@@ -5397,10 +5860,10 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x20);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
             }
-            PatchByte(_data, offset, 0x51); // push ecx
-            offset++;
             PatchByte(_data, offset, 0xFF); // call [varCalcLineBreakAddress]
             offset++;
             PatchByte(_data, offset, 0x15);
@@ -5602,6 +6065,25 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.ArsenalOfDemocracy:
+                    PatchByte(_data, offset, 0x01); // add esi,eax
+                    offset++;
+                    PatchByte(_data, offset, 0xC6);
+                    offset++;
+                    PatchByte(_data, offset, 0x8D); // lea eax,[ebp-00000618h]
+                    offset++;
+                    PatchByte(_data, offset, 0x85);
+                    offset++;
+                    PatchByte(_data, offset, 0xE8);
+                    offset++;
+                    PatchByte(_data, offset, 0xF9);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    break;
+
+                case PatchType.ArsenalOfDemocracy109:
                     PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+0Ch]
                     offset++;
                     PatchByte(_data, offset, 0x4D);
@@ -5653,7 +6135,7 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
             }
-            PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END5
+            PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END_5
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd5),
                 $"%XX ${GetTextAddress(_posCalcLineBreakEnd5):X8} CalcLineBreakEnd5");
@@ -5663,12 +6145,12 @@ namespace EuropaEnginePatcher
 
             #region 改行位置計算処理6 - メッセージ設定画面
 
-            // CALC_LINE_BREAK_START6
-            PatchByte(_data, _posCalcLineBreakStart6, 0xE9); // jmp CALC_LINE_BREAK6
+            // CALC_LINE_BREAK_START_6
+            PatchByte(_data, _posCalcLineBreakStart6, 0xE9); // jmp CALC_LINE_BREAK_6
             PatchLong(_data, _posCalcLineBreakStart6 + 1, GetRelativeOffset(_posCalcLineBreakStart6 + 5, offset),
                 $"%XX ${GetTextAddress(offset):X8} CalcLineBreak6");
 
-            // CALC_LINE_BREAK6
+            // CALC_LINE_BREAK_6
             PatchByte(_data, offset, 0xE8); // call GET_CALC_LINE_BREAK_ADDR
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, posGetCalcLineBreakAddr),
@@ -5718,6 +6200,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x00);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
 
                 case PatchType.ForTheGlory:
@@ -5747,9 +6231,36 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x20);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
 
                 case PatchType.ArsenalOfDemocracy:
+                    PatchByte(_data, offset, 0x8D); // lea esi,[esi-01h]
+                    offset++;
+                    PatchByte(_data, offset, 0x76);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0x8D); // lea eax,[ebp-00000214h]
+                    offset++;
+                    PatchByte(_data, offset, 0x85);
+                    offset++;
+                    PatchByte(_data, offset, 0xEC);
+                    offset++;
+                    PatchByte(_data, offset, 0xFD);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0x56); // push esi
+                    offset++;
+                    PatchByte(_data, offset, 0x50); // push eax
+                    offset++;
+                    break;
+
+                case PatchType.ArsenalOfDemocracy109:
                     PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+0Ch]
                     offset++;
                     PatchByte(_data, offset, 0x4D);
@@ -5778,6 +6289,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0xFF);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
 
                 case PatchType.ArsenalOfDemocracy107:
@@ -5793,10 +6306,10 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x20);
                     offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
                     break;
             }
-            PatchByte(_data, offset, 0x51); // push ecx
-            offset++;
             PatchByte(_data, offset, 0xFF); // call [varCalcLineBreakAddress]
             offset++;
             PatchByte(_data, offset, 0x15);
@@ -6010,6 +6523,25 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.ArsenalOfDemocracy:
+                    PatchByte(_data, offset, 0x01); // add esi,eax
+                    offset++;
+                    PatchByte(_data, offset, 0xC6);
+                    offset++;
+                    PatchByte(_data, offset, 0x8D); // lea eax,[ebp-00000414h]
+                    offset++;
+                    PatchByte(_data, offset, 0x85);
+                    offset++;
+                    PatchByte(_data, offset, 0xEC);
+                    offset++;
+                    PatchByte(_data, offset, 0xFB);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    break;
+
+                case PatchType.ArsenalOfDemocracy109:
                     PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+0Ch]
                     offset++;
                     PatchByte(_data, offset, 0x4D);
@@ -6061,7 +6593,7 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
             }
-            PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END6
+            PatchByte(_data, offset, 0xE9); // jmp CALC_LINE_BREAK_END_6
             offset++;
             PatchLong(_data, offset, GetRelativeOffset(offset + 4, _posCalcLineBreakEnd6),
                 $"%XX ${GetTextAddress(_posCalcLineBreakEnd6):X8} CalcLineBreakEnd6");
@@ -6228,9 +6760,9 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     offset = _posGetDivisionName1;
@@ -6294,6 +6826,12 @@ namespace EuropaEnginePatcher
                     PatchLong(_data, offset, offsetGetDivisionOrderName,
                         $"%XX ${GetRelativeAddress(GetTextAddress(offset + 4), offsetGetDivisionOrderName):X8} GetDivisionOrderName");
                     break;
+
+                case PatchType.ArsenalOfDemocracy:
+                    uint addrDivisionAbbrev = GetLong(_posGetDivisionName1);
+                    PatchLong(_data, _posGetDivisionName1, addrDivisionAbbrev + 2,
+                        $"%XX ${(addrDivisionAbbrev + 2):X8} addrDivisionAbbrev");
+                    break;
             }
 
             AppendLog("\n");
@@ -6343,9 +6881,9 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy:
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
                     offset = _posGetArmyName1;
@@ -6378,6 +6916,7 @@ namespace EuropaEnginePatcher
                             break;
                         case PatchType.ArsenalOfDemocracy:
                         case PatchType.ArsenalOfDemocracy107:
+                        case PatchType.ArsenalOfDemocracy109:
                             PatchByte(_data, offset, 0xD0);
                             offset++;
                             PatchByte(_data, offset, 0xFD);
@@ -6429,6 +6968,7 @@ namespace EuropaEnginePatcher
                             break;
                         case PatchType.ArsenalOfDemocracy:
                         case PatchType.ArsenalOfDemocracy107:
+                        case PatchType.ArsenalOfDemocracy109:
                             PatchByte(_data, offset, 0xA4);
                             offset++;
                             PatchByte(_data, offset, 0xFD);
@@ -6456,6 +6996,60 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchLong(_data, offset, offsetGetArmyOrderName,
                         $"%XX ${GetRelativeAddress(GetTextAddress(offset + 4), offsetGetArmyOrderName):X8} GetArmyOrderName");
+                    break;
+
+                case PatchType.ArsenalOfDemocracy:
+                    uint addrBufOrdinal = GetLong(_posGetArmyName1 + 5);
+                    uint addrPutNumber = GetLong(_posGetArmyName1 + 11);
+                    offset = _posGetArmyName1;
+                    PatchByte(_data, offset, 0xEB); // jmp GET_ORDINAL_SUFFIX
+                    offset++;
+                    PatchByte(_data, offset, 0x0D);
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+                    offset++;
+                    PatchByte(_data, offset, 0x90); // nop
+
+                    offset = _posGetArmyName2;
+                    PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+08h]
+                    offset++;
+                    PatchByte(_data, offset, 0x4D);
+                    offset++;
+                    PatchByte(_data, offset, 0x08);
+                    offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
+                    PatchByte(_data, offset, 0xB9); // mov ecx,addrBufOrdinal
+                    offset++;
+                    PatchLong(_data, offset, addrBufOrdinal, $"%XX ${addrBufOrdinal:X8} addrBufOrdinal");
+                    offset += 4;
+                    PatchByte(_data, offset, 0xFF); // call PutNumber
+                    offset++;
+                    PatchByte(_data, offset, 0x15);
+                    offset++;
+                    PatchLong(_data, offset, addrPutNumber, $"%XX ${addrPutNumber:X8} addrPutNumber");
                     break;
             }
 
@@ -6730,13 +7324,14 @@ namespace EuropaEnginePatcher
             offset++;
             PatchLong(_data, offset, _addrWinMmDll, $"%06 ${_addrWinMmDll:X8} WINMM.dll");
             offset += 4;
-            PatchByte(_data, offset, 0xFF); // call GetModuleHandleA
+            PatchByte(_data, offset, 0xFF); // call GetModuleHandleA/IsDebuggerPresent
             offset++;
             PatchByte(_data, offset, 0x15);
             offset++;
             switch (_patchType)
             {
                 case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy109:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
                         $"%04 ${_addrIsDebuggerPresent:X8} IsDebuggerPresent");
                     break;
@@ -6805,6 +7400,21 @@ namespace EuropaEnginePatcher
             switch (_patchType)
             {
                 case PatchType.ArsenalOfDemocracy:
+                    PatchByte(_data, offset, 0x8D); // lea eax,[ebp-CCh]
+                    offset++;
+                    PatchByte(_data, offset, 0x85);
+                    offset++;
+                    PatchByte(_data, offset, 0x34);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    break;
+
+                case PatchType.ArsenalOfDemocracy109:
                     PatchByte(_data, offset, 0x8D); // lea eax, byte ptr [ebp-90h]
                     offset++;
                     PatchByte(_data, offset, 0x85);
@@ -6868,6 +7478,25 @@ namespace EuropaEnginePatcher
             switch (_patchType)
             {
                 case PatchType.ArsenalOfDemocracy:
+                    PatchByte(_data, offset, 0xC6); // mov byte ptr [ebp+eax-CCh],0
+                    offset++;
+                    PatchByte(_data, offset, 0x84);
+                    offset++;
+                    PatchByte(_data, offset, 0x28);
+                    offset++;
+                    PatchByte(_data, offset, 0x34);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0xFF);
+                    offset++;
+                    PatchByte(_data, offset, 0x00);
+                    offset++;
+                    break;
+
+                case PatchType.ArsenalOfDemocracy109:
                     PatchByte(_data, offset, 0xC6); // mov [ebp+eax-90h],0
                     offset++;
                     PatchByte(_data, offset, 0x84);
@@ -6977,7 +7606,7 @@ namespace EuropaEnginePatcher
             }
 
             // TERM_MODEL_NAME_START1
-            if (_patchType == PatchType.ArsenalOfDemocracy)
+            if (_patchType == PatchType.ArsenalOfDemocracy109)
             {
                 // TERM_MODEL_NAME_START1
                 PatchByte(_data, _posTermModelNameStart1, 0xE9); // jmp TERM_MODEL_NAME
@@ -7063,15 +7692,33 @@ namespace EuropaEnginePatcher
                     _posTermModelNameStart1++;
                 }
                 PatchByte(_data, _posTermModelNameStart1, 0xE8); // call TERM_MODEL_NAME
-                PatchLong(_data, _posTermModelNameStart1 + 1,
-                    GetRelativeOffset(_posTermModelNameStart1 + 5, posTermModelName),
+                _posTermModelNameStart1++;
+                PatchLong(_data, _posTermModelNameStart1,
+                    GetRelativeOffset(_posTermModelNameStart1 + 4, posTermModelName),
                     $"%XX ${GetTextAddress(posTermModelName):X8} TermModelName");
+                _posTermModelNameStart1 += 4;
+
+                if (_patchType == PatchType.ArsenalOfDemocracy)
+                {
+                    PatchByte(_data, _posTermModelNameStart1, 0x90); // nop
+                    _posTermModelNameStart1++;
+                    PatchByte(_data, _posTermModelNameStart1, 0x90); // nop
+                }
 
                 // TERM_MODEL_NAME_START2
                 PatchByte(_data, _posTermModelNameStart2, 0xE8); // call TERM_MODEL_NAME
-                PatchLong(_data, _posTermModelNameStart2 + 1,
-                    GetRelativeOffset(_posTermModelNameStart2 + 5, posTermModelName),
+                _posTermModelNameStart2++;
+                PatchLong(_data, _posTermModelNameStart2,
+                    GetRelativeOffset(_posTermModelNameStart2 + 4, posTermModelName),
                     $"%XX ${GetTextAddress(posTermModelName):X8} TermModelName");
+                _posTermModelNameStart2 += 4;
+
+                if (_patchType == PatchType.ArsenalOfDemocracy)
+                {
+                    PatchByte(_data, _posTermModelNameStart2, 0x90); // nop
+                    _posTermModelNameStart2++;
+                    PatchByte(_data, _posTermModelNameStart2, 0x90); // nop
+                }
 
                 if (_patchType == PatchType.DarkestHour)
                 {
@@ -7368,10 +8015,11 @@ namespace EuropaEnginePatcher
         Victoria, // Victoria
         HeartsOfIron, // Hearts of Iron
         HeartsOfIron2, // Hearts of Iron 2 1.3-
-        ArsenalOfDemocracy, // Arsenal of Democracy 1.08-
+        ArsenalOfDemocracy, // Arsenal of Democracy 1.10-
         DarkestHour, // Darkest Hour 1.03-
         ArsenalOfDemocracy104, // Arsenal of Democracy 1.02-1.04
         ArsenalOfDemocracy107, // Arsenal of Democracy 1.05-1.07
+        ArsenalOfDemocracy109, // Arsenal of Democracy 1.08-1.09
         DarkestHour102, // Darkest Hour 1.00-1.02
         HeartsOfIron212, // Hearts of Iron 2 1.2
         IronCrossHoI2 // Iron Cross over Hearts of Iron 2
