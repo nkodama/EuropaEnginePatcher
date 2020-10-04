@@ -956,6 +956,7 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy109:
                     case PatchType.DarkestHour:
                     case PatchType.DarkestHour102:
+                    case PatchType.DarkestHour105:
                         if (!ScanGetDivisionName())
                         {
                             return false;
@@ -1052,6 +1053,7 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
+                case PatchType.DarkestHour105:
                     if (!ScanEeMaxAmphibModTitle())
                     {
                         return false;
@@ -1069,6 +1071,7 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
+                case PatchType.DarkestHour105:
                     if (!ScanTermModelName())
                     {
                         return false;
@@ -3211,6 +3214,7 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.DarkestHour:
+                case PatchType.DarkestHour105:
                     pattern = new byte[]
                     {
                         0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
@@ -3253,6 +3257,7 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.DarkestHour:
+                case PatchType.DarkestHour105:
                     _posTermModelNameStart1 = l[0] + 5;
                     _posTermModelNameStart2 = l[1] + 5;
                     _posTermModelNameStart3 = l[2] + 5;
@@ -3268,7 +3273,7 @@ namespace EuropaEnginePatcher
                     _posTermModelNameStart2 = l[1] + 5;
                     break;
             }
-            if (_patchType == PatchType.DarkestHour)
+            if (_patchType == PatchType.DarkestHour || _patchType == PatchType.DarkestHour105)
             {
                 byte[] pattern2 =
                 {
