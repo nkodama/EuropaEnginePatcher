@@ -2094,6 +2094,57 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd6 = l[1] + (uint) pattern.Length;
                     break;
 
+                case PatchType.DarkestHour105:
+                    pattern = new byte[]
+                    {
+                        0xC6, 0x44, 0x04, 0x18, 0x20, // mov     [esp+eax+918h+var_900], 20h
+                        0x88, 0x5C, 0x04, 0x19 // mov     [esp+eax+918h+var_8FF], bl
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count < 2)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakEnd1 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd2 = l[1] + (uint)pattern.Length;
+
+                    pattern = new byte[]
+                    {
+                        0x8B, 0x4D, 0x40, 0x88, 0x9C, 0x04, 0x29, 0x01,
+                        0x00, 0x00
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakEnd3 = l[0] + (uint)pattern.Length;
+
+                    pattern = new byte[]
+                    {
+                        0x8B, 0x4D, 0x4C,  // ecx, [ebp+4Ch]
+                        0x88, 0x5C, 0x04, 0x25 // mov     [esp+eax+930h+var_90B], bl
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakEnd5 = l[0] + (uint)pattern.Length;
+
+                    pattern = new byte[]
+                    {
+                        0x8B, 0x4D, 0x4C, // ecx, [ebp+4Ch]
+                        0xC6, 0x44, 0x04, 0x21, 0x00 // [esp+eax+92Ch+var_90B], 0
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakEnd6 = l[0] + (uint)pattern.Length;
+                    break;
+
                 case PatchType.HeartsOfIron2:
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
