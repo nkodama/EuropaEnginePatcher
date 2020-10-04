@@ -722,6 +722,7 @@ namespace EuropaEnginePatcher
             switch (_patchType)
             {
                 case PatchType.DarkestHour:
+				case PatchType.DarkestHour105:
                 case PatchType.DarkestHour102:
                     nReserveSize = 0x60;
                     break;
@@ -2409,6 +2410,7 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
+				case PatchType.DarkestHour105:
                     pattern = new byte[]
                     {
                         0x8B, 0x45, 0xF8, 0x99, 0xB9, 0x64, 0x00, 0x00,
@@ -2575,6 +2577,7 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
+				case PatchType.DarkestHour105:
                     pattern = new byte[]
                     {
                         0xFF, 0xFF, 0x99, 0xB9, 0x64, 0x00, 0x00, 0x00,
@@ -3319,6 +3322,7 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
+				case PatchType.DarkestHour105:
                     PatchLatinToUpper();
                     PatchChatBlockChar();
                     break;
@@ -3366,6 +3370,7 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy109:
                     case PatchType.DarkestHour:
                     case PatchType.DarkestHour102:
+					case PatchType.DarkestHour105:
                         PatchGetDivisionName();
                         EmbedDivisionNameFormat();
                         PatchGetArmyName();
@@ -3440,6 +3445,7 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
+				case PatchType.DarkestHour105:
                     PatchPushEeMaxAmphibModTitle();
                     EmbedEeMaxAmphibModTitle();
                     break;
@@ -3455,6 +3461,7 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
+				case PatchType.DarkestHour105:
                     PatchTermModelName();
                     EmbedStrNLen0();
                     break;
@@ -3585,6 +3592,7 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy109:
                     case PatchType.DarkestHour:
                     case PatchType.DarkestHour102:
+					case PatchType.DarkestHour105:
                         PatchByte(_data, offset, 0x94);
                         break;
                     case PatchType.ArsenalOfDemocracy:
@@ -3691,6 +3699,7 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy109:
                     case PatchType.DarkestHour:
                     case PatchType.DarkestHour102:
+					case PatchType.DarkestHour105:
                         PatchByte(_data, offset, 0x19);
                         break;
                     default:
@@ -3978,6 +3987,7 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
+				case PatchType.DarkestHour105:
                     PatchByte(_data, offset, 0xE8);
                     break;
                 default:
@@ -4034,6 +4044,7 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy109:
                     case PatchType.DarkestHour:
                     case PatchType.DarkestHour102:
+					case PatchType.DarkestHour105:
                         PatchByte(_data, offset, 0x19);
                         break;
                     default:
@@ -4388,6 +4399,7 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
+
                     PatchByte(_data, offset, 0x4E); // dec esi
                     offset++;
                     PatchByte(_data, offset, 0x56); // push esi
@@ -5347,6 +5359,7 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy104:
                     case PatchType.DarkestHour:
                     case PatchType.DarkestHour102:
+					case PatchType.DarkestHour105:
                         PatchByte(_data, offset, 0x8B); // mov ecx,[esp+00000238h]
                         offset++;
                         PatchByte(_data, offset, 0x8C);
@@ -5492,6 +5505,7 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy104:
                     case PatchType.DarkestHour:
                     case PatchType.DarkestHour102:
+					case PatchType.DarkestHour105:
                         PatchByte(_data, offset, 0x8B); // mov ecx,[esp+00000238h]
                         offset++;
                         PatchByte(_data, offset, 0x8C);
