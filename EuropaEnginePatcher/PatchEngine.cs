@@ -4729,7 +4729,7 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0xF0);
                     offset++;
-                    PatchByte(_data, offset, 0x89); // mov [esp+00000218h],esi
+                    PatchByte(_data, offset, 0x89); // mov [esp+00000218h],esi // 214h + arg_0
                     offset++;
                     PatchByte(_data, offset, 0xB4);
                     offset++;
@@ -4749,7 +4749,7 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x2E);
                     offset++;
-                    PatchByte(_data, offset, 0x8D); // lea ecx,[esp+00000114h]
+                    PatchByte(_data, offset, 0x8D); // lea ecx,[esp+00000114h] // 214h+var_100
                     offset++;
                     PatchByte(_data, offset, 0x8C);
                     offset++;
@@ -4766,6 +4766,49 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0x51); // push ecx
                     offset++;
                     PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+56h]
+                    offset++;
+                    PatchByte(_data, offset, 0x4D);
+                    offset++;
+                    PatchByte(_data, offset, 0x56);
+                    offset++;
+                    break;
+
+                case PatchType.DarkestHour105:
+                    PatchByte(_data, offset, 0x03); // add esi,eax
+                    offset++;
+                    PatchByte(_data, offset, 0xF0);
+                    offset++;
+                    PatchByte(_data, offset, 0x89); // mov [esp+00000918h],esi
+                    offset++;
+                    PatchByte(_data, offset, 0xB4);
+                    offset++;
+                    PatchByte(_data, offset, 0x24);
+                    offset++;
+                    PatchByte(_data, offset, 0x18);
+                    offset++;
+                    PatchByte(_data, offset, 0x09);
+                    offset++;
+                    PatchByte(_data, offset, 0x00);
+                    offset++;
+                    PatchByte(_data, offset, 0x00);
+                    offset++;
+                    PatchByte(_data, offset, 0x8B); // mov esi,[ebp+2Eh] // そのまま
+                    offset++;
+                    PatchByte(_data, offset, 0x75);
+                    offset++;
+                    PatchByte(_data, offset, 0x2E);
+                    offset++;
+                    PatchByte(_data, offset, 0x8D); // lea ecx,[esp+00000014h] // 914h+var_900
+                    offset++;
+                    PatchByte(_data, offset, 0x4C);
+                    offset++;
+                    PatchByte(_data, offset, 0x24);
+                    offset++;
+                    PatchByte(_data, offset, 0x14);
+                    offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
+                    PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+56h] // そのまま
                     offset++;
                     PatchByte(_data, offset, 0x4D);
                     offset++;
@@ -5269,6 +5312,49 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0x51); // push ecx
                     offset++;
                     PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+56h]
+                    offset++;
+                    PatchByte(_data, offset, 0x4D);
+                    offset++;
+                    PatchByte(_data, offset, 0x56);
+                    offset++;
+                    break;
+
+                case PatchType.DarkestHour105:
+                    PatchByte(_data, offset, 0x03); // add esi,eax
+                    offset++;
+                    PatchByte(_data, offset, 0xF0);
+                    offset++;
+                    PatchByte(_data, offset, 0x89); // mov [esp+00000918h],esi
+                    offset++;
+                    PatchByte(_data, offset, 0xB4);
+                    offset++;
+                    PatchByte(_data, offset, 0x24);
+                    offset++;
+                    PatchByte(_data, offset, 0x18);
+                    offset++;
+                    PatchByte(_data, offset, 0x09);
+                    offset++;
+                    PatchByte(_data, offset, 0x00);
+                    offset++;
+                    PatchByte(_data, offset, 0x00);
+                    offset++;
+                    PatchByte(_data, offset, 0x8B); // mov esi,[ebp+2Eh] // そのまま
+                    offset++;
+                    PatchByte(_data, offset, 0x75);
+                    offset++;
+                    PatchByte(_data, offset, 0x2E);
+                    offset++;
+                    PatchByte(_data, offset, 0x8D); // lea ecx,[esp+00000014h] // 914h+var_900
+                    offset++;
+                    PatchByte(_data, offset, 0x4C);
+                    offset++;
+                    PatchByte(_data, offset, 0x24);
+                    offset++;
+                    PatchByte(_data, offset, 0x14);
+                    offset++;
+                    PatchByte(_data, offset, 0x51); // push ecx
+                    offset++;
+                    PatchByte(_data, offset, 0x8B); // mov ecx,[ebp+56h] // そのまま
                     offset++;
                     PatchByte(_data, offset, 0x4D);
                     offset++;
