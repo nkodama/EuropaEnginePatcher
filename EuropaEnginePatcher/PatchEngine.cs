@@ -442,6 +442,11 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.DarkestHour:
+                    if (_gameVersion == 105)
+                    {
+                        _patchType = PatchType.DarkestHour105;
+                        AppendLog("PatchType: Darkest Hour 1.05\n\n");
+                    } else 
                     if (_gameVersion <= 102)
                     {
                         _patchType = PatchType.DarkestHour102;
@@ -891,6 +896,7 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy109:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
+                case PatchType.DarkestHour105:
                     if (!ScanLatinToUpper())
                     {
                         return false;
@@ -1158,6 +1164,7 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
+                case PatchType.DarkestHour105:
                     pattern = new byte[]
                     {
                         0x8B, 0x4D, 0x18, 0x8B, 0x11, 0x8B, 0x4D, 0x18,
@@ -1231,6 +1238,7 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
+                case PatchType.DarkestHour105:
                     pattern = new byte[]
                     {
                         0xC7, 0x45, 0xFC, 0x00, 0x00, 0x00, 0x00, 0xC6,
@@ -1614,11 +1622,10 @@ namespace EuropaEnginePatcher
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
 
-                    // mov     cl, [esp+914h+var_901]
                     pattern = new byte[]
                     {
-                        0x8A, 0x4C, 0x24, 0x13, 0x88, 0x4C, 0x04, 0x14,
-                        0x40, 0x38
+                        0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
+                        0x01, 0x00, 0x00
                     };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
@@ -1640,10 +1647,10 @@ namespace EuropaEnginePatcher
                     }
                     _posCalcLineBreakStart3 = l[0];
 
-                    // mov     [esp+eax+92Ch+var_90C], cl
                     pattern = new byte[]
                     {
-                        0x88, 0x4C, 0x04, 0x20, 0x40, 0x38, 0x5C, 0x24, 0x13, 0x0F, 0x85, 0x45
+                        0x88, 0x8C, 0x04, 0x20, 0x01, 0x00, 0x00, 0x40,
+                        0x38, 0x5C, 0x24, 0x13
                     };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
@@ -1654,8 +1661,8 @@ namespace EuropaEnginePatcher
 
                     pattern = new byte[]
                     {
-                        0x88, 0x5C, 0x04, 0x1C, 0x40, 0x84, 0xDB, 0x0F,
-                        0x85, 0x3C
+                        0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
+                        0x84, 0xDB
                     };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
@@ -8018,6 +8025,7 @@ namespace EuropaEnginePatcher
         HeartsOfIron, // Hearts of Iron
         HeartsOfIron2, // Hearts of Iron 2 1.3-
         ArsenalOfDemocracy, // Arsenal of Democracy 1.10-
+        DarkestHour105, // Darkest Hour 1.05
         DarkestHour, // Darkest Hour 1.03-
         ArsenalOfDemocracy104, // Arsenal of Democracy 1.02-1.04
         ArsenalOfDemocracy107, // Arsenal of Democracy 1.05-1.07
