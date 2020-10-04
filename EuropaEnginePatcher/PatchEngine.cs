@@ -1613,10 +1613,12 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.DarkestHour:
                 case PatchType.DarkestHour102:
+
+                    // mov     cl, [esp+914h+var_901]
                     pattern = new byte[]
                     {
-                        0x8A, 0x4C, 0x24, 0x13, 0x88, 0x8C, 0x04, 0x14,
-                        0x01, 0x00, 0x00
+                        0x8A, 0x4C, 0x24, 0x13, 0x88, 0x4C, 0x04, 0x14,
+                        0x40, 0x38
                     };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count < 2)
@@ -1638,10 +1640,10 @@ namespace EuropaEnginePatcher
                     }
                     _posCalcLineBreakStart3 = l[0];
 
+                    // mov     [esp+eax+92Ch+var_90C], cl
                     pattern = new byte[]
                     {
-                        0x88, 0x8C, 0x04, 0x20, 0x01, 0x00, 0x00, 0x40,
-                        0x38, 0x5C, 0x24, 0x13
+                        0x88, 0x4C, 0x04, 0x20, 0x40, 0x38, 0x5C, 0x24, 0x13, 0x0F, 0x85, 0x45
                     };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
@@ -1652,8 +1654,8 @@ namespace EuropaEnginePatcher
 
                     pattern = new byte[]
                     {
-                        0x88, 0x9C, 0x04, 0x1C, 0x01, 0x00, 0x00, 0x40,
-                        0x84, 0xDB
+                        0x88, 0x5C, 0x04, 0x1C, 0x40, 0x84, 0xDB, 0x0F,
+                        0x85, 0x3C
                     };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
