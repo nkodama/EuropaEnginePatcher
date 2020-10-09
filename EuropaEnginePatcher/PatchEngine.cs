@@ -6361,7 +6361,7 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.DarkestHour105:
-                    PatchByte(_data, offset, 0x8B); // mov ecx,[esp+00000234h]
+                    PatchByte(_data, offset, 0x8B); // mov ecx,[esp+00000934h]  // 92Ch + arg_4から
                     offset++;
                     PatchByte(_data, offset, 0x8C);
                     offset++;
@@ -6369,7 +6369,7 @@ namespace EuropaEnginePatcher
                     offset++;
                     PatchByte(_data, offset, 0x34);
                     offset++;
-                    PatchByte(_data, offset, 0x02);
+                    PatchByte(_data, offset, 0x09);
                     offset++;
                     PatchByte(_data, offset, 0x00);
                     offset++;
