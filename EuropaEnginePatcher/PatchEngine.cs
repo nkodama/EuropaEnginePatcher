@@ -256,7 +256,7 @@ namespace EuropaEnginePatcher
                     break;
 
                 case GameType.ArsenalOfDemocracy:
-                    _patchType = PatchType.ArsenalOfDemocracy;
+                    _patchType = PatchType.ArsenalOfDemocracyVersionUnknown;
                     AppendLog("PatchType: Arsenal of Democracy\n\n");
                     break;
 
@@ -281,7 +281,7 @@ namespace EuropaEnginePatcher
             switch (_patchType)
             {
                 case PatchType.HeartsOfIron2:
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracyVersionUnknown:
                 case PatchType.DarkestHourVersionUnkonwn:
                     break;
 
@@ -332,7 +332,7 @@ namespace EuropaEnginePatcher
                     }
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracyVersionUnknown:
                     // Arsenal of Democracy X.XX
                     pattern = new byte[]
                     {
@@ -418,7 +418,7 @@ namespace EuropaEnginePatcher
                     }
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracyVersionUnknown:
                     if (_gameVersion <= 104)
                     {
                         _patchType = PatchType.ArsenalOfDemocracy104;
@@ -429,15 +429,22 @@ namespace EuropaEnginePatcher
                         _patchType = PatchType.ArsenalOfDemocracy107;
                         AppendLog("PatchType: Arsenal of Democracy 1.07\n\n");
                     }
-                    else if (_gameVersion <= 109)
+                    else if (_gameVersion == 109)
                     {
                         _patchType = PatchType.ArsenalOfDemocracy109;
                         AppendLog("PatchType: Arsenal of Democracy 1.09\n\n");
                     }
-                    else
+                    else if (_gameVersion == 110)
                     {
-                        _patchType = PatchType.ArsenalOfDemocracy;
+                        _patchType = PatchType.ArsenalOfDemocracy110;
                         AppendLog("PatchType: Arsenal of Democracy\n\n");
+                    } else if (_gameVersion == 112)
+                    {
+                        _patchType = PatchType.ArsenalOfDemocracy112;
+                        AppendLog("PatchType: Arsenal of Democracy\n\n");
+                    } else
+                    {
+                        AppendLog("Not Support version\n\n");
                     }
                     break;
 
@@ -459,7 +466,7 @@ namespace EuropaEnginePatcher
                     }
                     else
                     {
-                        AppendLog("Version is unknown\n\n");
+                        AppendLog("Not Support version\n\n");
                     }
                     break;
             }
@@ -895,10 +902,11 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy:
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy104:
                 case PatchType.DarkestHour105:
                 case PatchType.DarkestHour104:
                 case PatchType.DarkestHour102:                
@@ -956,9 +964,9 @@ namespace EuropaEnginePatcher
                     case PatchType.HeartsOfIron2:
                     case PatchType.HeartsOfIron212:
                     case PatchType.IronCrossHoI2:
-                    case PatchType.ArsenalOfDemocracy104:
-                    case PatchType.ArsenalOfDemocracy107:
                     case PatchType.ArsenalOfDemocracy109:
+                    case PatchType.ArsenalOfDemocracy107:
+                    case PatchType.ArsenalOfDemocracy104:
                     case PatchType.DarkestHour105:
                     case PatchType.DarkestHour104:
                     case PatchType.DarkestHour102:                    
@@ -980,7 +988,8 @@ namespace EuropaEnginePatcher
                         }
                         break;
 
-                    case PatchType.ArsenalOfDemocracy:
+                    case PatchType.ArsenalOfDemocracy112:
+                    case PatchType.ArsenalOfDemocracy110:
                         if (!ScanGetDivisionName())
                         {
                             return false;
@@ -1070,10 +1079,11 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy:
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy104:
                 case PatchType.DarkestHour105:
                 case PatchType.DarkestHour104:
                 case PatchType.DarkestHour102:                
@@ -1129,7 +1139,8 @@ namespace EuropaEnginePatcher
             byte[] pattern;
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     pattern = new byte[]
                     {
                         0x8B, 0x45, 0x78, 0x8B, 0x48, 0x0C, 0x89, 0x4D
@@ -1190,8 +1201,8 @@ namespace EuropaEnginePatcher
                     };
                     break;
 
-                case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:                
                     pattern = new byte[]
                     {
                         0x8B, 0x55, 0x18, 0x8B, 0x02, 0x8B, 0x4D, 0x18,
@@ -1200,7 +1211,8 @@ namespace EuropaEnginePatcher
                     };
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     pattern = new byte[]
                     {
                         0x8B, 0x55, 0x78, 0x8B, 0x02, 0x8B, 0x4D, 0x78,
@@ -1255,7 +1267,8 @@ namespace EuropaEnginePatcher
                     };
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     pattern = new byte[]
                     {
                         0xC7, 0x45, 0xF4, 0x00, 0x00, 0x00, 0x00, 0x8B,
@@ -1295,7 +1308,8 @@ namespace EuropaEnginePatcher
             byte[] pattern;
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     pattern = new byte[]
                     {
                         0x8B, 0x45, 0xF4, 0x8B, 0xE5, 0x5D, 0xC2, 0x04,
@@ -1335,15 +1349,16 @@ namespace EuropaEnginePatcher
             byte[] pattern;
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     pattern = new byte[]
                     {
                         0x75, 0x1A, 0x8B, 0xCB, 0x8D, 0x51, 0x01
                     };
                     break;
 
-                case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
                     pattern = new byte[]
                     {
                         0x75, 0x1A, 0x8B, 0xC7, 0x8D, 0x50, 0x01
@@ -1381,9 +1396,10 @@ namespace EuropaEnginePatcher
             List<uint> l;
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy:
-                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
                     pattern = new byte[]
                     {
                         0x3D, 0xA7, 0x00, 0x00, 0x00, 0x0F, 0x8F
@@ -1815,7 +1831,8 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakStart5 = l[0];
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     pattern = new byte[]
                     {
                         0x88, 0x5C, 0x14, 0x0C, 0x42
@@ -2313,7 +2330,8 @@ namespace EuropaEnginePatcher
                     _posCalcLineBreakEnd6 = l[0] + (uint) pattern.Length;
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     pattern = new byte[]
                     {
                         0x8D, 0x84, 0x24, 0x0C, 0x02, 0x00, 0x00, 0x66,
@@ -2417,9 +2435,9 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy104:                
                 case PatchType.DarkestHour105:
                 case PatchType.DarkestHour104:
                 case PatchType.DarkestHour102:				
@@ -2448,7 +2466,8 @@ namespace EuropaEnginePatcher
                     _posGetDivisionName2 = l[0];
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     pattern = new byte[]
                     {
                         0x2E, 0x20, 0x00, 0x00
@@ -2495,9 +2514,10 @@ namespace EuropaEnginePatcher
             List<uint> l;
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy:
-                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
                     l = BinaryScan(_data, pattern, _posRdataSection, _sizeRdataSection);
                     break;
 
@@ -2584,9 +2604,9 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy104:
                 case PatchType.DarkestHour105:
                 case PatchType.DarkestHour104:
                 case PatchType.DarkestHour102:				
@@ -2615,7 +2635,8 @@ namespace EuropaEnginePatcher
                     _posGetArmyName2 = l[0];
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     pattern = new byte[]
                     {
                         0xC7, 0x45, 0xFC, 0xFF, 0xFF, 0xFF, 0xFF, 0x8B,
@@ -2662,9 +2683,10 @@ namespace EuropaEnginePatcher
             List<uint> l;
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy:
-                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
                     l = BinaryScan(_data, pattern, _posRdataSection, _sizeRdataSection);
                     break;
 
@@ -3203,7 +3225,8 @@ namespace EuropaEnginePatcher
             byte[] pattern = null;
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     pattern = new byte[]
                     {
                         0xC6, 0x85, 0x50, 0xFF, 0xFF, 0xFF, 0x00, 0x6A,
@@ -3265,7 +3288,8 @@ namespace EuropaEnginePatcher
             }
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
                     _posTermModelNameStart1 = l[0];
                     _posTermModelNameStart2 = l[1];
@@ -3328,10 +3352,11 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy:
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy104:
                 case PatchType.DarkestHour105:
                 case PatchType.DarkestHour104:
                 case PatchType.DarkestHour102:				
@@ -3343,7 +3368,8 @@ namespace EuropaEnginePatcher
             switch (_patchType)
             {
                 case PatchType.ForTheGlory:
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
                     PatchIsDebuggerPresent();
                     break;
@@ -3377,9 +3403,9 @@ namespace EuropaEnginePatcher
                     case PatchType.HeartsOfIron2:
                     case PatchType.HeartsOfIron212:
                     case PatchType.IronCrossHoI2:
-                    case PatchType.ArsenalOfDemocracy104:
-                    case PatchType.ArsenalOfDemocracy107:
                     case PatchType.ArsenalOfDemocracy109:
+                    case PatchType.ArsenalOfDemocracy107:
+                    case PatchType.ArsenalOfDemocracy104:                    
                     case PatchType.DarkestHour105:
                     case PatchType.DarkestHour104:
                     case PatchType.DarkestHour102:					
@@ -3389,7 +3415,8 @@ namespace EuropaEnginePatcher
                         EmbedArmyNameFormat();
                         break;
 
-                    case PatchType.ArsenalOfDemocracy:
+                    case PatchType.ArsenalOfDemocracy112:
+                    case PatchType.ArsenalOfDemocracy110:
                         PatchGetDivisionName();
                         PatchGetArmyName();
                         break;
@@ -3467,10 +3494,11 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy:
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy104:
                 case PatchType.DarkestHour105:
                 case PatchType.DarkestHour104:
                 case PatchType.DarkestHour102:				
@@ -3524,7 +3552,8 @@ namespace EuropaEnginePatcher
             switch (_patchType)
             {
                 case PatchType.ForTheGlory:
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
                         $"%04 ${_addrIsDebuggerPresent:X8} IsDebuggerPresent");
@@ -3599,15 +3628,16 @@ namespace EuropaEnginePatcher
                     case PatchType.HeartsOfIron2:
                     case PatchType.HeartsOfIron212:
                     case PatchType.IronCrossHoI2:
-                    case PatchType.ArsenalOfDemocracy104:
-                    case PatchType.ArsenalOfDemocracy107:
                     case PatchType.ArsenalOfDemocracy109:
+                    case PatchType.ArsenalOfDemocracy107:
+                    case PatchType.ArsenalOfDemocracy104:
                     case PatchType.DarkestHour105:
                     case PatchType.DarkestHour104:
                     case PatchType.DarkestHour102:					
                         PatchByte(_data, offset, 0x94);
                         break;
-                    case PatchType.ArsenalOfDemocracy:
+                    case PatchType.ArsenalOfDemocracy112:
+                    case PatchType.ArsenalOfDemocracy110:
                         PatchByte(_data, offset, 0x58);
                         break;
                     default:
@@ -3705,10 +3735,11 @@ namespace EuropaEnginePatcher
                     case PatchType.HeartsOfIron2:
                     case PatchType.HeartsOfIron212:
                     case PatchType.IronCrossHoI2:
-                    case PatchType.ArsenalOfDemocracy:
-                    case PatchType.ArsenalOfDemocracy104:
-                    case PatchType.ArsenalOfDemocracy107:
+                    case PatchType.ArsenalOfDemocracy112:
+                    case PatchType.ArsenalOfDemocracy110:
                     case PatchType.ArsenalOfDemocracy109:
+                    case PatchType.ArsenalOfDemocracy107:
+                    case PatchType.ArsenalOfDemocracy104:
                     case PatchType.DarkestHour105:
                     case PatchType.DarkestHour104:
                     case PatchType.DarkestHour102:					
@@ -3796,7 +3827,7 @@ namespace EuropaEnginePatcher
                 offset++;
                 PatchByte(_data, offset, 0x75);
                 offset++;
-                PatchByte(_data, offset, (byte) (_patchType == PatchType.ArsenalOfDemocracy ? 0x7C : 0x1C));
+                PatchByte(_data, offset, (byte) ((_patchType == PatchType.ArsenalOfDemocracy110 || _patchType == PatchType.ArsenalOfDemocracy112) ? 0x7C : 0x1C));
                 offset++;
                 PatchByte(_data, offset, 0x8B); // mov eax,[ecx+10h]
                 offset++;
@@ -3848,7 +3879,7 @@ namespace EuropaEnginePatcher
             offset++;
             PatchByte(_data, offset, 0x55);
             offset++;
-            PatchByte(_data, offset, (byte) (_patchType == PatchType.ArsenalOfDemocracy ? 0x78 : 0x18));
+            PatchByte(_data, offset, (byte) ((_patchType == PatchType.ArsenalOfDemocracy110 || _patchType == PatchType.ArsenalOfDemocracy112) ? 0x78 : 0x18));
             offset++;
             PatchByte(_data, offset, 0xFF); // push [edx+2Ch]
             offset++;
@@ -3860,13 +3891,13 @@ namespace EuropaEnginePatcher
             offset++;
             PatchByte(_data, offset, 0x75);
             offset++;
-            PatchByte(_data, offset, (byte) (_patchType == PatchType.ArsenalOfDemocracy ? 0x68 : 0x08));
+            PatchByte(_data, offset, (byte) ((_patchType == PatchType.ArsenalOfDemocracy110 || _patchType == PatchType.ArsenalOfDemocracy112) ? 0x68 : 0x08));
             offset++;
             PatchByte(_data, offset, 0x8D); // lea eax,[ebp+10h/70h]
             offset++;
             PatchByte(_data, offset, 0x45);
             offset++;
-            PatchByte(_data, offset, (byte) (_patchType == PatchType.ArsenalOfDemocracy ? 0x70 : 0x10));
+            PatchByte(_data, offset, (byte) ((_patchType == PatchType.ArsenalOfDemocracy110 || _patchType == PatchType.ArsenalOfDemocracy112) ? 0x70 : 0x10));
             offset++;
             PatchByte(_data, offset, 0x50); // push eax
             offset++;
@@ -3874,7 +3905,7 @@ namespace EuropaEnginePatcher
             offset++;
             PatchByte(_data, offset, 0x45);
             offset++;
-            PatchByte(_data, offset, (byte) (_patchType == PatchType.ArsenalOfDemocracy ? 0x6C : 0x0C));
+            PatchByte(_data, offset, (byte) ((_patchType == PatchType.ArsenalOfDemocracy110 || _patchType == PatchType.ArsenalOfDemocracy112) ? 0x6C : 0x0C));
             offset++;
             PatchByte(_data, offset, 0x50); // push eax
             offset++;
@@ -3882,7 +3913,7 @@ namespace EuropaEnginePatcher
             offset++;
             PatchByte(_data, offset, 0x75);
             offset++;
-            PatchByte(_data, offset, (byte) (_patchType == PatchType.ArsenalOfDemocracy ? 0x74 : 0x14));
+            PatchByte(_data, offset, (byte) ((_patchType == PatchType.ArsenalOfDemocracy110 || _patchType == PatchType.ArsenalOfDemocracy112) ? 0x74 : 0x14));
             offset++;
             PatchByte(_data, offset, 0xFF); // call [varTextOutDC2Address]
             offset++;
@@ -3933,7 +3964,8 @@ namespace EuropaEnginePatcher
             switch (_patchType)
             {
                 case PatchType.ForTheGlory:
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
                         $"%04 ${_addrIsDebuggerPresent:X8} IsDebuggerPresent");
@@ -3991,12 +4023,13 @@ namespace EuropaEnginePatcher
             offset++;
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     PatchByte(_data, offset, 0xF8);
                     break;
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy104:                
                 case PatchType.DarkestHour105:
                 case PatchType.DarkestHour104:
                 case PatchType.DarkestHour102:				
@@ -4050,10 +4083,11 @@ namespace EuropaEnginePatcher
                     case PatchType.HeartsOfIron2:
                     case PatchType.HeartsOfIron212:
                     case PatchType.IronCrossHoI2:
-                    case PatchType.ArsenalOfDemocracy:
-                    case PatchType.ArsenalOfDemocracy104:
-                    case PatchType.ArsenalOfDemocracy107:
+                    case PatchType.ArsenalOfDemocracy112:
+                    case PatchType.ArsenalOfDemocracy110:
                     case PatchType.ArsenalOfDemocracy109:
+                    case PatchType.ArsenalOfDemocracy107:
+                    case PatchType.ArsenalOfDemocracy104:
                     case PatchType.DarkestHour105:
                     case PatchType.DarkestHour104:
                     case PatchType.DarkestHour102:					
@@ -4228,7 +4262,8 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, offset, 0x17);
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
                     PatchByte(_data, offset, 0x16);
                     break;
@@ -4248,9 +4283,10 @@ namespace EuropaEnginePatcher
             AppendLog("  proc ChatBlockChar書き換え\n");
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy:
-                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
                     // 0x5C
                     PatchByte(_data, _posChatBlockChar1 + 0x5C + 0x59, 0x08);
                     PatchByte(_data, _posChatBlockChar2 + 0x5C - 0x2C, 0x01);
@@ -4328,7 +4364,8 @@ namespace EuropaEnginePatcher
             switch (_patchType)
             {
                 case PatchType.ForTheGlory:
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
                         $"%04 ${_addrIsDebuggerPresent:X8} IsDebuggerPresent");
@@ -4471,7 +4508,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     PatchByte(_data, offset, 0x8D); // lea esi,[esi-1]
                     offset++;
                     PatchByte(_data, offset, 0x76);
@@ -4821,7 +4859,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     PatchByte(_data, offset, 0x01); // add esi,eax
                     offset++;
                     PatchByte(_data, offset, 0xC6);
@@ -5011,7 +5050,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     PatchByte(_data, offset, 0x8D); // lea edi,[edi-01h]
                     offset++;
                     PatchByte(_data, offset, 0x7F);
@@ -5367,7 +5407,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     PatchByte(_data, offset, 0x01); // add edi,eax
                     offset++;
                     PatchByte(_data, offset, 0xC7);
@@ -5548,7 +5589,8 @@ namespace EuropaEnginePatcher
                         offset++;
                         break;
 
-                    case PatchType.ArsenalOfDemocracy:
+                    case PatchType.ArsenalOfDemocracy112:
+                    case PatchType.ArsenalOfDemocracy110:
                         PatchByte(_data, offset, 0x8D); // lea esi,[esi-01h]
                         offset++;
                         PatchByte(_data, offset, 0x76);
@@ -5779,7 +5821,8 @@ namespace EuropaEnginePatcher
                         offset++;
                         break;
 
-                    case PatchType.ArsenalOfDemocracy:
+                    case PatchType.ArsenalOfDemocracy112:
+                    case PatchType.ArsenalOfDemocracy110:
                         PatchByte(_data, offset, 0x01); // add esi,eax
                         offset++;
                         PatchByte(_data, offset, 0xC6);
@@ -6085,7 +6128,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     PatchByte(_data, offset, 0x8D); // lea esi,[esi-01h]
                     offset++;
                     PatchByte(_data, offset, 0x76);
@@ -6413,7 +6457,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     PatchByte(_data, offset, 0x01); // add esi,eax
                     offset++;
                     PatchByte(_data, offset, 0xC6);
@@ -6615,7 +6660,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     PatchByte(_data, offset, 0x8D); // lea esi,[esi-01h]
                     offset++;
                     PatchByte(_data, offset, 0x76);
@@ -6955,7 +7001,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     PatchByte(_data, offset, 0x01); // add esi,eax
                     offset++;
                     PatchByte(_data, offset, 0xC6);
@@ -7193,9 +7240,9 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy104:                
                 case PatchType.DarkestHour105:
                 case PatchType.DarkestHour104:
                 case PatchType.DarkestHour102:
@@ -7261,7 +7308,8 @@ namespace EuropaEnginePatcher
                         $"%XX ${GetRelativeAddress(GetTextAddress(offset + 4), offsetGetDivisionOrderName):X8} GetDivisionOrderName");
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     uint addrDivisionAbbrev = GetLong(_posGetDivisionName1);
                     PatchLong(_data, _posGetDivisionName1, addrDivisionAbbrev + 2,
                         $"%XX ${(addrDivisionAbbrev + 2):X8} addrDivisionAbbrev");
@@ -7315,9 +7363,9 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron2:
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
-                case PatchType.ArsenalOfDemocracy104:
-                case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
+                case PatchType.ArsenalOfDemocracy107:
+                case PatchType.ArsenalOfDemocracy104:                
                 case PatchType.DarkestHour105:
                 case PatchType.DarkestHour104:
                 case PatchType.DarkestHour102:
@@ -7349,9 +7397,10 @@ namespace EuropaEnginePatcher
                             offset++;
                             PatchByte(_data, offset, 0xFE);
                             break;
-                        case PatchType.ArsenalOfDemocracy:
-                        case PatchType.ArsenalOfDemocracy107:
+                        case PatchType.ArsenalOfDemocracy112:
+                        case PatchType.ArsenalOfDemocracy110:
                         case PatchType.ArsenalOfDemocracy109:
+                        case PatchType.ArsenalOfDemocracy107:                        
                             PatchByte(_data, offset, 0xD0);
                             offset++;
                             PatchByte(_data, offset, 0xFD);
@@ -7402,9 +7451,10 @@ namespace EuropaEnginePatcher
                             offset++;
                             PatchByte(_data, offset, 0xFE);
                             break;
-                        case PatchType.ArsenalOfDemocracy:
-                        case PatchType.ArsenalOfDemocracy107:
+                        case PatchType.ArsenalOfDemocracy112:
+                        case PatchType.ArsenalOfDemocracy110:
                         case PatchType.ArsenalOfDemocracy109:
+                        case PatchType.ArsenalOfDemocracy107:
                             PatchByte(_data, offset, 0xA4);
                             offset++;
                             PatchByte(_data, offset, 0xFD);
@@ -7435,7 +7485,8 @@ namespace EuropaEnginePatcher
                         $"%XX ${GetRelativeAddress(GetTextAddress(offset + 4), offsetGetArmyOrderName):X8} GetArmyOrderName");
                     break;
 
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     uint addrBufOrdinal = GetLong(_posGetArmyName1 + 5);
                     uint addrPutNumber = GetLong(_posGetArmyName1 + 11);
                     offset = _posGetArmyName1;
@@ -7767,7 +7818,8 @@ namespace EuropaEnginePatcher
             offset++;
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                 case PatchType.ArsenalOfDemocracy109:
                     PatchLong(_data, offset, _addrIsDebuggerPresent,
                         $"%04 ${_addrIsDebuggerPresent:X8} IsDebuggerPresent");
@@ -7836,7 +7888,8 @@ namespace EuropaEnginePatcher
             offset++;
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     PatchByte(_data, offset, 0x8D); // lea eax,[ebp-CCh]
                     offset++;
                     PatchByte(_data, offset, 0x85);
@@ -7915,7 +7968,8 @@ namespace EuropaEnginePatcher
             offset += 4;
             switch (_patchType)
             {
-                case PatchType.ArsenalOfDemocracy:
+                case PatchType.ArsenalOfDemocracy112:
+                case PatchType.ArsenalOfDemocracy110:
                     PatchByte(_data, offset, 0xC6); // mov byte ptr [ebp+eax-CCh],0
                     offset++;
                     PatchByte(_data, offset, 0x84);
@@ -8137,7 +8191,7 @@ namespace EuropaEnginePatcher
                     $"%XX ${GetTextAddress(posTermModelName):X8} TermModelName");
                 _posTermModelNameStart1 += 4;
 
-                if (_patchType == PatchType.ArsenalOfDemocracy)
+                if (_patchType == PatchType.ArsenalOfDemocracy110 || _patchType == PatchType.ArsenalOfDemocracy112)
                 {
                     PatchByte(_data, _posTermModelNameStart1, 0x90); // nop
                     _posTermModelNameStart1++;
@@ -8152,7 +8206,7 @@ namespace EuropaEnginePatcher
                     $"%XX ${GetTextAddress(posTermModelName):X8} TermModelName");
                 _posTermModelNameStart2 += 4;
 
-                if (_patchType == PatchType.ArsenalOfDemocracy)
+                if (_patchType == PatchType.ArsenalOfDemocracy110 || _patchType == PatchType.ArsenalOfDemocracy112)
                 {
                     PatchByte(_data, _posTermModelNameStart2, 0x90); // nop
                     _posTermModelNameStart2++;
@@ -8453,14 +8507,17 @@ namespace EuropaEnginePatcher
         ForTheGlory, // For The Glory
         Victoria, // Victoria
         HeartsOfIron, // Hearts of Iron
-        HeartsOfIron2, // Hearts of Iron 2 1.3-
-        ArsenalOfDemocracy, // Arsenal of Democracy 1.10-
+        HeartsOfIron2, // Hearts of Iron 2 1.3-        
         DarkestHourVersionUnkonwn,
         DarkestHour104, // Darkest Hour 1.03-1.04
-        DarkestHour105, // Darkest Hour 1.05
+        DarkestHour105, // Darkest Hour 1.05    
+        ArsenalOfDemocracyVersionUnknown,
         ArsenalOfDemocracy104, // Arsenal of Democracy 1.02-1.04
         ArsenalOfDemocracy107, // Arsenal of Democracy 1.05-1.07
         ArsenalOfDemocracy109, // Arsenal of Democracy 1.08-1.09
+        ArsenalOfDemocracy110, // Arsenal of Democracy 1.10
+        ArsenalOfDemocracy111, // Arsenal of Democracy 1.11
+        ArsenalOfDemocracy112, // Arsenal of Democracy 1.12
         DarkestHour102, // Darkest Hour 1.00-1.02
         HeartsOfIron212, // Hearts of Iron 2 1.2
         IronCrossHoI2 // Iron Cross over Hearts of Iron 2
