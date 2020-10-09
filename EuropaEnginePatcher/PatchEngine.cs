@@ -261,7 +261,7 @@ namespace EuropaEnginePatcher
                     break;
 
                 case GameType.DarkestHour:
-                    _patchType = PatchType.DarkestHour;
+                    _patchType = PatchType.DarkestHourVersionUnkonwn;
                     AppendLog("PatchType: Darkest Hour\n\n");
                     break;
 
@@ -282,7 +282,7 @@ namespace EuropaEnginePatcher
             {
                 case PatchType.HeartsOfIron2:
                 case PatchType.ArsenalOfDemocracy:
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHourVersionUnkonwn:
                     break;
 
                 default:
@@ -361,7 +361,7 @@ namespace EuropaEnginePatcher
                                    (_data[offset + 3] - '0');
                     break;
 
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHourVersionUnkonwn:
                     // Darkest Hour v X.XX
                     pattern = new byte[]
                     {
@@ -441,12 +441,17 @@ namespace EuropaEnginePatcher
                     }
                     break;
 
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHourVersionUnkonwn:
                     if (_gameVersion == 105)
                     {
                         _patchType = PatchType.DarkestHour105;
                         AppendLog("PatchType: Darkest Hour 1.05\n\n");
-                    } else 
+                    } else
+                    if (_gameVersion == 103 || _gameVersion == 104)
+                    {
+                        _patchType = PatchType.DarkestHour103;
+                        AppendLog("PatchType: Darkest Hour 1.03 or 1.04\n\n");
+                    } else
                     if (_gameVersion <= 102)
                     {
                         _patchType = PatchType.DarkestHour102;
@@ -454,8 +459,7 @@ namespace EuropaEnginePatcher
                     }
                     else
                     {
-                        _patchType = PatchType.DarkestHour;
-                        AppendLog("PatchType: Darkest Hour\n\n");
+                        AppendLog("Version is unknown\n\n");
                     }
                     break;
             }
@@ -721,8 +725,8 @@ namespace EuropaEnginePatcher
             int nReserveSize;
             switch (_patchType)
             {
-                case PatchType.DarkestHour:
-				case PatchType.DarkestHour105:
+                case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:				
                 case PatchType.DarkestHour102:
                     nReserveSize = 0x60;
                     break;
@@ -895,9 +899,9 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
                 case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
+                case PatchType.DarkestHour102:                
                     if (!ScanLatinToUpper())
                     {
                         return false;
@@ -955,9 +959,9 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy104:
                     case PatchType.ArsenalOfDemocracy107:
                     case PatchType.ArsenalOfDemocracy109:
-                    case PatchType.DarkestHour:
-                    case PatchType.DarkestHour102:
                     case PatchType.DarkestHour105:
+                    case PatchType.DarkestHour103:
+                    case PatchType.DarkestHour102:                    
                         if (!ScanGetDivisionName())
                         {
                             return false;
@@ -1052,9 +1056,9 @@ namespace EuropaEnginePatcher
             // ゲーム固有
             switch (_patchType)
             {
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
                 case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
+                case PatchType.DarkestHour102:                
                     if (!ScanEeMaxAmphibModTitle())
                     {
                         return false;
@@ -1070,9 +1074,9 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
                 case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
+                case PatchType.DarkestHour102:                
                     if (!ScanTermModelName())
                     {
                         return false;
@@ -1166,9 +1170,9 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy104:
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
                 case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
+                case PatchType.DarkestHour102:                
                     pattern = new byte[]
                     {
                         0x8B, 0x4D, 0x18, 0x8B, 0x11, 0x8B, 0x4D, 0x18,
@@ -1240,9 +1244,9 @@ namespace EuropaEnginePatcher
             byte[] pattern;
             switch (_patchType)
             {
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
                 case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
+                case PatchType.DarkestHour102:                
                     pattern = new byte[]
                     {
                         0xC7, 0x45, 0xFC, 0x00, 0x00, 0x00, 0x00, 0xC6,
@@ -1678,7 +1682,7 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy104:
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour103:
                 case PatchType.DarkestHour102:
 
                     pattern = new byte[]
@@ -2160,7 +2164,7 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy104:
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour103:
                 case PatchType.DarkestHour102:
                     pattern = new byte[]
                     {
@@ -2415,9 +2419,9 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
-				case PatchType.DarkestHour105:
+                case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
+                case PatchType.DarkestHour102:				
                     pattern = new byte[]
                     {
                         0x8B, 0x45, 0xF8, 0x99, 0xB9, 0x64, 0x00, 0x00,
@@ -2582,9 +2586,9 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
-				case PatchType.DarkestHour105:
+                case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
+                case PatchType.DarkestHour102:				
                     pattern = new byte[]
                     {
                         0xFF, 0xFF, 0x99, 0xB9, 0x64, 0x00, 0x00, 0x00,
@@ -3223,8 +3227,8 @@ namespace EuropaEnginePatcher
                     };
                     break;
 
-                case PatchType.DarkestHour:
                 case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
                     pattern = new byte[]
                     {
                         0x68, 0xFF, 0x00, 0x00, 0x00, 0xC6, 0x44, 0x24,
@@ -3244,7 +3248,7 @@ namespace EuropaEnginePatcher
                     break;
             }
             List<uint> l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
-            if (_patchType == PatchType.DarkestHour)
+            if (_patchType == PatchType.DarkestHour103 || _patchType == PatchType.DarkestHour105)
             {
                 if (l.Count < 8)
                 {
@@ -3266,8 +3270,8 @@ namespace EuropaEnginePatcher
                     _posTermModelNameStart2 = l[1];
                     break;
 
-                case PatchType.DarkestHour:
                 case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
                     _posTermModelNameStart1 = l[0] + 5;
                     _posTermModelNameStart2 = l[1] + 5;
                     _posTermModelNameStart3 = l[2] + 5;
@@ -3283,7 +3287,7 @@ namespace EuropaEnginePatcher
                     _posTermModelNameStart2 = l[1] + 5;
                     break;
             }
-            if (_patchType == PatchType.DarkestHour || _patchType == PatchType.DarkestHour105)
+            if (_patchType == PatchType.DarkestHour103 || _patchType == PatchType.DarkestHour105)
             {
                 byte[] pattern2 =
                 {
@@ -3327,9 +3331,9 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
-				case PatchType.DarkestHour105:
+                case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
+                case PatchType.DarkestHour102:				
                     PatchLatinToUpper();
                     PatchChatBlockChar();
                     break;
@@ -3375,9 +3379,9 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy104:
                     case PatchType.ArsenalOfDemocracy107:
                     case PatchType.ArsenalOfDemocracy109:
-                    case PatchType.DarkestHour:
-                    case PatchType.DarkestHour102:
-					case PatchType.DarkestHour105:
+                    case PatchType.DarkestHour105:
+                    case PatchType.DarkestHour103:
+                    case PatchType.DarkestHour102:					
                         PatchGetDivisionName();
                         EmbedDivisionNameFormat();
                         PatchGetArmyName();
@@ -3450,9 +3454,9 @@ namespace EuropaEnginePatcher
             // ゲーム固有
             switch (_patchType)
             {
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
                 case PatchType.DarkestHour102:
-				case PatchType.DarkestHour105:
                     PatchPushEeMaxAmphibModTitle();
                     EmbedEeMaxAmphibModTitle();
                     break;
@@ -3466,9 +3470,9 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
-				case PatchType.DarkestHour105:
+                case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
+                case PatchType.DarkestHour102:				
                     PatchTermModelName();
                     EmbedStrNLen0();
                     break;
@@ -3597,9 +3601,9 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy104:
                     case PatchType.ArsenalOfDemocracy107:
                     case PatchType.ArsenalOfDemocracy109:
-                    case PatchType.DarkestHour:
-                    case PatchType.DarkestHour102:
-					case PatchType.DarkestHour105:
+                    case PatchType.DarkestHour105:
+                    case PatchType.DarkestHour103:
+                    case PatchType.DarkestHour102:					
                         PatchByte(_data, offset, 0x94);
                         break;
                     case PatchType.ArsenalOfDemocracy:
@@ -3704,9 +3708,9 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy104:
                     case PatchType.ArsenalOfDemocracy107:
                     case PatchType.ArsenalOfDemocracy109:
-                    case PatchType.DarkestHour:
-                    case PatchType.DarkestHour102:
-					case PatchType.DarkestHour105:
+                    case PatchType.DarkestHour105:
+                    case PatchType.DarkestHour103:
+                    case PatchType.DarkestHour102:					
                         PatchByte(_data, offset, 0x19);
                         break;
                     default:
@@ -3992,9 +3996,9 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
-                case PatchType.DarkestHour:
-                case PatchType.DarkestHour102:
-				case PatchType.DarkestHour105:
+                case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
+                case PatchType.DarkestHour102:				
                     PatchByte(_data, offset, 0xE8);
                     break;
                 default:
@@ -4049,9 +4053,9 @@ namespace EuropaEnginePatcher
                     case PatchType.ArsenalOfDemocracy104:
                     case PatchType.ArsenalOfDemocracy107:
                     case PatchType.ArsenalOfDemocracy109:
-                    case PatchType.DarkestHour:
-                    case PatchType.DarkestHour102:
-					case PatchType.DarkestHour105:
+                    case PatchType.DarkestHour105:
+                    case PatchType.DarkestHour103:
+                    case PatchType.DarkestHour102:					
                         PatchByte(_data, offset, 0x19);
                         break;
                     default:
@@ -4404,7 +4408,7 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy104:
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour103:
                 case PatchType.DarkestHour102:
 
                     PatchByte(_data, offset, 0x4E); // dec esi
@@ -4723,7 +4727,7 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy104:
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour103:
                 case PatchType.DarkestHour102:
                     PatchByte(_data, offset, 0x03); // add esi,eax
                     offset++;
@@ -4940,7 +4944,7 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy104:
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour103:
                 case PatchType.DarkestHour102:
                     PatchByte(_data, offset, 0x4E); // dec esi
                     offset++;
@@ -5269,7 +5273,7 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy104:
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour103:
                 case PatchType.DarkestHour102:
                     PatchByte(_data, offset, 0x03); // add esi,eax
                     offset++;
@@ -5487,9 +5491,9 @@ namespace EuropaEnginePatcher
                     case PatchType.HeartsOfIron212:
                     case PatchType.IronCrossHoI2:
                     case PatchType.ArsenalOfDemocracy104:
-                    case PatchType.DarkestHour:
+                    case PatchType.DarkestHour105:
+                    case PatchType.DarkestHour103:
                     case PatchType.DarkestHour102:
-					case PatchType.DarkestHour105:
                         PatchByte(_data, offset, 0x8B); // mov ecx,[esp+00000238h]
                         offset++;
                         PatchByte(_data, offset, 0x8C);
@@ -5633,9 +5637,9 @@ namespace EuropaEnginePatcher
                     case PatchType.HeartsOfIron212:
                     case PatchType.IronCrossHoI2:
                     case PatchType.ArsenalOfDemocracy104:
-                    case PatchType.DarkestHour:
-                    case PatchType.DarkestHour102:
-					case PatchType.DarkestHour105:
+                    case PatchType.DarkestHour105:
+                    case PatchType.DarkestHour103:
+                    case PatchType.DarkestHour102:					
                         PatchByte(_data, offset, 0x8B); // mov ecx,[esp+00000238h]
                         offset++;
                         PatchByte(_data, offset, 0x8C);
@@ -6011,7 +6015,7 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy104:
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour103:
                 case PatchType.DarkestHour102:
                     PatchByte(_data, offset, 0x8B); // mov ecx,[esp+00000234h] // mov     esi, [esp+22Ch+arg_4]
                     offset++;
@@ -6295,7 +6299,7 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy104:
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour103:
                 case PatchType.DarkestHour102:
                     PatchByte(_data, offset, 0x8B); // mov ecx,[esp+00000234h] // 22Ch+arg_4
                     offset++;
@@ -6510,7 +6514,7 @@ namespace EuropaEnginePatcher
                 case PatchType.HeartsOfIron212:
                 case PatchType.IronCrossHoI2:
                 case PatchType.ArsenalOfDemocracy104:
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour103:
                 case PatchType.DarkestHour102:
                     PatchByte(_data, offset, 0x8B); // mov ecx,[esp+00000230h] // mov     ecx, [esp+228h+arg_4]から
                     offset++;
@@ -6757,7 +6761,7 @@ namespace EuropaEnginePatcher
                 case PatchType.EuropaUniversalis2:
                 case PatchType.HeartsOfIron2:
                 case PatchType.ArsenalOfDemocracy104:
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour103:
                 case PatchType.DarkestHour102:
                     PatchByte(_data, offset, 0x8B); // mov ecx,[esp+00000230h] // 228h+arg_4
                     offset++;
@@ -7191,7 +7195,8 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
                 case PatchType.DarkestHour102:
                     offset = _posGetDivisionName1;
                     PatchByte(_data, offset, 0xE9); // jmp GetDivisionNameOtherCase
@@ -7312,7 +7317,8 @@ namespace EuropaEnginePatcher
                 case PatchType.ArsenalOfDemocracy104:
                 case PatchType.ArsenalOfDemocracy107:
                 case PatchType.ArsenalOfDemocracy109:
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour105:
+                case PatchType.DarkestHour103:
                 case PatchType.DarkestHour102:
                     offset = _posGetArmyName1;
                     PatchByte(_data, offset, 0xE9); // jmp GetArmyNameOtherCase
@@ -7349,7 +7355,8 @@ namespace EuropaEnginePatcher
                             offset++;
                             PatchByte(_data, offset, 0xFD);
                             break;
-                        case PatchType.DarkestHour:
+                        case PatchType.DarkestHour105:
+                        case PatchType.DarkestHour103:
                         case PatchType.DarkestHour102:
                             PatchByte(_data, offset, 0xD0);
                             offset++;
@@ -7401,7 +7408,8 @@ namespace EuropaEnginePatcher
                             offset++;
                             PatchByte(_data, offset, 0xFD);
                             break;
-                        case PatchType.DarkestHour:
+                        case PatchType.DarkestHour105:
+                        case PatchType.DarkestHour103:
                         case PatchType.DarkestHour102:
                             PatchByte(_data, offset, 0xA8);
                             offset++;
@@ -7883,7 +7891,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
 
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour105: // 怪しい
+                case PatchType.DarkestHour103:
                     PatchByte(_data, offset, 0x8D); // lea eax, byte ptr [esp+4Ch]
                     offset++;
                     PatchByte(_data, offset, 0x44);
@@ -7973,7 +7982,8 @@ namespace EuropaEnginePatcher
                     offset++;
                     break;
 
-                case PatchType.DarkestHour:
+                case PatchType.DarkestHour105: // 怪しい
+                case PatchType.DarkestHour103:
                     PatchByte(_data, offset, 0xC6); // mov [esp+eax+48h],0
                     offset++;
                     PatchByte(_data, offset, 0x44);
@@ -7990,7 +8000,7 @@ namespace EuropaEnginePatcher
             offset++;
 
             uint posTermModelName2 = offset;
-            if (_patchType == PatchType.DarkestHour)
+            if (_patchType == PatchType.DarkestHour103 || _patchType == PatchType.DarkestHour105)
             {
                 // TERM_MODEL_NAME2
                 PatchByte(_data, offset, 0xE8); // call GET_STRNLEN0_ADDR
@@ -8148,7 +8158,7 @@ namespace EuropaEnginePatcher
                     PatchByte(_data, _posTermModelNameStart2, 0x90); // nop
                 }
 
-                if (_patchType == PatchType.DarkestHour)
+                if (_patchType == PatchType.DarkestHour103 || _patchType == PatchType.DarkestHour105)
                 {
                     // TERM_MODEL_NAME_START3
                     PatchByte(_data, _posTermModelNameStart3, 0xE8); // call TERM_MODEL_NAME
@@ -8444,8 +8454,9 @@ namespace EuropaEnginePatcher
         HeartsOfIron, // Hearts of Iron
         HeartsOfIron2, // Hearts of Iron 2 1.3-
         ArsenalOfDemocracy, // Arsenal of Democracy 1.10-
+        DarkestHourVersionUnkonwn,
+        DarkestHour103, // Darkest Hour 1.03-1.04
         DarkestHour105, // Darkest Hour 1.05
-        DarkestHour, // Darkest Hour 1.03-
         ArsenalOfDemocracy104, // Arsenal of Democracy 1.02-1.04
         ArsenalOfDemocracy107, // Arsenal of Democracy 1.05-1.07
         ArsenalOfDemocracy109, // Arsenal of Democracy 1.08-1.09
