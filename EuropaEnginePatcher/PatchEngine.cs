@@ -2530,6 +2530,29 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.ArsenalOfDemocracy112:
+                    pattern = new byte[]
+                    {
+                        0x2E, 0x20, 0x00, 0x00
+                    };
+                    l = BinaryScan(_data, pattern, _posRdataSection, _sizeRdataSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    uint addrDivisionAbbrevA = GetRdataAddress(l[0]);
+                    pattern = new byte[]
+                    {
+                        0xBA, (byte) (addrDivisionAbbrevA & 0xFF), (byte) ((addrDivisionAbbrevA >> 8) & 0xFF),
+                        (byte) ((addrDivisionAbbrevA >> 16) & 0xFF), (byte) (addrDivisionAbbrevA >> 24)
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posGetDivisionName1 = l[0] + 1;
+                    break;
+
                 case PatchType.ArsenalOfDemocracy110:
                     pattern = new byte[]
                     {
@@ -2699,11 +2722,37 @@ namespace EuropaEnginePatcher
                     break;
 
                 case PatchType.ArsenalOfDemocracy112:
+                    pattern = new byte[]
+                    {
+                        0x8B, 0x4D, 0x08, // mov     ecx, [ebp+arg_0]
+                        0x51, // push ecx
+                        0xB9, 0x38, 0x53, 0xCE, 0x02 // mov     ecx, offset xxxxx
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posGetArmyName1 = l[0] + 7;
+
+                    pattern = new byte[]
+                    {
+                        0x83, 0xC4, 0x08, 0x6A, 0x20
+                    };
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posGetArmyName2 = l[0] + 3;
+                    break;
+
                 case PatchType.ArsenalOfDemocracy110:
                     pattern = new byte[]
                     {
-                        0xC7, 0x45, 0xFC, 0xFF, 0xFF, 0xFF, 0xFF, 0x8B,
-                        0x4D, 0x08, 0x51
+                        0xC7, 0x45, 0xFC, 0xFF, 0xFF, 0xFF, 0xFF, // mov     [ebp+var_4], 0FFFFFFFFh
+                        0x8B, 0x4D, 0x08,  // mov     ecx, [ebp+arg_0]
+                        0x51 // push    ecx
                     };
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
@@ -3289,11 +3338,19 @@ namespace EuropaEnginePatcher
             switch (_patchType)
             {
                 case PatchType.ArsenalOfDemocracy112:
+                    pattern = new byte[]
+                    {
+                        // 下側のコードが分岐するように変更になっている
+                        0xC6, 0x85, 0x48, 0xFF, 0xFF, 0xFF, 0x00, // mov     [ebp+var_B8], 0
+                        0x85, 0xC0 // test    eax, eax
+                    };
+                    break;
+
                 case PatchType.ArsenalOfDemocracy110:
                     pattern = new byte[]
                     {
-                        0xC6, 0x85, 0x50, 0xFF, 0xFF, 0xFF, 0x00, 0x6A,
-                        0x00
+                        0xC6, 0x85, 0x50, 0xFF, 0xFF, 0xFF, 0x00, // mov     [ebp+var_B0], 0
+                        0x6A, 0x00 // push 0
                     };
                     break;
 
