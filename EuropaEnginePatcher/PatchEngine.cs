@@ -1876,31 +1876,16 @@ namespace EuropaEnginePatcher
                         return false;
                     }
                     _posCalcLineBreakStart3 = l[0];
-                    
-                    switch (_patchType) {
+
+                    // _posCalcLineBreakStart5
+                    switch (_patchType)
+                    {
                         case PatchType.ArsenalOfDemocracy110:
                             pattern = new byte[]
                             {
                                 0x88, 0x9C, 0x0D, 0xE8, 0xFD, 0xFF, 0xFF,
                                 0x41
                             };
-                            l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
-                            if (l.Count == 0)
-                            {
-                                return false;
-                            }
-                            _posCalcLineBreakStart5 = l[0];
-
-                            pattern = new byte[]
-                            {
-                                0x88, 0x9C, 0x0D, 0xEC, 0xFD, 0xFF, 0xFF, 0x41
-                            };
-                            l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
-                            if (l.Count == 0)
-                            {
-                                return false;
-                            }
-                            _posCalcLineBreakStart6 = l[0];
                             break;
                         case PatchType.ArsenalOfDemocracy112:
                             pattern = new byte[]
@@ -1908,25 +1893,39 @@ namespace EuropaEnginePatcher
                                 0x88, 0x9C, 0x0D, 0xE0, 0xFD, 0xFF, 0xFF, // mov     byte ptr [ebp+ecx+var_220], bl
                                 0x41 // inc ecx
                             };
-                            l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
-                            if (l.Count == 0)
+                            break;
+                    }
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakStart5 = l[0];
+
+
+                    // _posCalcLineBreakStart6
+                    switch (_patchType)
+                    {
+                        case PatchType.ArsenalOfDemocracy110:
+                            pattern = new byte[]
                             {
-                                return false;
-                            }
-                            _posCalcLineBreakStart5 = l[0];
+                                0x88, 0x9C, 0x0D, 0xEC, 0xFD, 0xFF, 0xFF, 0x41
+                            };
+                            break;
+                        case PatchType.ArsenalOfDemocracy112:
                             pattern = new byte[]
                             {
                                 0x88, 0x94, 0x0D, 0x34, 0xFB, 0xFF, 0xFF , // mov     byte ptr [ebp+ecx+var_4CC], dl
                                 0x41 // inc ecx
                             };
-                            l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
-                            if (l.Count == 0)
-                            {
-                                return false;
-                            }
-                            _posCalcLineBreakStart6 = l[0];
                             break;
                     }
+                    l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
+                    if (l.Count == 0)
+                    {
+                        return false;
+                    }
+                    _posCalcLineBreakStart6 = l[0];
                     break;
             }
 
