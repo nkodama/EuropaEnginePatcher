@@ -1960,8 +1960,8 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd1 = l[0] + (uint) pattern.Length;
-                    _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd1 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd2 = l[1] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -1974,8 +1974,8 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
-                    _posCalcLineBreakEnd6 = l[1] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd5 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd6 = l[1] + (uint)pattern.Length;
                     break;
 
                 case PatchType.EuropaUniversalis2:
@@ -1989,8 +1989,8 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd1 = l[0] + (uint) pattern.Length;
-                    _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd1 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd2 = l[1] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2002,7 +2002,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd3 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2014,7 +2014,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd4 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd4 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2026,8 +2026,8 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
-                    _posCalcLineBreakEnd6 = l[1] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd5 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd6 = l[1] + (uint)pattern.Length;
                     break;
 
                 case PatchType.ForTheGlory:
@@ -2041,7 +2041,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd1 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd1 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2053,7 +2053,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd2 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd2 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2065,7 +2065,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd3 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2077,8 +2077,8 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
-                    _posCalcLineBreakEnd6 = l[1] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd5 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd6 = l[1] + (uint)pattern.Length;
                     break;
 
                 case PatchType.Victoria:
@@ -2092,8 +2092,8 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd1 = l[0] + (uint) pattern.Length;
-                    _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd1 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd2 = l[1] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2106,7 +2106,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd3 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2119,8 +2119,8 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
-                    _posCalcLineBreakEnd6 = l[1] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd5 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd6 = l[1] + (uint)pattern.Length;
                     break;
 
                 case PatchType.HeartsOfIron:
@@ -2134,8 +2134,8 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd1 = l[0] + (uint) pattern.Length;
-                    _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd1 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd2 = l[1] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2148,7 +2148,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd3 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2161,8 +2161,8 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
-                    _posCalcLineBreakEnd6 = l[1] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd5 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd6 = l[1] + (uint)pattern.Length;
                     break;
 
                 case PatchType.HeartsOfIron2:
@@ -2181,8 +2181,8 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd1 = l[0] + (uint) pattern.Length;
-                    _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd1 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd2 = l[1] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2194,7 +2194,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd3 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2206,7 +2206,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd5 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2218,7 +2218,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd6 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd6 = l[0] + (uint)pattern.Length;
                     break;
 
                 case PatchType.DarkestHour105:
@@ -2285,8 +2285,8 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd1 = l[0] + (uint) pattern.Length;
-                    _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd1 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd2 = l[1] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2299,7 +2299,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd3 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2311,8 +2311,8 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
-                    _posCalcLineBreakEnd6 = l[1] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd5 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd6 = l[1] + (uint)pattern.Length;
                     break;
 
                 case PatchType.ArsenalOfDemocracy109:
@@ -2327,8 +2327,8 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd1 = l[0] + (uint) pattern.Length;
-                    _posCalcLineBreakEnd2 = l[1] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd1 = l[0] + (uint)pattern.Length;
+                    _posCalcLineBreakEnd2 = l[1] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2340,7 +2340,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd3 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2353,7 +2353,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd5 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2366,7 +2366,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd6 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd6 = l[0] + (uint)pattern.Length;
                     break;
 
                 case PatchType.ArsenalOfDemocracy112:
@@ -2381,7 +2381,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd1 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd1 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2393,7 +2393,7 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd2 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd2 = l[0] + (uint)pattern.Length;
 
                     pattern = new byte[]
                     {
@@ -2405,25 +2405,49 @@ namespace EuropaEnginePatcher
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd3 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd3 = l[0] + (uint)pattern.Length;
 
-                    pattern = new byte[]
-                    {
-                        0x8D, 0x85, 0xE8, 0xF9, 0xFF, 0xFF, 0x66, 0xC7,
-                        0x84, 0x0D, 0xE8, 0xFD, 0xFF, 0xFF, 0x20, 0x00
-                    };
+                    // _posCalcLineBreakEnd5
+                    switch (_patchType) {
+                        case PatchType.ArsenalOfDemocracy110:
+                            pattern = new byte[]
+                            {
+                                0x8D, 0x85, 0xE8, 0xF9, 0xFF, 0xFF, // lea     eax, [ebp+var_618]
+                                0x66, 0xC7, 0x84, 0x0D, 0xE8, 0xFD, 0xFF, 0xFF, 0x20, 0x00 // mov     [ebp+ecx+var_218], 20h
+                            };
+                            break;
+                        case PatchType.ArsenalOfDemocracy112:
+                            pattern = new byte[]
+                            {
+                                0x8D, 0x85, 0xE0, 0xF9, 0xFF, 0xFF, // lea     eax, [ebp+var_620]
+                                0x66, 0xC7, 0x84, 0x0D, 0xE0, 0xFD, 0xFF, 0xFF, 0x20, 0x00 // mov     [ebp+ecx+var_220], 20h
+                            };
+                            break;
+                    }
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
                         return false;
                     }
-                    _posCalcLineBreakEnd5 = l[0] + (uint) pattern.Length;
+                    _posCalcLineBreakEnd5 = l[0] + (uint)pattern.Length;
 
-                    pattern = new byte[]
-                    {
-                        0x8D, 0x85, 0xEC, 0xFB, 0xFF, 0xFF, 0x66, 0xC7,
-                        0x84, 0x0D, 0xEC, 0xFD, 0xFF, 0xFF, 0x20, 0x00
-                    };
+                    // _posCalcLineBreakEnd6
+                    switch (_patchType) {
+                        case PatchType.ArsenalOfDemocracy110:
+                            pattern = new byte[]
+                            {
+                                0x8D, 0x85, 0xEC, 0xFB, 0xFF, 0xFF, // lea     eax, [ebp+var_414]
+                                0x66, 0xC7, 0x84, 0x0D, 0xEC, 0xFD, 0xFF, 0xFF, 0x20, 0x00 // mov     [ebp+ecx+var_214], 20h
+                            };
+                            break;
+                        case PatchType.ArsenalOfDemocracy112:
+                            pattern = new byte[]
+                            {
+                                0x8D, 0x85, 0x34, 0xFD, 0xFF, 0xFF, // lea     eax, [ebp+var_2CC]
+                                0x66, 0xC7, 0x84, 0x0D, 0x34, 0xFB, 0xFF, 0xFF, 0x20, 0x00 // mov     [ebp+ecx+var_4CC], 20h
+                            };
+                            break;
+                    }
                     l = BinaryScan(_data, pattern, _posTextSection, _sizeTextSection);
                     if (l.Count == 0)
                     {
